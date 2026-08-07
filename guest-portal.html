@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartConvo — Guest Portal</title>
+<link rel="icon" type="image/x-icon" href="icon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #FAFAF7;
+    --surface: #FFFFFF;
+    --ink: #1A2332;
+    --ink-soft: #5B6472;
+    --line: #E4E1D8;
+    --navy: #1E3A5F;
+    --navy-deep: #14283F;
+    --gold: #B08D2B;
+    --gold-soft: #EFE6C8;
+    --red: #B34A4A;
+    --radius: 3px;
+    --sidebar-w: 250px;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100svh;
+    display:flex;
+    flex-direction:column;
+  }
+  a{color:inherit;text-decoration:none;}
+
+  /* ---------- LAYOUT ---------- */
+  .app-layout{display:flex;min-height:100svh;}
+
+  /* ---------- SIDEBAR ---------- */
+  .sidebar{
+    position:fixed;top:0;left:0;bottom:0;
+    width:var(--sidebar-w);
+    background:var(--surface);
+    border-right:1px solid var(--line);
+    display:flex;flex-direction:column;
+    z-index:40;overflow-y:auto;
+  }
+  .sidebar-brand{padding:28px 24px 24px;border-bottom:1px solid var(--line);}
+  .sidebar-brand .nav-mark{font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:var(--navy-deep);}
+  .sidebar-brand .nav-tag{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;
+    text-transform:uppercase;color:var(--ink-soft);margin-top:4px;
+  }
+  .sidebar-nav{flex:1;padding:16px 12px;display:flex;flex-direction:column;gap:2px;}
+  .nav-item{
+    display:flex;align-items:center;gap:14px;padding:14px 16px;
+    border-radius:var(--radius);font-size:14px;font-weight:500;
+    color:var(--ink-soft);transition:background 0.2s ease,color 0.2s ease;
+  }
+  .nav-item:hover{background:var(--bg);color:var(--ink);}
+  .nav-item.active{background:var(--navy);color:#fff;}
+  .nav-item .nav-icon{width:22px;height:22px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+  .nav-item .nav-icon svg{width:20px;height:20px;}
+  .sidebar-logout{padding:16px 12px 20px;border-top:1px solid var(--line);}
+  .sidebar-logout .nav-item{color:var(--red);}
+  .sidebar-logout .nav-item:hover{background:#F5E6E6;}
+
+  .main-area{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100svh;}
+
+  /* ---------- TOP BAR ---------- */
+  .topbar{
+    position:sticky;top:0;z-index:30;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 40px;
+    background:rgba(250,250,247,0.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar-left{display:flex;align-items:center;gap:12px;}
+  .topbar-left .topbar-title{font-family:'Fraunces',serif;font-weight:500;font-size:22px;color:var(--navy-deep);}
+  .topbar-right{display:flex;align-items:center;gap:18px;}
+  .topbar-right .user-chip{display:flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:0.05em;color:var(--ink-soft);}
+  .topbar-right .user-chip .dot{width:9px;height:9px;border-radius:50%;background:var(--gold);}
+
+  /* ---------- WRAPPER ---------- */
+  .wrap{max-width:1080px;margin:0 auto;padding:40px 40px 80px;width:100%;flex:1;}
+
+  /* ---------- HERO ---------- */
+  .portal-hero{
+    position:relative;
+    background:var(--surface);
+    border:1px solid var(--line);
+    padding:46px 48px;
+    margin-bottom:44px;
+  }
+  .portal-hero::before,.portal-hero::after{
+    content:"";position:absolute;width:24px;height:24px;
+    border:1.5px solid var(--navy);opacity:0.5;
+  }
+  .portal-hero::before{ top:-1px;left:-1px;border-right:none;border-bottom:none; }
+  .portal-hero::after{ bottom:-1px;right:-1px;border-left:none;border-top:none; }
+
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:16px;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--navy);
+    margin-bottom:14px;
+    display:flex;align-items:center;gap:9px;
+  }
+  .eyebrow .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);animation:pulse 1.8s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.35;}}
+
+  .portal-hero h1{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:clamp(38px, 6vw, 56px);
+    color:var(--navy-deep);
+    margin-bottom:14px;
+  }
+  .portal-hero p{
+    color:var(--ink-soft);
+    font-size:20px;
+    line-height:1.6;
+    max-width:680px;
+  }
+
+  /* ---------- SECTION HEAD ---------- */
+  .section-head{
+    display:flex;align-items:flex-end;justify-content:space-between;
+    margin-bottom:26px;
+  }
+  .section-head h2{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:clamp(30px, 4vw, 40px);
+    color:var(--navy-deep);
+    margin-bottom:6px;
+  }
+  .section-head .sub{
+    font-size:18px;color:var(--ink-soft);
+  }
+
+  /* ---------- SCHEDULE TABLE ---------- */
+  .schedule-table{
+    width:100%;
+    border-collapse:collapse;
+    background:var(--surface);
+    border:1px solid var(--line);
+  }
+  .schedule-table th{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:16px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    text-align:left;
+    padding:18px 22px;
+    background:var(--bg);
+    border-bottom:1px solid var(--line);
+  }
+  .schedule-table td{
+    padding:20px 22px;
+    font-size:19px;
+    border-bottom:1px solid var(--line);
+    vertical-align:top;
+  }
+  .schedule-table tr:last-child td{border-bottom:none;}
+  .schedule-table .time{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:17px;
+    color:var(--navy);
+    white-space:nowrap;
+  }
+  .schedule-table .evt{font-weight:600;color:var(--ink);}
+  .schedule-table .loc{color:var(--ink-soft);font-size:17px;}
+  .schedule-table tr:hover td{background:#FCFBF7;}
+  .badge{
+    display:inline-block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:14px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--gold);
+    border:2px solid var(--gold);
+    padding:5px 11px;
+    border-radius:2px;
+  }
+
+  /* ---------- AWARDS GRID ---------- */
+  .awards-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .award-card{
+    background:var(--surface);
+    padding:32px 30px;
+    display:flex;
+    gap:20px;
+    align-items:flex-start;
+    transition:background 0.25s ease;
+  }
+  .award-card:hover{background:#FCFBF7;}
+  .award-num{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:17px;
+    color:var(--gold);
+    letter-spacing:0.05em;
+    padding-top:2px;
+    flex-shrink:0;
+  }
+  .award-card h3{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:24px;
+    color:var(--ink);
+    margin-bottom:9px;
+  }
+  .award-card p{
+    font-size:17px;
+    line-height:1.6;
+    color:var(--ink-soft);
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    margin-top:auto;
+    border-top:1px solid var(--line);
+    padding:28px 48px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:15px;
+    color:var(--ink-soft);
+    letter-spacing:0.04em;
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:860px){
+    .sidebar{width:64px;}
+    .sidebar-brand .nav-tag,
+    .nav-item .nav-label{display:none;}
+    .sidebar-brand{border-bottom:none;}
+    .sidebar-brand .nav-mark{font-size:16px;text-align:center;}
+    .nav-item{padding:14px;justify-content:center;}
+    .sidebar-logout .nav-item{justify-content:center;}
+    .main-area{margin-left:64px;}
+    .topbar{padding:14px 20px;}
+    .wrap{padding:24px 18px 60px;}
+    .portal-hero{padding:34px 26px;}
+    .awards-grid{grid-template-columns:1fr;}
+    footer{flex-direction:column;gap:8px;text-align:center;padding:24px;}
+  }
+
+  :focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+  @media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important;}}
+</style>
+</head>
+<body>
+
+<div class="app-layout">
+
+  <!-- ================= SIDEBAR ================= -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="nav-mark">SmartConvo</div>
+      <div class="nav-tag">Guest Portal</div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="guest-portal.html" class="nav-item active">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        </span>
+        <span class="nav-label">Dashboard</span>
+      </a>
+      <a href="guest-graduate-search.html" class="nav-item">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        </span>
+        <span class="nav-label">Graduate Search</span>
+      </a>
+      <a href="guest-graduate.html" class="nav-item">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9l10-4.5L22 9l-10 4.5L2 9z"/><path d="M6 11v5c0 1.1 2.7 2.5 6 2.5s6-1.4 6-2.5v-5"/></svg>
+        </span>
+        <span class="nav-label">Graduate &amp; Voting</span>
+      </a>
+      <a href="guest-announcement.html" class="nav-item">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l16-6v14L3 13v-2z"/><path d="M3 13l3 2 2 3"/></svg>
+        </span>
+        <span class="nav-label">Announcements</span>
+      </a>
+      <a href="guest-profile.html" class="nav-item">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.6 3.1-6.4 7-6.4s7 2.8 7 6.4"/></svg>
+        </span>
+        <span class="nav-label">My Profile</span>
+      </a>
+    </nav>
+    <div class="sidebar-logout">
+      <a href="login-guest.html" class="nav-item">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+        </span>
+        <span class="nav-label">Logout</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ================= MAIN ================= -->
+  <div class="main-area">
+
+    <header class="topbar">
+      <div class="topbar-left">
+        <span class="topbar-title">Dashboard</span>
+      </div>
+      <div class="topbar-right">
+        <span class="user-chip"><span class="dot"></span>Guest</span>
+      </div>
+    </header>
+
+    <main class="wrap">
+
+      <!-- ================= HERO ================= -->
+      <section class="portal-hero">
+        <div class="eyebrow"><span class="dot"></span> Guest Portal</div>
+        <h1>Welcome to the Convocation Portal</h1>
+        <p>Browse the ceremony schedule and discover the ten award categories that will be presented at this year's convocation.</p>
+      </section>
+
+      <!-- ================= CEREMONY SCHEDULE ================= -->
+      <section id="schedule">
+        <div class="section-head">
+          <div>
+            <h2>Ceremony Schedule</h2>
+            <p class="sub">Official timetable for the convocation event.</p>
+          </div>
+        </div>
+
+        <table class="schedule-table">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Event</th>
+              <th>Venue</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="time">08:00 — 09:00</td>
+              <td class="evt">Guest Registration &amp; Seating</td>
+              <td class="loc">Main Entrance, Dewan Seri Budaya</td>
+            </tr>
+            <tr>
+              <td class="time">09:00 — 09:30</td>
+              <td class="evt">University Anthem &amp; Processional</td>
+              <td class="loc">Main Auditorium</td>
+            </tr>
+            <tr>
+              <td class="time">09:30 — 10:15</td>
+              <td class="evt">Welcome &amp; Opening Address</td>
+              <td class="loc">Main Auditorium</td>
+            </tr>
+            <tr>
+              <td class="time">10:15 — 11:30</td>
+              <td class="evt">Award Presentation Ceremony <span class="badge">Main Session</span></td>
+              <td class="loc">Main Auditorium</td>
+            </tr>
+            <tr>
+              <td class="time">11:30 — 12:30</td>
+              <td class="evt">Graduate Conferral &amp; Student Recognition</td>
+              <td class="loc">Main Auditorium</td>
+            </tr>
+            <tr>
+              <td class="time">12:30 — 13:00</td>
+              <td class="evt">Closing Remarks &amp; Recessional</td>
+              <td class="loc">Main Auditorium</td>
+            </tr>
+            <tr>
+              <td class="time">13:00 — 15:00</td>
+              <td class="evt">Lunch &amp; Graduation Photo Sessions</td>
+              <td class="loc">Foyer &amp; Heritage Garden</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ================= AWARD CATEGORIES ================= -->
+      <section id="awards" style="margin-top:64px;">
+        <div class="section-head">
+          <div>
+            <h2>Award Categories</h2>
+            <p class="sub">Ten categories will be contested at this convocation.</p>
+          </div>
+        </div>
+
+        <div class="awards-grid">
+          <div class="award-card">
+            <span class="award-num">01</span>
+            <div>
+              <h3>Best Overall Student Award</h3>
+              <p>Honours the student with the most outstanding all-round academic and co-curricular performance.</p>
+            </div>
+          </div>
+          <div class="award-card">
+            <span class="award-num">02</span>
+            <div>
+              <h3>Academic Excellence Award</h3>
+              <p>Recognises exceptional academic achievement and outstanding cumulative results.</p>
+            </div>
+          </div>
+          <div class="award-card">
+            <span class="award-num">03</span>
+            <div>
+              <h3>Dean's List Award</h3>
+              <p>Awarded for consistent high academic performance across multiple semesters.</p>
+            </div>
+          </div>
+          <div class="award-card">
+            <span class="award-num">04</span>
+            <div>
+              <h3>Best Program Graduate</h3>
+              <p>Presented to the top graduate of each programme for excellence in their field of study.</p>
+            </div>
+          </div>
+          <div class="award-card">
+            <span class="award-num">05</span>
+            <div>
+              <h3>Outstanding Leadership Award</h3>
+              <p>Recognises students who have demonstrated exceptional leadership in campus organisations and initiatives.</p>
+            </div>
+          </div>
+          <div class="award-card">
+            <span class="award-num">06</span>
+            <div>
+              <h3>Extracurricular Achievement Award</h3>
+              <p>Celebrates notable contributions and achievements in clubs, societies, and community activities.</p>
+            </div>
+          </div>
+          <div class="award-card">
+            <span class="award-num">07</span>
+            <div>
+              <h3>Innovation &amp; Research Award</h3>
+              <p>Honours innovative projects, research breakthroughs, and creative problem-solving.</p>
+            </div>
+          </div>
+          <div class="award-card">
+            <span class="award-num">08</span>
+            <div>
+              <h3>Best Final Year Project Award</h3>
+              <p>Rewards the most outstanding final year project in terms of quality, impact, and originality.</p>
+            </div>
+          </div>
+          <div class="award-card">
+            <span class="award-num">09</span>
+            <div>
+              <h3>Sportsman &amp; Sportswoman of the Year</h3>
+              <p>Recognises the top male and female athletes for sporting excellence and sportsmanship.</p>
+            </div>
+          </div>
+          <div class="award-card">
+            <span class="award-num">10</span>
+            <div>
+              <h3>Special Recognition Award</h3>
+              <p>Given for exceptional contributions, perseverance, or distinguished service beyond regular categories.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer>
+      <span>© 2026 SmartConvo</span>
+      <span>AI-Assisted Convocation Queue &amp; Identity Verification System</span>
+    </footer>
+
+  </div>
+
+</div>
+
+</body>
+</html>

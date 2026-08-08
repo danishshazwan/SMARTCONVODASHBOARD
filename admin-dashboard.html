@@ -255,11 +255,117 @@
     .current-student{flex-direction:column;}
     .main-footer{flex-direction:column;gap:6px;text-align:center;padding:16px 20px;}
   }
-  :focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
-  @media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important;}}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+
+  /* ============ ADMIN ENTRY ANIMATION ============ */
+  .boot-overlay{
+    position:fixed;inset:0;z-index:200;
+    background:
+      radial-gradient(1200px 600px at 50% -10%, rgba(30,58,95,0.55), transparent 60%),
+      radial-gradient(900px 500px at 90% 110%, rgba(176,141,43,0.18), transparent 55%),
+      var(--navy-deep);
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+    transition:opacity 0.55s ease, visibility 0s linear 0.55s;
+  }
+  .boot-overlay.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+  .boot-scan{
+    position:absolute;left:0;right:0;height:2px;
+    background:linear-gradient(90deg,transparent,var(--gold) 25%,var(--gold) 75%,transparent);
+    opacity:0.7;
+    animation:bootScan 2.4s ease-in-out forwards;
+  }
+  @keyframes bootScan{
+    0%{top:0;opacity:0;}
+    12%{opacity:0.7;}
+    50%{top:100%;opacity:0.7;}
+    62%{opacity:0;}
+    100%{top:100%;opacity:0;}
+  }
+  .boot-frame{
+    position:relative;
+    width:min(520px,88vw);
+    padding:44px 48px 40px;
+    background:rgba(255,255,255,0.03);
+    border:1px solid rgba(176,141,43,0.35);
+    backdrop-filter:blur(4px);
+    text-align:center;
+    animation:bootIn 0.7s cubic-bezier(0.22,1,0.36,1) both;
+  }
+  .boot-frame::before,.boot-frame::after,
+  .boot-frame .bf-tl,.boot-frame .bf-br{
+    content:"";position:absolute;width:24px;height:24px;border:2px solid var(--gold);
+  }
+  .boot-frame::before{top:-2px;left:-2px;border-right:none;border-bottom:none;}
+  .boot-frame::after{bottom:-2px;right:-2px;border-left:none;border-top:none;}
+  .boot-frame .bf-tl{top:-2px;right:-2px;border-left:none;border-bottom:none;}
+  .boot-frame .bf-br{bottom:-2px;left:-2px;border-right:none;border-top:none;}
+  @keyframes bootIn{from{opacity:0;transform:translateY(18px) scale(0.97);}to{opacity:1;transform:none;}}
+  .boot-brand{
+    font-family:'Fraunces',serif;font-weight:600;font-size:34px;color:#fff;
+    letter-spacing:0.01em;margin-bottom:6px;
+  }
+  .boot-brand-tag{display:block;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-top:8px;}
+  .boot-panel{margin-top:30px;text-align:left;}
+  .boot-status{
+    font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:0.06em;
+    color:rgba(255,255,255,0.92);min-height:20px;
+    opacity:0;transform:translateY(6px);
+    transition:opacity 0.3s ease, transform 0.3s ease;
+  }
+  .boot-status.show{opacity:1;transform:none;}
+  .boot-bar{
+    margin-top:14px;height:3px;background:rgba(255,255,255,0.12);
+    overflow:hidden;border-radius:2px;
+  }
+  .boot-bar-fill{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),#E4C878);transition:width 0.35s ease;}
+  .boot-detail{
+    margin-top:12px;display:flex;align-items:center;gap:8px;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.08em;
+    color:var(--gold);text-transform:uppercase;min-height:16px;
+  }
+  .boot-detail .spinner{
+    width:12px;height:12px;border-radius:50%;
+    border:2px solid rgba(176,141,43,0.3);border-top-color:var(--gold);
+    animation:bootSpin 0.8s linear infinite;
+  }
+  @keyframes bootSpin{to{transform:rotate(360deg);}}
+  .boot-foot{
+    margin-top:30px;
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;
+    color:rgba(255,255,255,0.4);
+  }
+  /* Dashboard reveal */
+  .app-layout{opacity:0;transform:translateY(14px);transition:opacity 0.55s ease, transform 0.55s ease;}
+  .app-layout.reveal{opacity:1;transform:none;}
+  @media (max-width:640px){.boot-frame{padding:34px 24px 32px;}}
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important;transition:none !important;}
+    .boot-overlay.hidden{transition:none;}
+  }
 </style>
 </head>
 <body>
+
+  <!-- ============ ADMIN ENTRY ANIMATION ============ -->
+  <div class="boot-overlay" id="bootOverlay" aria-hidden="true">
+    <div class="boot-frame">
+      <div class="boot-brand">
+        SmartConvo
+        <span class="boot-brand-tag">Administrator Console</span>
+      </div>
+      <div class="boot-panel">
+        <div class="boot-status" id="bootStatus">Initializing SmartConvo...</div>
+        <div class="boot-bar"><span class="boot-bar-fill" id="bootFill"></span></div>
+        <div class="boot-detail" id="bootDetail">Loading system modules</div>
+      </div>
+      <div class="boot-foot">
+        AI-Assisted Convocation Queue &amp; Identity Verification System
+      </div>
+    </div>
+    <div class="boot-scan"></div>
+  </div>
+  <!-- ============ END ADMIN ENTRY ANIMATION ============ -->
 
 <div class="app-layout">
 
@@ -576,6 +682,48 @@
 </div>
 
 <script>
+  // ============ ADMIN ENTRY ANIMATION ============
+  (function(){
+    var overlay = document.getElementById('bootOverlay');
+    var statusEl = document.getElementById('bootStatus');
+    var detailEl = document.getElementById('bootDetail');
+    var fillEl = document.getElementById('bootFill');
+    var layout = document.querySelector('.app-layout');
+    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    var steps = [
+      { text: 'Initializing SmartConvo...', detail: 'Loading system modules', pct: 25 },
+      { text: 'Verifying Administrator Access...', detail: 'Authenticating secure session', pct: 60 },
+      { text: 'Syncing queue & verification engine...', detail: 'Monitoring queue | identity | convocation', pct: 85 },
+      { text: 'Welcome, Administrator', detail: 'Access granted', pct: 100 }
+    ];
+
+    var i = 0;
+    function showStep(){
+      if(reduced){ finish(); return; }
+      var s = steps[i];
+      statusEl.textContent = s.text;
+      detailEl.innerHTML = '<span class="spinner"></span>' + s.detail;
+      statusEl.classList.add('show');
+      fillEl.style.width = s.pct + '%';
+i++;
+      if(i < steps.length){
+        setTimeout(showStep, 400);
+      }else{
+        setTimeout(finish, 500);
+      }
+    }
+    function finish(){
+      layout.classList.add('reveal');
+      overlay.classList.add('hidden');
+      setTimeout(function(){
+        overlay.style.display = 'none';
+      }, 600);
+    }
+    // Start after a short beat so the frame settles in
+    setTimeout(showStep, 350);
+  })();
+
   // Load the logged-in admin name from the database.
   // Replace the API URL with your backend endpoint (e.g. /api/admin/profile).
   async function loadAdminName(){

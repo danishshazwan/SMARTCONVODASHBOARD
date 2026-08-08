@@ -597,11 +597,91 @@
 .stats-grid{grid-template-columns:1fr;}
     .main-footer{flex-direction:column;gap:6px;text-align:center;padding:16px 20px;}
   }
+  /* ---------- ENTRY ANIMATION ---------- */
+  .entry-overlay{
+    position:fixed;inset:0;z-index:100;
+    background:var(--bg);
+    display:flex;align-items:center;justify-content:center;
+    transition:opacity 0.6s ease, visibility 0.6s ease;
+  }
+  .entry-overlay.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+  .entry-inner{
+    text-align:center;display:flex;flex-direction:column;align-items:center;gap:24px;
+    padding:0 24px;
+  }
+  .entry-mark{font-family:'Fraunces',serif;font-weight:600;font-size:30px;color:var(--navy-deep);}
+  .entry-mark .entry-dot{color:var(--gold);}
+  .entry-progress{position:relative;width:230px;height:3px;background:var(--line);border-radius:3px;overflow:hidden;}
+  .entry-progress .bar{
+    position:absolute;top:0;left:0;bottom:0;width:42%;
+    background:linear-gradient(90deg,var(--navy),var(--gold));
+    border-radius:3px;animation:loadbar 1.1s linear infinite;
+  }
+  @keyframes loadbar{0%{transform:translateX(-120%);}100%{transform:translateX(340%);}}
+  .entry-stack{display:flex;flex-direction:column;gap:14px;min-height:28px;}
+  .entry-step{display:none;align-items:center;gap:11px;font-size:16px;font-weight:500;color:var(--ink);}
+  .entry-step.active{display:flex;}
+  .entry-step .check{
+    width:26px;height:26px;flex-shrink:0;border-radius:50%;
+    background:var(--green-soft);color:var(--green);
+    display:flex;align-items:center;justify-content:center;
+    opacity:0;transform:scale(0.5);
+    transition:opacity .3s ease, transform .4s cubic-bezier(.34,1.56,.64,1);
+  }
+  .entry-step.done .check{opacity:1;transform:scale(1);}
+  .entry-dots{display:inline-flex;gap:5px;align-items:center;margin-left:2px;}
+  .entry-dots span{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:dotPulse 1s ease-in-out infinite;}
+  .entry-dots span:nth-child(2){animation-delay:.15s;}
+  .entry-dots span:nth-child(3){animation-delay:.3s;}
+  @keyframes dotPulse{0%,100%{opacity:.25;}50%{opacity:1;}}
+
+  /* Dashboard reveal after entry */
+  .main-area .topbar,
+  .main-area .content,
+  .main-area .main-footer{
+    opacity:0;
+    transform:translateY(8px);
+    transition:opacity .55s ease, transform .55s ease;
+  }
+  body.entry-done .main-area .topbar,
+  body.entry-done .main-area .content,
+  body.entry-done .main-area .main-footer{opacity:1;transform:none;}
+
   :focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
   @media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important;}}
 </style>
 </head>
 <body>
+
+<!-- ================= ENTRY ANIMATION ================= -->
+<div class="entry-overlay" id="entryOverlay" aria-hidden="true">
+  <div class="entry-inner">
+    <div class="entry-mark">SmartConvo<span class="entry-dot">.</span></div>
+    <div class="entry-progress"><span class="bar"></span></div>
+    <div class="entry-stack">
+      <div class="entry-step active" data-step="1">
+        <span class="check">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        </span>
+        <span>Initializing SmartConvo</span>
+        <span class="entry-dots"><span></span><span></span><span></span></span>
+      </div>
+      <div class="entry-step" data-step="2">
+        <span class="check">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        </span>
+        <span>Verifying Student Access</span>
+        <span class="entry-dots"><span></span><span></span><span></span></span>
+      </div>
+      <div class="entry-step" data-step="3">
+        <span class="check">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        </span>
+        <span>Welcome, <span id="entryName">Student</span></span>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="app-layout">
 
@@ -922,16 +1002,43 @@
     }catch(e){ return null; }
   }
 
+const currentName = getCurrentUserName() || 'Student';
+
   function applyUserName(){
-    const name = getCurrentUserName();
-    if(!name) return;
     const userNameEl = document.getElementById('userName');
     const greetingEl = document.getElementById('greetingName');
-    if(userNameEl)  userNameEl.textContent = name;
-    if(greetingEl)  greetingEl.textContent = name;
+    const entryNameEl = document.getElementById('entryName');
+    if(userNameEl)  userNameEl.textContent = currentName;
+    if(greetingEl)  greetingEl.textContent = currentName;
+    if(entryNameEl) entryNameEl.textContent = currentName;
+  }
+
+  // ---------- ENTRY ANIMATION SEQUENCE ----------
+  function runEntryAnimation(){
+    const steps = Array.from(document.querySelectorAll('.entry-step'));
+    let current = 0;
+
+    function advance(){
+      if(current >= steps.length){ finishEntry(); return; }
+      const prev = steps[current - 1];
+      const cur  = steps[current];
+      if(prev) prev.classList.add('done');
+      if(cur)  cur.classList.add('active');
+      current++;
+      setTimeout(advance, 700);
+    }
+
+    function finishEntry(){
+      document.body.classList.add('entry-done');
+      const overlay = document.getElementById('entryOverlay');
+      if(overlay) overlay.classList.add('hidden');
+    }
+
+    advance();
   }
 
   applyUserName();
+  runEntryAnimation();
 </script>
 
 </body>

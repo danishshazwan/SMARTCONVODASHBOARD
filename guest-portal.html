@@ -245,7 +245,53 @@
     letter-spacing:0.04em;
   }
 
-/* ---------- RESPONSIVE (CONTENT) ---------- */
+/* ---------- ENTRY INTRO OVERLAY ---------- */
+  .intro-overlay{
+    position:fixed;inset:0;z-index:1000;
+    background:var(--bg);
+    display:flex;align-items:center;justify-content:center;
+    transition:opacity 0.6s ease,visibility 0.6s ease;
+  }
+  .intro-overlay.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+  .intro-inner{text-align:center;max-width:420px;padding:24px;}
+  .intro-mark{
+    font-family:'Fraunces', serif;font-weight:600;font-size:30px;
+    color:var(--navy-deep);margin-bottom:6px;letter-spacing:0.01em;
+  }
+  .intro-tag{
+    font-family:'IBM Plex Mono', monospace;font-size:12px;
+    letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-soft);
+    margin-bottom:30px;
+  }
+  .intro-status{
+    font-family:'IBM Plex Mono', monospace;font-size:15px;
+    letter-spacing:0.06em;color:var(--navy);margin-bottom:18px;
+    min-height:1.4em;
+  }
+  .intro-progress{
+    height:4px;background:var(--line);border-radius:2px;overflow:hidden;
+    margin-bottom:26px;
+  }
+  .intro-progress-bar{
+    height:100%;width:0;background:var(--gold);
+    transition:width 0.4s ease;
+  }
+  .intro-loader{
+    display:flex;align-items:center;justify-content:center;gap:9px;
+  }
+  .intro-loader .ld-dot{
+    width:9px;height:9px;border-radius:50%;background:var(--gold);
+    animation:ldBounce 1.2s ease-in-out infinite;
+  }
+.intro-loader .ld-dot:nth-child(2){animation-delay:0.15s;}
+  .intro-loader .ld-dot:nth-child(3){animation-delay:0.3s;}
+  @keyframes ldBounce{0%,100%{transform:translateY(0);opacity:0.4;}50%{transform:translateY(-6px);opacity:1;}}
+
+  /* ---------- DASHBOARD REVEAL ---------- */
+  .app-layout{opacity:0;transform:translateY(10px);transition:opacity 0.6s ease,transform 0.6s ease;}
+  .app-layout.ready{opacity:1;transform:translateY(0);}
+
+  /* ---------- RESPONSIVE (CONTENT) ---------- */
   @media (max-width:860px){
     .topbar{padding:14px 20px;}
     .wrap{padding:24px 18px 60px;}
@@ -275,7 +321,22 @@
 </head>
 <body>
 
-<div class="app-layout">
+<!-- ================= ENTRY INTRO OVERLAY ================= -->
+<div class="intro-overlay" id="introOverlay" aria-hidden="true">
+  <div class="intro-inner">
+    <div class="intro-mark">SmartConvo</div>
+    <div class="intro-tag">Convocation System</div>
+    <div class="intro-status" id="introStatus">Initializing SmartConvo...</div>
+    <div class="intro-progress"><div class="intro-progress-bar" id="introProgress"></div></div>
+    <div class="intro-loader">
+      <span class="ld-dot"></span>
+      <span class="ld-dot"></span>
+      <span class="ld-dot"></span>
+    </div>
+  </div>
+</div>
+
+<div class="app-layout" id="appLayout">
 
   <!-- ================= SIDEBAR ================= -->
   <aside class="sidebar">
@@ -499,9 +560,60 @@
       <span>AI-Assisted Convocation Queue &amp; Identity Verification System</span>
     </footer>
 
-  </div>
+</div>
 
 </div>
+
+<script>
+  (function(){
+    var overlay = document.getElementById('introOverlay');
+    var statusEl = document.getElementById('introStatus');
+    var progressEl = document.getElementById('introProgress');
+    var appLayout = document.getElementById('appLayout');
+
+    var steps = [
+      { text: 'Initializing SmartConvo...', progress: 30 },
+      { text: 'Verifying Guest Access...', progress: 65 },
+      { text: 'Welcome to Guest Portal', progress: 100 }
+    ];
+
+    var stepIndex = 0;
+
+    function runStep(){
+      if(stepIndex >= steps.length){
+        finishIntro();
+        return;
+      }
+      var step = steps[stepIndex];
+      statusEl.textContent = step.text;
+      progressEl.style.width = step.progress + '%';
+      stepIndex++;
+      setTimeout(runStep, 700);
+    }
+
+    function finishIntro(){
+      // Reveal the dashboard
+      appLayout.classList.add('ready');
+      // Fade out the overlay
+      overlay.classList.add('hidden');
+      // Remove the overlay from the DOM after the transition completes
+      setTimeout(function(){
+        if(overlay && overlay.parentNode){
+          overlay.parentNode.removeChild(overlay);
+        }
+      }, 700);
+    }
+
+    // Respect reduced-motion: skip the animation and show the dashboard immediately
+    if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+      finishIntro();
+      return;
+    }
+
+    // Small delay before starting so the first message is visible
+    setTimeout(runStep, 300);
+  })();
+</script>
 
 </body>
 </html>

@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SmartConvo — Student Login</title>
-<link rel="icon" type="image/x-icon" href="icon.ico">
+  <link rel="icon" type="image/svg+xml" href="smc-icon.svg?v=3">
+  <link rel="apple-touch-icon" href="smc-icon.svg?v=3">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -332,7 +333,7 @@
 
         <div class="form-field">
           <label for="studentId">Student ID</label>
-          <input type="text" id="studentId" name="studentId" placeholder="000000" maxlength="6" pattern="\d{6}" inputmode="numeric" required>
+          <input type="text" id="studentId" name="studentId" placeholder="0000000" maxlength="7" pattern="\d{7}" inputmode="numeric" required>
           <div class="note-hint">Must be 6 numbers only</div>
         </div>
 
@@ -390,7 +391,7 @@
     const sesi = document.getElementById('sesi').value;
 
     if(emel && studentId && password && sesi){
-      const idValid = /^\d{6}$/.test(studentId);
+      const idValid = /^\d{7}$/.test(studentId);
       if(!idValid){
         alert('Student ID must be exactly 6 numbers.');
         return;

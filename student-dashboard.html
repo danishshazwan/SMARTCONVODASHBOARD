@@ -4,12 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SmartConvo — Student Dashboard</title>
-<link rel="icon" type="image/x-icon" href="icon.ico">
+  <link rel="icon" type="image/svg+xml" href="smc-icon.svg?v=3">
+  <link rel="apple-touch-icon" href="smc-icon.svg?v=3">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root{
+:root{
     --bg: #FAFAF7;
     --surface: #FFFFFF;
     --ink: #1A2332;
@@ -409,71 +410,125 @@
     color:var(--ink);
   }
 
-  /* ---------- PROGRESS TRACKER ---------- */
-  .progress-tracker{
-    display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
-    padding:8px 0;
+/* ---------- SIMULATION FLOW ---------- */
+  .simulation-card{
+    background:var(--navy);
+    border:1px solid var(--navy);
+    color:#fff;
+    margin-bottom:36px;
+    position:relative;
+    overflow:hidden;
   }
-  .progress-step{
+  .simulation-card::before,.simulation-card::after{
+    content:"";position:absolute;width:22px;height:22px;
+    border:1.5px solid var(--gold);opacity:0.6;
+  }
+  .simulation-card::before{top:-1px;left:-1px;border-right:none;border-bottom:none;}
+  .simulation-card::after{bottom:-1px;right:-1px;border-left:none;border-top:none;}
+  .simulation-card .card-head{
+    padding:20px 24px;
+    border-bottom:1px solid rgba(255,255,255,0.15);
     display:flex;
-    flex-direction:column;
     align-items:center;
-    gap:8px;
-    flex:1;
-    position:relative;
+    justify-content:space-between;
   }
-  .progress-step:not(:last-child)::after{
-    content:"";
-    position:absolute;
-    top:18px;
-    left:calc(50% + 22px);
-    right:calc(-50% + 22px);
-    height:2px;
-    background:var(--line);
-  }
-  .progress-step.completed:not(:last-child)::after{
-    background:var(--navy);
-  }
-  .progress-step.active:not(:last-child)::after{
-    background:linear-gradient(90deg, var(--navy) 50%, var(--line) 50%);
-  }
-  .progress-dot{
-    width:36px;height:36px;
-    border-radius:50%;
-    display:flex;align-items:center;justify-content:center;
-    font-size:14px;
-    font-weight:600;
-    background:var(--line);
-    color:var(--ink-soft);
-    position:relative;
-    z-index:2;
-    transition:background 0.3s ease, color 0.3s ease;
-  }
-  .progress-step.completed .progress-dot{
-    background:var(--navy);
-    color:#fff;
-  }
-  .progress-step.active .progress-dot{
-    background:var(--gold);
-    color:#fff;
-    box-shadow:0 0 0 4px var(--gold-soft);
-  }
-  .progress-label{
-    font-size:12px;
-    text-align:center;
-    color:var(--ink-soft);
-    max-width:80px;
-    line-height:1.3;
-  }
-  .progress-step.completed .progress-label{
-    color:var(--navy);
+  .simulation-card .card-head h3{
+    font-family:'Fraunces', serif;
     font-weight:500;
+    font-size:20px;
+    color:#fff;
   }
-  .progress-step.active .progress-label{
-    color:var(--gold);
-    font-weight:600;
+  .simulation-card .card-head .sim-live{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;letter-spacing:0.08em;text-transform:uppercase;
+    background:var(--gold);color:#fff;
+    padding:5px 12px;border-radius:2px;
+  }
+  .simulation-card .sim-live .live-dot{
+    width:7px;height:7px;border-radius:50%;background:#fff;
+    animation:pulseSim 1.6s ease-in-out infinite;
+  }
+  @keyframes pulseSim{0%,100%{opacity:1;}50%{opacity:0.3;}}
+
+  .sim-here{
+    padding:22px 24px;
+    display:flex;align-items:center;justify-content:space-between;gap:20px;
+    border-bottom:1px solid rgba(255,255,255,0.15);
+    flex-wrap:wrap;
+  }
+  .sim-here .here-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;letter-spacing:0.14em;text-transform:uppercase;
+    color:var(--gold);margin-bottom:6px;
+  }
+  .sim-here .here-value{
+    font-family:'Fraunces', serif;
+    font-weight:500;font-size:26px;color:#fff;
+  }
+  .sim-here .here-sub{
+    font-size:14px;color:rgba(255,255,255,0.7);margin-top:4px;
+  }
+  .sim-instruction{
+    flex:1;min-width:260px;
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.15);
+    padding:14px 18px;
+    border-radius:var(--radius);
+  }
+  .sim-instruction .inst-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10px;letter-spacing:0.14em;text-transform:uppercase;
+    color:var(--gold);margin-bottom:4px;
+  }
+  .sim-instruction .inst-text{
+    font-size:15px;font-weight:500;color:#fff;line-height:1.4;
+  }
+  .sim-instruction .inst-text .dest{color:var(--gold);}
+
+  .sim-flow{
+    display:flex;align-items:flex-start;justify-content:space-between;
+    padding:26px 24px 30px;
+  }
+  .sim-checkpoint{
+    flex:1;display:flex;flex-direction:column;align-items:center;gap:9px;
+    position:relative;
+  }
+  .sim-checkpoint:not(:last-child)::after{
+    content:"";position:absolute;
+    top:20px;left:calc(50% + 24px);right:calc(-50% + 24px);
+    height:2px;background:rgba(255,255,255,0.25);
+  }
+  .sim-checkpoint.done:not(:last-child)::after{
+    background:var(--gold);
+  }
+  .sim-checkpoint.active:not(:last-child)::after{
+    background:linear-gradient(90deg, var(--gold) 55%, rgba(255,255,255,0.25) 55%);
+  }
+  .sim-dot{
+    width:40px;height:40px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);
+    font-family:'Fraunces', serif;font-weight:600;font-size:16px;
+    position:relative;z-index:2;
+  }
+.sim-checkpoint.done .sim-dot{background:var(--gold);color:#1A2332;}
+  .sim-checkpoint.active .sim-dot{
+    background:var(--gold);color:#1A2332;
+    box-shadow:0 0 0 5px rgba(176,141,43,0.3);
+  }
+  .sim-label{font-size:12px;text-align:center;color:rgba(255,255,255,0.7);max-width:92px;line-height:1.3;}
+  .sim-checkpoint.active .sim-label{color:var(--gold);font-weight:600;}
+  .sim-checkpoint .sim-loc{
+    font-size:10px;font-family:'IBM Plex Mono', monospace;
+    letter-spacing:0.06em;text-transform:uppercase;
+    color:rgba(255,255,255,0.5);text-align:center;max-width:100px;
+  }
+  .sim-checkpoint .you-here{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:9px;letter-spacing:0.1em;text-transform:uppercase;
+    background:var(--gold);color:#1A2332;
+    padding:2px 8px;border-radius:2px;font-weight:600;
   }
 
   /* ---------- NOTIFICATIONS LIST ---------- */
@@ -539,9 +594,7 @@
     .main-area{margin-left:64px;}
     .topbar{padding:14px 20px;}
     .content{padding:24px 20px 40px;}
-    .stats-grid{grid-template-columns:1fr;}
-    .progress-tracker{gap:4px;}
-    .progress-step:not(:last-child)::after{display:none;}
+.stats-grid{grid-template-columns:1fr;}
     .main-footer{flex-direction:column;gap:6px;text-align:center;padding:16px 20px;}
   }
   :focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
@@ -640,7 +693,7 @@
       <div class="topbar-right">
         <span class="user-chip">
           <span class="dot"></span>
-          Aiman Hakimi
+          <span id="userName">Student</span>
         </span>
         <a href="student-notifications.html" class="notif-bell">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -657,10 +710,68 @@
 
       <!-- WELCOME HERO -->
       <section class="welcome-hero">
-        <div class="greeting">Welcome back, Aiman Hakimi</div>
+        <div class="greeting">Welcome back, <span id="greetingName">Student</span></div>
         <div class="greeting-sub">
           <span>Diploma in Computer Technology (Big Data Analytics)</span>
           <span class="program-badge">IT &amp; Engineering</span>
+        </div>
+      </section>
+
+<!-- SIMULATION FLOW -->
+      <section class="simulation-card">
+        <div class="card-head">
+          <h3>Simulation Flow</h3>
+          <span class="sim-live"><span class="live-dot"></span> Live Simulation</span>
+        </div>
+
+        <div class="sim-here">
+          <div>
+            <div class="here-label">You Are Here</div>
+            <div class="here-value">Queue — Waiting Area</div>
+            <div class="here-sub">Queue #042 · Estimated 15 min remaining</div>
+          </div>
+          <div class="sim-instruction">
+            <div class="inst-label">Please Stay</div>
+            <div class="inst-text">Stay at the <span class="dest">Waiting Area</span> near the Main Auditorium until your queue number is called.</div>
+          </div>
+          <div class="sim-instruction">
+            <div class="inst-label">Please Go To</div>
+            <div class="inst-text">When <span class="dest">#042 is called</span>, proceed to the <span class="dest">Stage Entrance</span> for face verification.</div>
+          </div>
+        </div>
+
+<div class="sim-flow">
+          <div class="sim-checkpoint done c-reg">
+            <div class="sim-dot">✓</div>
+            <span class="sim-label">Registration</span>
+            <span class="sim-loc">Main Entrance</span>
+          </div>
+          <div class="sim-checkpoint done c-face">
+            <div class="sim-dot">✓</div>
+            <span class="sim-label">Face Verification</span>
+            <span class="sim-loc">Verification Booth</span>
+          </div>
+          <div class="sim-checkpoint done c-seat">
+            <div class="sim-dot">✓</div>
+            <span class="sim-label">Seat Queue</span>
+            <span class="sim-loc">Seating Area</span>
+          </div>
+          <div class="sim-checkpoint active c-queue">
+            <div class="sim-dot">4</div>
+            <span class="sim-label">Queue</span>
+            <span class="sim-loc">Waiting Area</span>
+            <span class="you-here">You are here</span>
+          </div>
+          <div class="sim-checkpoint c-stage">
+            <div class="sim-dot">5</div>
+            <span class="sim-label">On Stage</span>
+            <span class="sim-loc">Stage Entrance</span>
+          </div>
+          <div class="sim-checkpoint c-exit">
+            <div class="sim-dot">6</div>
+            <span class="sim-label">Completed</span>
+            <span class="sim-loc">Exit / Foyer</span>
+          </div>
         </div>
       </section>
 
@@ -759,37 +870,6 @@
 
       </section>
 
-      <!-- PROGRESS TRACKER -->
-      <section class="section-card" style="margin-bottom:36px;">
-        <div class="card-head">
-          <h3>Convocation Progress</h3>
-        </div>
-        <div class="card-body">
-          <div class="progress-tracker">
-            <div class="progress-step completed">
-              <div class="progress-dot">✓</div>
-              <span class="progress-label">Registration</span>
-            </div>
-            <div class="progress-step completed">
-              <div class="progress-dot">✓</div>
-              <span class="progress-label">Face Verification</span>
-            </div>
-            <div class="progress-step active">
-              <div class="progress-dot">3</div>
-              <span class="progress-label">Queue</span>
-            </div>
-            <div class="progress-step">
-              <div class="progress-dot">4</div>
-              <span class="progress-label">On Stage</span>
-            </div>
-            <div class="progress-step">
-              <div class="progress-dot">5</div>
-              <span class="progress-label">Completed</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <!-- RECENT NOTIFICATIONS -->
       <section class="section-card">
         <div class="card-head">
@@ -828,6 +908,31 @@
   </div>
 
 </div>
+
+<script>
+  // Load the logged-in student's name from the database-backed session.
+  // Placeholder function — replace with your auth/session fetch (e.g. from localStorage, sessionStorage
+  // set after login, or an API call that returns the logged-in user's record).
+  function getCurrentUserName(){
+    try{
+      // e.g. value stored at login from the database
+      const name = sessionStorage.getItem('smartconvo_student_name')
+                || localStorage.getItem('smartconvo_student_name');
+      return name ? name.trim() : null;
+    }catch(e){ return null; }
+  }
+
+  function applyUserName(){
+    const name = getCurrentUserName();
+    if(!name) return;
+    const userNameEl = document.getElementById('userName');
+    const greetingEl = document.getElementById('greetingName');
+    if(userNameEl)  userNameEl.textContent = name;
+    if(greetingEl)  greetingEl.textContent = name;
+  }
+
+  applyUserName();
+</script>
 
 </body>
 </html>

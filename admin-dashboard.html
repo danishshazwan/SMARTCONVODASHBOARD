@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SmartConvo — Admin Dashboard</title>
-<link rel="icon" type="image/x-icon" href="icon.ico">
+  <link rel="icon" type="image/svg+xml" href="smc-icon.svg?v=3">
+  <link rel="apple-touch-icon" href="smc-icon.svg?v=3">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -284,6 +285,10 @@
         <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8V6a2 2 0 012-2h2M2 16v2a2 2 0 002 2h2M16 4h2a2 2 0 012 2v2M16 20h2a2 2 0 002-2v-2"/><circle cx="12" cy="12" r="3"/></svg></span>
         <span class="nav-label">Face Verification</span>
       </a>
+      <a href="admin-approval.html" class="nav-item">
+        <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg></span>
+        <span class="nav-label">Approvals</span>
+      </a>
       <a href="admin-registry.html" class="nav-item">
         <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span>
         <span class="nav-label">Student Registry</span>
@@ -319,8 +324,7 @@
 
       <section class="page-hero">
         <div class="eyebrow"><span class="dot"></span> Convocation Day Operations</div>
-        <h1>Admin Dashboard</h1>
-        <p>Monitor the convocation queue, face verification, and live ceremony progress in real time.</p>
+        <h1>Welcome to Admin Dashboard, <span id="adminName">Admin</span></h1>
       </section>
 
       <section class="stats-grid">
@@ -572,6 +576,22 @@
 </div>
 
 <script>
+  // Load the logged-in admin name from the database.
+  // Replace the API URL with your backend endpoint (e.g. /api/admin/profile).
+  async function loadAdminName(){
+    try{
+      const res = await fetch('/api/admin/profile', { credentials: 'include' });
+      if(!res.ok) throw new Error('Unauthorized');
+      const data = await res.json();
+      const name = (data && (data.name || data.full_name || data.username)) || 'Admin';
+      document.getElementById('adminName').textContent = name;
+    }catch(err){
+      // Fallback while backend is not connected
+      document.getElementById('adminName').textContent = 'Admin';
+    }
+  }
+  loadAdminName();
+
   const navy = '#1E3A5F';
   const navyDeep = '#14283F';
   const gold = '#B08D2B';

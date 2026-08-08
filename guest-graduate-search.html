@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SmartConvo — Graduate Status Search</title>
-<link rel="icon" type="image/x-icon" href="icon.ico">
+  <link rel="icon" type="image/svg+xml" href="smc-icon.svg?v=3">
+  <link rel="apple-touch-icon" href="smc-icon.svg?v=3">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -210,7 +211,24 @@
     display:flex;align-items:center;justify-content:space-between;
     font-family:'IBM Plex Mono',monospace;font-size:15px;color:var(--ink-soft);letter-spacing:0.04em;
   }
+/* ---------- RESPONSIVE (CONTENT) ---------- */
   @media (max-width:860px){
+    .topbar{padding:14px 20px;}
+    .wrap{padding:24px 18px 60px;}
+    .portal-hero{padding:34px 26px;}
+    .portal-hero h1{font-size:clamp(30px,6vw,44px);}
+    .portal-hero p{font-size:18px;}
+    .search-row{flex-direction:column;}
+    .status-card{grid-template-columns:1fr;}
+    .sc-grid{grid-template-columns:1fr;}
+    .sc-field{width:100%;border-right:none;border-bottom:1px solid var(--line);}
+    .sc-field:nth-child(2n){border-right:none;}
+    .sc-field:last-child{border-bottom:none;}
+    footer{flex-direction:column;gap:8px;text-align:center;padding:24px;}
+  }
+
+  /* ---------- RESPONSIVE (SIDEBAR COLLAPSE — PHONE ONLY) ---------- */
+  @media (max-width:640px){
     .sidebar{width:64px;}
     .sidebar-brand .nav-tag,
     .nav-item .nav-label{display:none;}
@@ -219,16 +237,7 @@
     .nav-item{padding:14px;justify-content:center;}
     .sidebar-logout .nav-item{justify-content:center;}
     .main-area{margin-left:64px;}
-    .topbar{padding:14px 20px;}
-    .wrap{padding:24px 18px 60px;}
-    .portal-hero{padding:34px 26px;}
-    .search-row{flex-direction:column;}
-    .status-card{grid-template-columns:1fr;}
-    .sc-grid{grid-template-columns:1fr;}
-    .sc-field{width:100%;border-right:none;border-bottom:1px solid var(--line);}
-    .sc-field:nth-child(2n){border-right:none;}
-    .sc-field:last-child{border-bottom:none;}
-    footer{flex-direction:column;gap:8px;text-align:center;padding:24px;}
+    .topbar-title{font-size:18px;}
   }
   :focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
   @media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important;}}
@@ -249,7 +258,13 @@
         <span class="nav-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
         </span>
-        <span class="nav-label">Dashboard</span>
+<span class="nav-label">Dashboard</span>
+      </a>
+      <a href="guest-live-hall.html" class="nav-item">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M2 9h20"/><path d="M6 7h.01M10 7h.01"/></svg>
+        </span>
+        <span class="nav-label">Live Hall</span>
       </a>
       <a href="guest-graduate-search.html" class="nav-item active">
         <span class="nav-icon">
@@ -356,9 +371,13 @@
               <div class="f-label">Programme</div>
               <div class="f-value" id="scProgramme">—</div>
             </div>
-            <div class="sc-field">
+<div class="sc-field">
               <div class="f-label">Queue Number</div>
               <div class="f-value"><span class="queue-num" id="scQueue">—</span></div>
+            </div>
+            <div class="sc-field">
+              <div class="f-label">Seat</div>
+              <div class="f-value"><span class="queue-num" id="scSeat">—</span></div>
             </div>
             <div class="sc-field">
               <div class="f-label">Current Status</div>
@@ -383,12 +402,22 @@
 </div>
 
 <script>
-  // Mock graduate database
-  const graduates = {
-    '2024123456': { name:'Nurul Izzah binti Fauzi', faculty:'Electrical & Electronics', programme:'Diploma in Electrical Competency (Domestic & Industrial) PW4', queue:35 },
-    '2024098765': { name:'Muhammad Syafiq bin Azman', faculty:'Welding & Manufacturing', programme:'Diploma in Welding Competency', queue:36 },
-    '2024101122': { name:'Aiman Hakimi bin Roslan', faculty:'Information Technology & Engineering', programme:'Diploma in Computer Technology (Big Data Analytics)', queue:42 },
-    '2024112233': { name:'Farah Adibah binti Saleh', faculty:'Automotive', programme:'Diploma in Automotive Technology', queue:37 }
+// Mock graduate database
+const graduates = {
+    '2402076': { name:'Danish Shazwan Bin Suwandi', faculty:'Information Technology & Engineering', programme:'Diploma in Computer Technology', queue:1, seat:'A01' },
+    '2402077': { name:'Iskandar Zulkarnain Bin Muhamad', faculty:'Information Technology & Engineering', programme:'Diploma in Computer Technology', queue:2, seat:'A02' },
+    '2402078': { name:'Mior Muhammad Ikmal Bin Mior Darul Ridzuan', faculty:'Information Technology & Engineering', programme:'Diploma in Computer Technology', queue:3, seat:'A03' },
+    '2402079': { name:'Mohammad Haziq Afiq Bin Yusli@Yazid', faculty:'Information Technology & Engineering', programme:'Diploma in Computer Technology', queue:4, seat:'A04' },
+    '2402080': { name:'Muhammad Ammar Bin Mahadir', faculty:'Information Technology & Engineering', programme:'Diploma in Computer Technology', queue:5, seat:'A05' },
+    '2402081': { name:'Muhammad Hafiz Bin Hassan', faculty:'Information Technology & Engineering', programme:'Diploma in Computer Technology', queue:6, seat:'A06' },
+    '2402082': { name:'Nor Adilah Binti Shamsuddin', faculty:'Information Technology & Engineering', programme:'Diploma in Computer Technology', queue:7, seat:'A07' },
+    '2402083': { name:'Nur Fadhilatul Akma Binti Roslan', faculty:'Information Technology & Engineering', programme:'Diploma in Computer Technology', queue:8, seat:'A08' },
+    '2402084': { name:'Nurfatin Nadiah Binti Mohd Khir', faculty:'Information Technology & Engineering', programme:'Diploma in Computer Technology', queue:9, seat:'A09' },
+    '2402085': { name:'Nursyazwanie Binti Jaimi', faculty:'Information Technology & Engineering', programme:'Diploma in Computer Technology', queue:10, seat:'A10' },
+    '2402086': { name:'Nur Ain Solehah Binti Muhamad Fauzi', faculty:'Information Technology & Engineering', programme:'Diploma in Computer Technology', queue:11, seat:'A11' },
+    '2402087': { name:'Lily Liyana Lorraine Binti Jale', faculty:'Information Technology & Engineering', programme:'Diploma in Computer Technology', queue:12, seat:'A12' },
+    '2402088': { name:'Muhammad Syamsul Nazir Bin Mohd Samsuri', faculty:'Information Technology & Engineering', programme:'Diploma in Computer Technology', queue:13, seat:'A13' },
+    '2402089': { name:'Najjwa Aqilla Binti Mohd Khairi', faculty:'Information Technology & Engineering', programme:'Diploma in Computer Technology', queue:14, seat:'A14' }
   };
 
   const statuses = [
@@ -429,6 +458,7 @@
     document.getElementById('scFaculty').textContent = student.faculty;
     document.getElementById('scProgramme').textContent = student.programme;
     document.getElementById('scQueue').textContent = '#' + String(student.queue).padStart(3,'0');
+    document.getElementById('scSeat').textContent = student.seat;
     document.getElementById('avatar').textContent = student.name.charAt(0);
 
     currentStatusIndex = 0;

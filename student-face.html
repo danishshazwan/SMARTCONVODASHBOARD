@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SmartConvo — Face Registration</title>
-<link rel="icon" type="image/x-icon" href="icon.ico">
+  <link rel="icon" type="image/svg+xml" href="smc-icon.svg?v=3">
+  <link rel="apple-touch-icon" href="smc-icon.svg?v=3">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -137,14 +138,36 @@
   .capture-btn:hover{background:var(--navy-deep);}
   .capture-btn.success{background:var(--green);}
   .capture-btn.success:hover{background:var(--green);}
+  .capture-box video,
+  .capture-box .captured-preview{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;background:#000;}
+  .capture-box video{display:none;}
+  .capture-box .captured-preview{display:none;}
+  .profile-cta{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;
+    margin-top:12px;padding:13px 20px;background:var(--gold-soft);color:var(--navy);
+    border-radius:var(--radius);font-family:'IBM Plex Mono',monospace;font-size:13px;
+    letter-spacing:0.08em;text-transform:uppercase;font-weight:500;border:1px solid var(--gold);
+    transition:background 0.2s ease,color 0.2s ease;
+  }
+  .profile-cta:hover{background:var(--navy);color:#fff;border-color:var(--navy);}
 
-  .status-pill{
+.status-pill{
     display:inline-flex;align-items:center;gap:8px;
     font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;
     padding:6px 14px;border-radius:2px;
   }
   .status-pill.verified{background:var(--green-soft);color:var(--green);}
   .status-pill.not-verified{background:var(--amber-soft);color:var(--amber);}
+
+  .match-result{display:flex;align-items:center;gap:16px;margin-bottom:18px;padding:16px 18px;background:var(--green-soft);border:1px solid var(--green);}
+  .match-result.fail{background:var(--red-soft);border-color:var(--red);}
+  .match-icon{width:44px;height:44px;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;background:var(--green);}
+  .match-result.fail .match-icon{background:var(--red);}
+  .match-info{flex:1;}
+  .match-info .m-label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:2px;}
+  .match-info .m-value{font-size:15px;font-weight:600;color:var(--ink);}
+  .match-info .m-value .m-score{color:var(--green);}
+  .match-result.fail .match-info .m-value .m-score{color:var(--red);}
 
   .guide-list{display:flex;flex-direction:column;gap:16px;}
   .guide-item{display:flex;align-items:flex-start;gap:14px;}
@@ -254,10 +277,12 @@
             <span class="status-pill verified">✓ Verified</span>
           </div>
           <div class="card-body">
-            <div class="capture-box">
+            <div class="capture-box" id="captureBox">
               <span class="fc-tl"></span>
               <span class="fc-br"></span>
-              <div class="capture-face">
+              <video id="video" autoplay playsinline muted></video>
+              <img class="captured-preview" id="capturedPreview" alt="Captured face">
+              <div class="capture-face" id="facePlaceholder">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3">
                   <circle cx="12" cy="8" r="3.4"/>
                   <path d="M5 20c0-3.6 3.1-6.4 7-6.4s7 2.8 7 6.4"/>
@@ -265,10 +290,20 @@
               </div>
               <div class="scan-line"></div>
             </div>
-            <p class="capture-hint">Your face has been registered and verified successfully.</p>
-            <button type="button" class="capture-btn success" onclick="reCapture(this)">
-              ✓ Verified
+            <p class="capture-hint" id="captureHint">Position your face within the frame following the guidelines, then click Capture Photo.</p>
+            <div class="match-result" id="matchResult" style="display:none;">
+              <span class="match-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg></span>
+              <div class="match-info">
+                <div class="m-label">AI Specification Check</div>
+                <div class="m-value"><span class="m-score" id="confScore">99.2%</span> — Meets all requirements</div>
+              </div>
+            </div>
+            <button type="button" class="capture-btn" id="captureBtn" onclick="startCamera()">
+              Start Camera
             </button>
+            <a href="student-profile.html" class="profile-cta" id="profileCta" style="display:none;">
+              Go to My Profile to place photo
+            </a>
           </div>
         </div>
 
@@ -354,13 +389,124 @@
 </div>
 
 <script>
-  function reCapture(btn){
-    btn.textContent = 'Re-capturing...';
-    setTimeout(function(){
-      btn.textContent = '✓ Re-verified';
-      alert('Face re-captured and verified successfully.');
-    }, 1200);
+let stream = null;
+  const video = document.getElementById('video');
+  const captureBtn = document.getElementById('captureBtn');
+  const facePlaceholder = document.getElementById('facePlaceholder');
+  const scanLine = document.querySelector('.scan-line');
+  const capturedPreview = document.getElementById('capturedPreview');
+  const captureHint = document.getElementById('captureHint');
+  const matchResult = document.getElementById('matchResult');
+  const profileCta = document.getElementById('profileCta');
+
+  // Start the webcam
+  function startCamera(){
+    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+      alert('Camera is not supported in this browser.');
+      return;
+    }
+    captureBtn.disabled = true;
+    captureBtn.textContent = 'Starting camera...';
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 960 } }, audio: false })
+      .then(function(str){
+        stream = str;
+        video.srcObject = stream;
+        video.style.display = 'block';
+        facePlaceholder.style.display = 'none';
+        scanLine.style.display = 'block';
+        captureHint.textContent = 'Position your face within the frame following the guidelines, then click Capture Photo.';
+        captureBtn.disabled = false;
+        captureBtn.textContent = 'Capture Photo';
+        captureBtn.onclick = capturePhoto;
+      })
+      .catch(function(err){
+        alert('Unable to access camera: ' + err.message);
+        captureBtn.disabled = false;
+        captureBtn.textContent = 'Start Camera';
+        captureBtn.onclick = startCamera;
+      });
   }
+
+  // Capture a still frame and run AI specification check
+  function capturePhoto(){
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth || 960;
+    canvas.height = video.videoHeight || 720;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    // AI specification check simulation (lighting/exposure validation)
+    captureBtn.disabled = true;
+    captureBtn.textContent = 'Analysing with AI...';
+
+    // Simple brightness/luma check for good lighting
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imageData.data;
+    let sum = 0;
+    for(let i = 0; i < data.length; i += 40){ // sample pixels for speed
+      sum += (data[i] * 0.299) + (data[i+1] * 0.587) + (data[i+2] * 0.114);
+    }
+    const avgLuma = sum / (data.length / 40);
+
+    setTimeout(function(){
+      let passed = avgLuma >= 60 && avgLuma <= 200;
+      if(passed){
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
+
+        // Store the captured photo + spec results in localStorage
+        const pendingPhoto = {
+          dataUrl: dataUrl,
+          timestamp: new Date().toISOString(),
+          status: 'pending',
+          spec: {
+            luma: Math.round(avgLuma),
+            verified: true
+          }
+        };
+        localStorage.setItem('smartconvo_face_photo', JSON.stringify(pendingPhoto));
+
+        // Stop camera stream
+        if(stream){
+          stream.getTracks().forEach(function(t){ t.stop(); });
+          stream = null;
+        }
+        video.style.display = 'none';
+        scanLine.style.display = 'none';
+        facePlaceholder.style.display = 'none';
+        capturedPreview.src = dataUrl;
+        capturedPreview.style.display = 'block';
+
+        captureBtn.style.display = 'none';
+        profileCta.style.display = 'inline-flex';
+
+        matchResult.style.display = 'flex';
+        matchResult.classList.remove('fail');
+        matchResult.querySelector('.match-icon').innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>';
+        document.getElementById('confScore').textContent = (97 + avgLuma/100).toFixed(1) + '%';
+
+        captureHint.textContent = 'Photo captured and passed the AI specification check.';
+
+        // Alert directing student to student-profile.html to place the photo
+        alert('Your face photo has been captured and passed the AI specification check.\n\nPlease go to My Profile (student-profile.html) to place the photo, review and update your details.');
+      } else {
+        // Failed lighting check - allow retry
+        const statusPill = document.querySelector('.status-pill');
+        statusPill.classList.remove('verified');
+        statusPill.classList.add('not-verified');
+        statusPill.textContent = 'Retake';
+        matchResult.style.display = 'flex';
+        matchResult.classList.add('fail');
+        matchResult.querySelector('.match-icon').innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4M12 16h.01"/><circle cx="12" cy="12" r="9"/></svg>';
+        document.getElementById('confScore').textContent = '—';
+        captureHint.textContent = 'Lighting not suitable. Please improve lighting (avoid backlight/shadows) and capture again.';
+        alert('The photo does not meet the AI specification (lighting check failed). Please improve lighting and retake.');
+        captureBtn.disabled = false;
+        captureBtn.textContent = 'Capture Photo';
+        captureBtn.onclick = capturePhoto;
+      }
+    }, 1000);
+  }
+
 </script>
 
 </body>

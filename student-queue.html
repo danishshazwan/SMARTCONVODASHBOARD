@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SmartConvo — Queue Status</title>
-<link rel="icon" type="image/x-icon" href="icon.ico">
+  <link rel="icon" type="image/svg+xml" href="smc-icon.svg?v=3">
+  <link rel="apple-touch-icon" href="smc-icon.svg?v=3">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -235,15 +236,15 @@
           <div class="q-value">042</div>
           <div class="q-note">Assigned at registration</div>
         </div>
-        <div class="queue-tile">
+<div class="queue-tile">
           <div class="q-label">Ahead of You</div>
-          <div class="q-value">07</div>
-          <div class="q-note">Approximately 15 min wait</div>
+          <div class="q-value" id="aheadValue">07</div>
+          <div class="q-note" id="aheadNote">Approximately 15 min wait</div>
         </div>
         <div class="queue-tile">
           <div class="q-label">Estimated Call Time</div>
-          <div class="q-value">1:45 PM</div>
-          <div class="q-note">Subject to live updates</div>
+          <div class="q-value" id="callTimeValue">1:45 PM</div>
+          <div class="q-note" id="callTimeNote">Subject to live updates</div>
         </div>
       </section>
 
@@ -287,52 +288,88 @@
                 <th>Status</th>
               </tr>
             </thead>
-            <tbody>
+<tbody>
               <tr>
                 <td class="row-num">035</td>
-                <td>Nurul Izzah binti Fauzi</td>
-                <td>Diploma in Electrical Competency (Domestic &amp; Industrial) PW4</td>
+                <td>Danish Shazwan bin Azlan</td>
+                <td>Diploma in Computer Technology (Big Data Analytics)</td>
                 <td><span class="status-pill onstage">On Stage</span></td>
               </tr>
               <tr>
                 <td class="row-num">036</td>
-                <td>Muhammad Syafiq bin Azman</td>
-                <td>Diploma in Automotive Technology</td>
+                <td>Iskandar Zulkarnain bin Rahim</td>
+                <td>Diploma in Computer Technology (Big Data Analytics)</td>
                 <td><span class="status-pill waiting">Waiting</span></td>
               </tr>
               <tr>
                 <td class="row-num">037</td>
-                <td>Farah Adibah binti Saleh</td>
-                <td>Certificate in Architecture</td>
+                <td>Mior Muhammad Ikmal bin Mokhtar</td>
+                <td>Diploma in Computer Technology (Big Data Analytics)</td>
                 <td><span class="status-pill waiting">Waiting</span></td>
               </tr>
               <tr>
                 <td class="row-num">038</td>
-                <td>Lim Wei Jian</td>
-                <td>Diploma in Engineering Technology – Smart Manufacturing</td>
+                <td>Mohd Haziq Afiq bin Zulkifli</td>
+                <td>Diploma in Computer Technology (Big Data Analytics)</td>
                 <td><span class="status-pill waiting">Waiting</span></td>
               </tr>
               <tr>
                 <td class="row-num">039</td>
-                <td>Anis Sofea binti Kamarudin</td>
-                <td>Diploma in Water Services Technology</td>
+                <td>Muhammad Ammar bin Mahadir</td>
+                <td>Diploma in Computer Technology (Big Data Analytics)</td>
                 <td><span class="status-pill waiting">Waiting</span></td>
               </tr>
               <tr>
                 <td class="row-num">040</td>
-                <td>Rajesh a/l Kumar</td>
-                <td>Certificate in Foundry Technology</td>
+                <td>Mohd Hafiz bin Abd Rahman</td>
+                <td>Diploma in Computer Technology (Big Data Analytics)</td>
                 <td><span class="status-pill waiting">Waiting</span></td>
               </tr>
               <tr>
                 <td class="row-num">041</td>
-                <td>Nur Alya binti Iskandar</td>
-                <td>Diploma in Automotive Technology – Vehicle Body Repair &amp; Refinishing</td>
+                <td>Nor Adilah binti Roslan</td>
+                <td>Diploma in Computer Technology (Big Data Analytics)</td>
                 <td><span class="status-pill waiting">Waiting</span></td>
               </tr>
               <tr class="current">
                 <td class="row-num">042</td>
                 <td>Aiman Hakimi bin Roslan</td>
+                <td>Diploma in Computer Technology (Big Data Analytics)</td>
+                <td><span class="status-pill waiting">Waiting</span></td>
+              </tr>
+              <tr>
+                <td class="row-num">043</td>
+                <td>Nur Fadhilatul Akma binti Zainudin</td>
+                <td>Diploma in Computer Technology (Big Data Analytics)</td>
+                <td><span class="status-pill waiting">Waiting</span></td>
+              </tr>
+              <tr>
+                <td class="row-num">044</td>
+                <td>Nurfatin Nadiah binti Kamaruzaman</td>
+                <td>Diploma in Computer Technology (Big Data Analytics)</td>
+                <td><span class="status-pill waiting">Waiting</span></td>
+              </tr>
+              <tr>
+                <td class="row-num">045</td>
+                <td>Nursyazwanie binti Mohd Fauzi</td>
+                <td>Diploma in Computer Technology (Big Data Analytics)</td>
+                <td><span class="status-pill waiting">Waiting</span></td>
+              </tr>
+              <tr>
+                <td class="row-num">046</td>
+                <td>Nur Ain Solehah binti Hassan</td>
+                <td>Diploma in Computer Technology (Big Data Analytics)</td>
+                <td><span class="status-pill waiting">Waiting</span></td>
+              </tr>
+              <tr>
+                <td class="row-num">047</td>
+                <td>Lily Liyana binti Rosli</td>
+                <td>Diploma in Computer Technology (Big Data Analytics)</td>
+                <td><span class="status-pill waiting">Waiting</span></td>
+              </tr>
+              <tr>
+                <td class="row-num">048</td>
+                <td>Syamsul Nazir bin Ismail</td>
                 <td>Diploma in Computer Technology (Big Data Analytics)</td>
                 <td><span class="status-pill waiting">Waiting</span></td>
               </tr>
@@ -351,6 +388,54 @@
   </div>
 
 </div>
+
+<script>
+  // Live queue countdown simulation (Aiman: queue 042)
+  const MY_QUEUE = 42;
+  let nowServing = 35;   // current number being served
+  let secondsLeft = 15 * 60; // 15 minutes estimated wait
+
+  function pad2(n){ return String(n).padStart(3,'0'); }
+
+  function fmt(sec){
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    return m + ':' + String(s).padStart(2,'0');
+  }
+
+  // Compute estimated call time (1:45 PM + remaining)
+  function callTime(){
+    const d = new Date();
+    d.setHours(13, 45, 0, 0);
+    d.setSeconds(d.getSeconds() + secondsLeft - (15 * 60));
+    return d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+  }
+
+  function tick(){
+    const ahead = Math.max(MY_QUEUE - nowServing, 0);
+    document.getElementById('aheadValue').textContent = String(ahead).padStart(2,'0');
+    document.getElementById('callTimeValue').textContent = callTime();
+
+    if (ahead === 0){
+      document.getElementById('aheadNote').textContent = 'Your number is being called — proceed to stage';
+      document.getElementById('callTimeNote').textContent = 'Now — head to the stage entrance';
+    } else {
+      document.getElementById('aheadNote').textContent = 'Approximately ' + fmt(secondsLeft) + ' min wait';
+      document.getElementById('callTimeNote').textContent = 'Subject to live updates';
+    }
+  }
+
+  // Simulate the queue advancing every few seconds for a lively demo
+  setInterval(function(){
+    if (nowServing < MY_QUEUE){
+      nowServing++;
+      secondsLeft = Math.max(secondsLeft - 60, Math.max(MY_QUEUE - nowServing, 0) * 60);
+      tick();
+    }
+  }, 6000);
+
+  tick();
+</script>
 
 </body>
 </html>

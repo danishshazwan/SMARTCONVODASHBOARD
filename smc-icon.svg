@@ -1,0 +1,18 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- soft gold background -->
+  <rect x="0" y="0" width="200" height="200" rx="44" fill="#F4EBDD"/>
+
+  <!-- minimal frame corners -->
+  <g stroke="#C9A45C" stroke-width="4" stroke-linecap="round" fill="none">
+    <path d="M50 76 V64 a10 10 0 0 1 10 -10 H72"/>
+    <path d="M150 76 V64 a10 10 0 0 0 -10 -10 H128"/>
+    <path d="M50 124 V136 a10 10 0 0 0 10 10 H72"/>
+    <path d="M150 124 V136 a10 10 0 0 1 -10 10 H128"/>
+  </g>
+
+  <!-- minimal graduation cap -->
+  <g fill="#B8934A">
+    <path d="M100 82 L134 98 L100 114 L66 98 Z"/>
+    <path d="M84 104 V120 c0 7 7 12 16 12 s16 -5 16 -12 V104 l-16 8 Z"/>
+  </g>
+</svg>

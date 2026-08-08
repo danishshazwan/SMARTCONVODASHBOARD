@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SmartConvo — Front Display</title>
-<link rel="icon" type="image/x-icon" href="icon.ico">
+  <link rel="icon" type="image/svg+xml" href="smc-icon.svg?v=3">
+  <link rel="apple-touch-icon" href="smc-icon.svg?v=3">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -124,32 +125,60 @@
     display:flex;flex-direction:column;align-items:center;text-align:center;
     max-width:760px;
   }
-  .now-label{
-    font-family:'IBM Plex Mono',monospace;font-size:16px;letter-spacing:0.3em;
-    text-transform:uppercase;color:var(--gold);margin-bottom:14px;
+
+  /* ---- Congratulations seal (redesigned) ---- */
+  .congrats-seal{
+    display:flex;align-items:center;justify-content:center;gap:14px;
+    margin-bottom:14px;
   }
-  .now-label .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--gold);margin-right:12px;animation:pulse 1.6s ease-in-out infinite;}
+  .congrats-seal svg{width:30px;height:30px;flex-shrink:0;color:var(--gold);}
+  .congrats{
+    font-family:'Fraunces',serif;font-weight:500;font-style:italic;
+    font-size:clamp(22px, 2vw, 27px);
+    color:var(--navy-deep);letter-spacing:0.01em;
+  }
+  .congrats-rule{
+    width:64px;height:1px;background:var(--gold);opacity:0.5;
+    margin:0 auto 22px;
+  }
+
+  .now-label{
+    display:inline-flex;align-items:center;gap:10px;
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.22em;
+    text-transform:uppercase;color:var(--green);margin-bottom:16px;
+    background:var(--green-soft);padding:7px 16px;border-radius:20px;
+  }
+  .now-label .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 1.6s ease-in-out infinite;}
+.now-faculty{
+    font-family:'IBM Plex Mono',monospace;font-size:14px;letter-spacing:0.18em;
+    text-transform:uppercase;color:var(--gold);margin-bottom:16px;
+  }
   .now-name{
     font-family:'Fraunces',serif;font-weight:500;
     font-size:clamp(36px, 4.5vw, 58px);
-    color:var(--navy-deep);margin-bottom:12px;line-height:1.1;
+    color:var(--navy-deep);margin-bottom:10px;line-height:1.1;
   }
   .now-programme{
     font-size:clamp(17px, 2vw, 22px);
-    color:var(--ink-soft);line-height:1.5;margin-bottom:14px;
+    color:var(--ink-soft);line-height:1.5;margin-bottom:22px;
   }
   .now-meta{
-    display:flex;flex-direction:column;gap:10px;
-    font-family:'IBM Plex Mono',monospace;font-size:15px;letter-spacing:0.08em;
-    color:var(--ink-soft);margin-bottom:26px;
+    display:flex;align-items:center;justify-content:center;gap:30px;
+    background:var(--surface);border:1px solid var(--line);
+    border-radius:var(--radius);padding:16px 34px;margin-bottom:26px;
+    box-shadow:0 10px 26px rgba(30,58,95,0.06);
   }
-  .now-meta .meta-row{display:flex;align-items:center;gap:10px;}
-  .now-meta .meta-row strong{
-    font-weight:500;color:var(--navy);letter-spacing:0.04em;
+  .now-meta .meta-item{
+    display:flex;flex-direction:column;align-items:center;gap:4px;min-width:110px;
+    font-family:'IBM Plex Mono',monospace;
   }
-  .now-meta .meta-row .meta-div{width:1px;height:16px;background:var(--line);}
-  .now-meta .meta-row .meta-label{color:var(--ink-soft);}
-  .now-meta .meta-row .meta-val{font-weight:600;color:var(--ink);}
+  .now-meta .meta-item .meta-label{
+    color:var(--ink-soft);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;
+  }
+  .now-meta .meta-item .meta-val{
+    font-weight:600;color:var(--navy);font-size:22px;letter-spacing:0.04em;
+  }
+  .now-meta .meta-sep{width:1px;height:34px;background:var(--line);}
 
   /* Professional status strip */
   .status-strip{
@@ -265,7 +294,7 @@
     <div class="dt-right">
       <span class="live-chip"><span class="live-dot"></span> Live</span>
       <span class="dt-clock" id="clock">10:24:30</span>
-      <span class="dt-date">Saturday, 21 Feb 2026</span>
+      <span class="dt-date" id="date">—</span>
     </div>
   </header>
 
@@ -289,25 +318,36 @@
         </svg>
         <span>Student Photo</span>
       </div>
-      <div class="photo-cap">ID: 2024123456</div>
+<div class="photo-cap">ID: 2402076</div>
     </div>
 
     <!-- Info -->
     <div class="now-info">
+
+      <!-- Redesigned: Congratulations as a quiet, formal seal rather than a loud headline -->
+      <div class="congrats-seal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3">
+          <path d="M12 2l1.6 3.6 3.9.4-2.9 2.7.8 3.9L12 10.7 8.6 12.6l.8-3.9-2.9-2.7 3.9-.4z"/>
+          <path d="M9 13.5L7 21l5-2.4 5 2.4-2-7.5"/>
+        </svg>
+        <span class="congrats">Congratulations</span>
+      </div>
+      <div class="congrats-rule"></div>
+
       <div class="now-label"><span class="dot"></span>Face Verified</div>
-      <div class="now-name">Nurul Izzah binti Fauzi</div>
-      <div class="now-programme">Diploma in Electrical Competency (Domestic &amp; Industrial) PW4</div>
+      <div class="now-faculty">Faculty of Information Technology &amp; Engineering</div>
+      <div class="now-name">Danish Shazwan Bin Suwandi</div>
+      <div class="now-programme">Diploma in Computer Technology</div>
 
       <div class="now-meta">
-        <div class="meta-row">
-          <strong>Student ID</strong>
-          <span class="meta-val">2024123456</span>
+        <div class="meta-item">
+          <span class="meta-label">Student ID</span>
+          <span class="meta-val">2402076</span>
         </div>
-        <div class="meta-row">
-          <strong>CGPA</strong>
-          <span class="meta-val">3.84</span>
-          <span class="meta-div"></span>
-          <span class="meta-label">Faculty of Electrical &amp; Electronics</span>
+        <div class="meta-sep"></div>
+        <div class="meta-item">
+          <span class="meta-label">CGPA</span>
+          <span class="meta-val">3.78</span>
         </div>
       </div>
 
@@ -318,7 +358,7 @@
           <div class="ss-sub">Identity match confirmed for convocation</div>
         </div>
         <div class="ss-queue">
-          <div class="sq-num">#035</div>
+          <div class="sq-num">#001</div>
           <div class="sq-label">Queue No.</div>
         </div>
       </div>
@@ -342,8 +382,8 @@
             <circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.6 3.1-6.4 7-6.4s7 2.8 7 6.4"/>
           </svg>
         </span>
-        <span class="rc-name">Nurul Izzah binti Fauzi</span>
-        <span class="rc-num">#035</span>
+        <span class="rc-name">Danish Shazwan Bin Suwandi</span>
+        <span class="rc-num">#001</span>
       </div>
       <div class="recent-chip">
         <span class="rc-thumb">
@@ -351,8 +391,8 @@
             <circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.6 3.1-6.4 7-6.4s7 2.8 7 6.4"/>
           </svg>
         </span>
-        <span class="rc-name">Muhammad Syafiq bin Azman</span>
-        <span class="rc-num">#036</span>
+        <span class="rc-name">Iskandar Zulkarnain Bin Muhamad</span>
+        <span class="rc-num">#002</span>
       </div>
       <div class="recent-chip">
         <span class="rc-thumb">
@@ -360,8 +400,8 @@
             <circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.6 3.1-6.4 7-6.4s7 2.8 7 6.4"/>
           </svg>
         </span>
-        <span class="rc-name">Farah Adibah binti Saleh</span>
-        <span class="rc-num">#037</span>
+        <span class="rc-name">Mior Muhammad Ikmal Bin Mior Darul Ridzuan</span>
+        <span class="rc-num">#003</span>
       </div>
       <div class="recent-chip">
         <span class="rc-thumb">
@@ -369,8 +409,8 @@
             <circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.6 3.1-6.4 7-6.4s7 2.8 7 6.4"/>
           </svg>
         </span>
-        <span class="rc-name">Lim Wei Jian</span>
-        <span class="rc-num">#038</span>
+        <span class="rc-name">Mohammad Haziq Afiq Bin Yusli@Yazid</span>
+        <span class="rc-num">#004</span>
       </div>
       <div class="recent-chip">
         <span class="rc-thumb">
@@ -378,8 +418,8 @@
             <circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.6 3.1-6.4 7-6.4s7 2.8 7 6.4"/>
           </svg>
         </span>
-        <span class="rc-name">Anis Sofea binti Kamarudin</span>
-        <span class="rc-num">#039</span>
+        <span class="rc-name">Muhammad Ammar Bin Mahadir</span>
+        <span class="rc-num">#005</span>
       </div>
     </div>
 
@@ -400,6 +440,19 @@
   }
   updateClock();
   setInterval(updateClock, 1000);
+
+  // Real-time day & date
+  function updateDate(){
+    const now = new Date();
+    const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const day = days[now.getDay()];
+    const date = now.getDate();
+    const month = months[now.getMonth()];
+    const year = now.getFullYear();
+    document.getElementById('date').textContent = day + ', ' + date + ' ' + month + ' ' + year;
+  }
+  updateDate();
 
   // Example: set student photo from database (replace src with real DB path)
   // document.getElementById('studentPhoto').src = 'images/student/nurul.jpg';

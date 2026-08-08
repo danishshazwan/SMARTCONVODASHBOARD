@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SmartConvo — Queue Management</title>
-<link rel="icon" type="image/x-icon" href="icon.ico">
+  <link rel="icon" type="image/svg+xml" href="smc-icon.svg?v=3">
+  <link rel="apple-touch-icon" href="smc-icon.svg?v=3">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -59,6 +60,7 @@
   .stat-card{background:var(--surface);border:1px solid var(--line);padding:22px 20px;position:relative;}
   .stat-card .stat-label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:8px;}
   .stat-card .stat-value{font-family:'Fraunces',serif;font-weight:500;font-size:30px;color:var(--navy-deep);}
+  .stat-card .stat-sub{font-size:12px;color:var(--ink-soft);margin-top:4px;line-height:1.4;}
   .stat-card .stat-icon{position:absolute;top:22px;right:20px;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;}
   .stat-card.q-waiting .stat-icon{background:var(--amber);}
   .stat-card.q-verified .stat-icon{background:var(--green);}
@@ -100,6 +102,38 @@
   .action-btn:hover{border-color:var(--gold);color:var(--navy);}
   .action-btn.call{color:var(--green);}
   .action-btn.done{color:var(--navy-deep);}
+
+  /* MODAL */
+  .modal-overlay{
+    position:fixed;inset:0;background:rgba(20,40,63,0.42);z-index:60;display:none;
+    align-items:flex-start;justify-content:center;padding:80px 20px;overflow-y:auto;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal{
+    background:var(--surface);border:1px solid var(--line);width:100%;max-width:560px;
+  }
+  .modal-head{padding:20px 24px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;}
+  .modal-head h3{font-family:'Fraunces',serif;font-weight:500;font-size:22px;color:var(--ink);}
+  .modal-close{background:none;border:none;font-size:24px;line-height:1;color:var(--ink-soft);cursor:pointer;}
+  .modal-close:hover{color:var(--red);}
+  .modal-body{padding:24px;}
+  .field{margin-bottom:18px;}
+  .field label{display:block;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:8px;}
+  .field input,.field select{
+    width:100%;padding:13px 14px;border:1px solid var(--line);background:var(--surface);
+    font-family:'Inter',sans-serif;font-size:14px;color:var(--ink);border-radius:var(--radius);outline:none;
+  }
+  .field input:focus,.field select:focus{border-color:var(--gold);}
+  .modal-actions{display:flex;justify-content:flex-end;gap:12px;margin-top:8px;}
+  .ghost-btn{padding:13px 20px;background:var(--surface);border:1px solid var(--line);font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink);cursor:pointer;transition:border-color 0.2s ease;}
+  .ghost-btn:hover{border-color:var(--gold);}
+  .toast{
+    position:fixed;bottom:28px;right:28px;z-index:70;background:var(--navy);color:#fff;
+    padding:15px 22px;border-radius:var(--radius);font-family:'IBM Plex Mono',monospace;font-size:13px;
+    letter-spacing:0.05em;box-shadow:0 12px 30px rgba(20,40,63,0.25);opacity:0;transform:translateY(12px);
+    transition:opacity 0.3s ease,transform 0.3s ease;pointer-events:none;
+  }
+  .toast.show{opacity:1;transform:translateY(0);}
 
   .main-footer{border-top:1px solid var(--line);padding:20px 40px;display:flex;align-items:center;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);letter-spacing:0.04em;}
 
@@ -145,6 +179,10 @@
         <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8V6a2 2 0 012-2h2M2 16v2a2 2 0 002 2h2M16 4h2a2 2 0 012 2v2M16 20h2a2 2 0 002-2v-2"/><circle cx="12" cy="12" r="3"/></svg></span>
         <span class="nav-label">Face Verification</span>
       </a>
+      <a href="admin-approval.html" class="nav-item">
+        <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg></span>
+        <span class="nav-label">Approvals</span>
+      </a>
       <a href="admin-registry.html" class="nav-item">
         <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span>
         <span class="nav-label">Student Registry</span>
@@ -181,7 +219,6 @@
       <section class="page-hero">
         <div class="eyebrow"><span class="dot"></span> Queue Control</div>
         <h1>Queue Management</h1>
-        <p>Manage the live queue order, call students to the stage, and update their status in real time.</p>
       </section>
 
       <section class="queue-stats">
@@ -189,28 +226,32 @@
           <span class="stat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span>
           <div class="stat-label">Waiting</div>
           <div class="stat-value">56</div>
+          <div class="stat-sub">In waiting area · Next up #039</div>
         </div>
         <div class="stat-card q-verified">
           <span class="stat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg></span>
           <div class="stat-label">Verified</div>
           <div class="stat-value">38</div>
+          <div class="stat-sub">Face identity confirmed</div>
         </div>
         <div class="stat-card q-stage">
           <span class="stat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9l10-4.5L22 9l-10 4.5L2 9z"/><path d="M6 11v5c0 1.1 2.7 2.5 6 2.5s6-1.4 6-2.5v-5"/></svg></span>
           <div class="stat-label">On Stage</div>
           <div class="stat-value">03</div>
+          <div class="stat-sub">Currently presenting</div>
         </div>
         <div class="stat-card q-done">
           <span class="stat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
           <div class="stat-label">Completed</div>
           <div class="stat-value">283</div>
+          <div class="stat-sub">Graduated today</div>
         </div>
       </section>
 
       <div class="queue-toolbar">
         <div class="search-box">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-          <input type="text" placeholder="Search by name, ID, or queue number...">
+          <input type="text" id="searchInput" placeholder="Search by name, ID, or queue number...">
         </div>
         <div style="display:flex;gap:12px;align-items:center;">
           <button class="filter-btn">Filter</button>
@@ -223,10 +264,10 @@
       <section class="section-card">
         <div class="card-head">
           <h3>Live Queue</h3>
-          <span class="live-chip"><span class="live-dot"></span> Auto-refresh 5s</span>
+          <span class="live-chip"><span class="live-dot"></span> Auto-refresh <span id="refreshCount">5s</span></span>
         </div>
         <div class="card-body">
-          <table class="queue-table">
+          <table class="queue-table" id="queueTable">
             <thead>
               <tr>
                 <th>Queue No.</th>
@@ -237,115 +278,227 @@
                 <th>Action</th>
               </tr>
             </thead>
-            <tbody>
+<tbody>
               <tr>
-                <td class="row-num">034</td>
+                <td class="row-num">001</td>
                 <td>
                   <div class="student-cell">
-                    <span class="s-avatar">LW</span>
+                    <span class="s-avatar">DS</span>
                     <div>
-                      <div class="s-name">Lim Wei Jian</div>
-                      <div class="s-id">241034</div>
+                      <div class="s-name">Danish Shazwan Bin Suwandi</div>
+                      <div class="s-id">2402076</div>
                     </div>
                   </div>
                 </td>
-                <td>Diploma in Engineering Technology – Smart Manufacturing</td>
+                <td>Diploma in Computer Technology</td>
                 <td><span class="status-pill verified">✓ Verified</span></td>
                 <td><span class="status-pill completed">Completed</span></td>
                 <td><button class="action-btn done" title="Mark completed"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></button></td>
               </tr>
               <tr>
-                <td class="row-num">035</td>
+                <td class="row-num">002</td>
                 <td>
                   <div class="student-cell">
-                    <span class="s-avatar">NI</span>
+                    <span class="s-avatar">IZ</span>
                     <div>
-                      <div class="s-name">Nurul Izzah binti Fauzi</div>
-                      <div class="s-id">241035</div>
+                      <div class="s-name">Iskandar Zulkarnain Bin Muhamad</div>
+                      <div class="s-id">2402077</div>
                     </div>
                   </div>
                 </td>
-                <td>Diploma in Electrical Competency (Domestic &amp; Industrial) PW4</td>
+                <td>Diploma in Computer Technology</td>
                 <td><span class="status-pill verified">✓ Verified</span></td>
                 <td><span class="status-pill onstage">On Stage</span></td>
                 <td><button class="action-btn done" title="Mark completed"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></button></td>
               </tr>
               <tr>
-                <td class="row-num">036</td>
+                <td class="row-num">003</td>
                 <td>
                   <div class="student-cell">
-                    <span class="s-avatar">MS</span>
+                    <span class="s-avatar">MM</span>
                     <div>
-                      <div class="s-name">Muhammad Syafiq bin Azman</div>
-                      <div class="s-id">241036</div>
+                      <div class="s-name">Mior Muhammad Ikmal Bin Mior Darul Ridzuan</div>
+                      <div class="s-id">2402078</div>
                     </div>
                   </div>
                 </td>
-                <td>Diploma in Automotive Technology</td>
+                <td>Diploma in Computer Technology</td>
                 <td><span class="status-pill verified">✓ Verified</span></td>
                 <td><span class="status-pill waiting">Waiting</span></td>
                 <td><button class="action-btn call" title="Call to stage"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5l18 7-18 7V5z"/></svg></button></td>
               </tr>
               <tr>
-                <td class="row-num">037</td>
+                <td class="row-num">004</td>
                 <td>
                   <div class="student-cell">
-                    <span class="s-avatar">FA</span>
+                    <span class="s-avatar">MH</span>
                     <div>
-                      <div class="s-name">Farah Adibah binti Saleh</div>
-                      <div class="s-id">241037</div>
+                      <div class="s-name">Mohammad Haziq Afiq Bin Yusli@Yazid</div>
+                      <div class="s-id">2402079</div>
                     </div>
                   </div>
                 </td>
-                <td>Certificate in Architecture</td>
+                <td>Diploma in Computer Technology</td>
                 <td><span class="status-pill verified">✓ Verified</span></td>
                 <td><span class="status-pill waiting">Waiting</span></td>
                 <td><button class="action-btn call" title="Call to stage"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5l18 7-18 7V5z"/></svg></button></td>
               </tr>
               <tr>
-                <td class="row-num">038</td>
+                <td class="row-num">005</td>
                 <td>
                   <div class="student-cell">
-                    <span class="s-avatar">AN</span>
+                    <span class="s-avatar">MA</span>
                     <div>
-                      <div class="s-name">Anis Sofea binti Kamarudin</div>
-                      <div class="s-id">241038</div>
+                      <div class="s-name">Muhammad Ammar Bin Mahadir</div>
+                      <div class="s-id">2402080</div>
                     </div>
                   </div>
                 </td>
-                <td>Diploma in Water Services Technology</td>
+                <td>Diploma in Computer Technology</td>
                 <td><span class="status-pill verified">✓ Verified</span></td>
                 <td><span class="status-pill waiting">Waiting</span></td>
                 <td><button class="action-btn call" title="Call to stage"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5l18 7-18 7V5z"/></svg></button></td>
               </tr>
               <tr class="current">
-                <td class="row-num">039</td>
+                <td class="row-num">006</td>
                 <td>
                   <div class="student-cell">
-                    <span class="s-avatar">RK</span>
+                    <span class="s-avatar">HF</span>
                     <div>
-                      <div class="s-name">Rajesh a/l Kumar</div>
-                      <div class="s-id">241039</div>
+                      <div class="s-name">Muhammad Hafiz Bin Hassan</div>
+                      <div class="s-id">2402081</div>
                     </div>
                   </div>
                 </td>
-                <td>Certificate in Foundry Technology</td>
+                <td>Diploma in Computer Technology</td>
                 <td><span class="status-pill verified">✓ Verified</span></td>
                 <td><span class="status-pill waiting">Waiting</span></td>
                 <td><button class="action-btn call" title="Call to stage"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5l18 7-18 7V5z"/></svg></button></td>
               </tr>
               <tr>
-                <td class="row-num">040</td>
+                <td class="row-num">007</td>
                 <td>
                   <div class="student-cell">
                     <span class="s-avatar">NA</span>
                     <div>
-                      <div class="s-name">Nur Alya binti Iskandar</div>
-                      <div class="s-id">241040</div>
+                      <div class="s-name">Nor Adilah Binti Shamsuddin</div>
+                      <div class="s-id">2402082</div>
                     </div>
                   </div>
                 </td>
-                <td>Diploma in Automotive Technology – Vehicle Body Repair &amp; Refinishing</td>
+<td>Diploma in Computer Technology</td>
+                <td><span class="status-pill waiting">Pending</span></td>
+                <td><span class="status-pill waiting">Waiting</span></td>
+                <td><button class="action-btn" title="Verify"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8V6a2 2 0 012-2h2M2 16v2a2 2 0 002 2h2M16 4h2a2 2 0 012 2v2M16 20h2a2 2 0 002-2v-2"/><circle cx="12" cy="12" r="3"/></svg></button></td>
+              </tr>
+              <tr>
+                <td class="row-num">008</td>
+                <td>
+                  <div class="student-cell">
+                    <span class="s-avatar">NF</span>
+                    <div>
+                      <div class="s-name">Nur Fadhilatul Akma Binti Roslan</div>
+                      <div class="s-id">2402083</div>
+                    </div>
+                  </div>
+                </td>
+                <td>Diploma in Computer Technology</td>
+                <td><span class="status-pill waiting">Pending</span></td>
+                <td><span class="status-pill waiting">Waiting</span></td>
+                <td><button class="action-btn" title="Verify"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8V6a2 2 0 012-2h2M2 16v2a2 2 0 002 2h2M16 4h2a2 2 0 012 2v2M16 20h2a2 2 0 002-2v-2"/><circle cx="12" cy="12" r="3"/></svg></button></td>
+              </tr>
+              <tr>
+                <td class="row-num">009</td>
+                <td>
+                  <div class="student-cell">
+                    <span class="s-avatar">NN</span>
+                    <div>
+                      <div class="s-name">Nurfatin Nadiah Binti Mohd Khir</div>
+                      <div class="s-id">2402084</div>
+                    </div>
+                  </div>
+                </td>
+                <td>Diploma in Computer Technology</td>
+                <td><span class="status-pill waiting">Pending</span></td>
+                <td><span class="status-pill waiting">Waiting</span></td>
+                <td><button class="action-btn" title="Verify"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8V6a2 2 0 012-2h2M2 16v2a2 2 0 002 2h2M16 4h2a2 2 0 012 2v2M16 20h2a2 2 0 002-2v-2"/><circle cx="12" cy="12" r="3"/></svg></button></td>
+              </tr>
+              <tr>
+                <td class="row-num">010</td>
+                <td>
+                  <div class="student-cell">
+                    <span class="s-avatar">NS</span>
+                    <div>
+                      <div class="s-name">Nursyazwanie Binti Jaimi</div>
+                      <div class="s-id">2402085</div>
+                    </div>
+                  </div>
+                </td>
+                <td>Diploma in Computer Technology</td>
+                <td><span class="status-pill waiting">Pending</span></td>
+                <td><span class="status-pill waiting">Waiting</span></td>
+                <td><button class="action-btn" title="Verify"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8V6a2 2 0 012-2h2M2 16v2a2 2 0 002 2h2M16 4h2a2 2 0 012 2v2M16 20h2a2 2 0 002-2v-2"/><circle cx="12" cy="12" r="3"/></svg></button></td>
+              </tr>
+              <tr>
+                <td class="row-num">011</td>
+                <td>
+                  <div class="student-cell">
+                    <span class="s-avatar">NA</span>
+                    <div>
+                      <div class="s-name">Nur Ain Solehah Binti Muhamad Fauzi</div>
+                      <div class="s-id">2402086</div>
+                    </div>
+                  </div>
+                </td>
+                <td>Diploma in Computer Technology</td>
+                <td><span class="status-pill waiting">Pending</span></td>
+                <td><span class="status-pill waiting">Waiting</span></td>
+                <td><button class="action-btn" title="Verify"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8V6a2 2 0 012-2h2M2 16v2a2 2 0 002 2h2M16 4h2a2 2 0 012 2v2M16 20h2a2 2 0 002-2v-2"/><circle cx="12" cy="12" r="3"/></svg></button></td>
+              </tr>
+              <tr>
+                <td class="row-num">012</td>
+                <td>
+                  <div class="student-cell">
+                    <span class="s-avatar">LL</span>
+                    <div>
+                      <div class="s-name">Lily Liyana Lorraine Binti Jale</div>
+                      <div class="s-id">2402087</div>
+                    </div>
+                  </div>
+                </td>
+                <td>Diploma in Computer Technology</td>
+                <td><span class="status-pill waiting">Pending</span></td>
+                <td><span class="status-pill waiting">Waiting</span></td>
+                <td><button class="action-btn" title="Verify"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8V6a2 2 0 012-2h2M2 16v2a2 2 0 002 2h2M16 4h2a2 2 0 012 2v2M16 20h2a2 2 0 002-2v-2"/><circle cx="12" cy="12" r="3"/></svg></button></td>
+              </tr>
+              <tr>
+                <td class="row-num">013</td>
+                <td>
+                  <div class="student-cell">
+                    <span class="s-avatar">MS</span>
+                    <div>
+                      <div class="s-name">Muhammad Syamsul Nazir Bin Mohd Samsuri</div>
+                      <div class="s-id">2402088</div>
+                    </div>
+                  </div>
+                </td>
+                <td>Diploma in Computer Technology</td>
+                <td><span class="status-pill waiting">Pending</span></td>
+                <td><span class="status-pill waiting">Waiting</span></td>
+                <td><button class="action-btn" title="Verify"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8V6a2 2 0 012-2h2M2 16v2a2 2 0 002 2h2M16 4h2a2 2 0 012 2v2M16 20h2a2 2 0 002-2v-2"/><circle cx="12" cy="12" r="3"/></svg></button></td>
+              </tr>
+              <tr>
+                <td class="row-num">014</td>
+                <td>
+                  <div class="student-cell">
+                    <span class="s-avatar">NJ</span>
+                    <div>
+                      <div class="s-name">Najjwa Aqilla Binti Mohd Khairi</div>
+                      <div class="s-id">2402089</div>
+                    </div>
+                  </div>
+                </td>
+                <td>Diploma in Computer Technology</td>
                 <td><span class="status-pill waiting">Pending</span></td>
                 <td><span class="status-pill waiting">Waiting</span></td>
                 <td><button class="action-btn" title="Verify"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8V6a2 2 0 012-2h2M2 16v2a2 2 0 002 2h2M16 4h2a2 2 0 012 2v2M16 20h2a2 2 0 002-2v-2"/><circle cx="12" cy="12" r="3"/></svg></button></td>
@@ -366,10 +519,133 @@
 
 </div>
 
+<!-- Add to Queue Modal -->
+<div class="modal-overlay" id="addQueueModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Add Student to Queue</h3>
+      <button class="modal-close" onclick="closeAddModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="field">
+        <label>Search Student</label>
+        <input type="text" id="addName" placeholder="Enter name or student ID">
+      </div>
+      <div class="field">
+        <label>Programme</label>
+        <select id="addProgramme">
+          <option>Diploma in Computer Technology (Big Data Analytics)</option>
+          <option>Diploma in Electrical Competency (Domestic &amp; Industrial) PW4</option>
+          <option>Diploma in Automotive Technology</option>
+          <option>Certificate in Architecture</option>
+          <option>Diploma in Water Services Technology</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Queue Position</label>
+        <input type="number" id="addQueueNo" value="041" min="1">
+      </div>
+      <div class="modal-actions">
+        <button class="ghost-btn" onclick="closeAddModal()">Cancel</button>
+        <button class="primary-btn" onclick="confirmAdd()">Add to Queue</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
 <script>
   function addToQueue(){
-    alert('Add to queue feature (prototype).\n\nIn the real system, this would open a student search modal.');
+    document.getElementById('addQueueModal').classList.add('open');
   }
+  function closeAddModal(){
+    document.getElementById('addQueueModal').classList.remove('open');
+  }
+  function showToast(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(function(){ t.classList.remove('show'); }, 2600);
+  }
+  function confirmAdd(){
+    const name = document.getElementById('addName').value.trim();
+    const q = document.getElementById('addQueueNo').value;
+    const prog = document.getElementById('addProgramme').value;
+    const tbody = document.querySelector('#queueTable tbody');
+    const row = document.createElement('tr');
+    const initials = (function(){
+      const parts = (name || 'New Student').split(' ');
+      return parts.map(function(w){ return w.charAt(0); }).join('').toUpperCase().slice(0,2);
+    })();
+    row.innerHTML =
+      '<td class="row-num">' + q + '</td>' +
+      '<td><div class="student-cell"><span class="s-avatar">' + initials + '</span>' +
+      '<div><div class="s-name">' + (name || 'New Student') + '</div>' +
+      '<div class="s-id">NEW</div></div></div></td>' +
+      '<td>' + prog + '</td>' +
+      '<td><span class="status-pill waiting">Pending</span></td>' +
+      '<td><span class="status-pill waiting">Waiting</span></td>' +
+      '<td><button class="action-btn" title="Verify"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8V6a2 2 0 012-2h2M2 16v2a2 2 0 002 2h2M16 4h2a2 2 0 012 2v2M16 20h2a2 2 0 002-2v-2"/><circle cx="12" cy="12" r="3"/></svg></button></td>';
+    tbody.insertBefore(row, tbody.firstChild);
+    closeAddModal();
+    document.getElementById('addName').value = '';
+    showToast('Added ' + (name || 'New student') + ' to queue #' + q);
+    wireActionButtons();
+  }
+
+  function wireActionButtons(){
+    document.querySelectorAll('.action-btn.call').forEach(function(btn){
+      if(btn.dataset.wired) return;
+      btn.dataset.wired = '1';
+      btn.addEventListener('click', function(){
+        const row = btn.closest('tr');
+        const name = row.querySelector('.s-name').textContent;
+        row.querySelector('td:nth-child(5)').innerHTML = '<span class="status-pill onstage">On Stage</span>';
+        showToast('Called ' + name + ' to stage');
+      });
+    });
+    document.querySelectorAll('.action-btn.done').forEach(function(btn){
+      if(btn.dataset.wired) return;
+      btn.dataset.wired = '1';
+      btn.addEventListener('click', function(){
+        const row = btn.closest('tr');
+        const name = row.querySelector('.s-name').textContent;
+        row.querySelector('td:nth-child(5)').innerHTML = '<span class="status-pill completed">Completed</span>';
+        showToast('Marked ' + name + ' as completed');
+      });
+    });
+    document.querySelectorAll('.action-btn').forEach(function(btn){
+      if(btn.dataset.wired) return;
+      if(!btn.classList.contains('call') && !btn.classList.contains('done')){
+        btn.dataset.wired = '1';
+        btn.addEventListener('click', function(){
+          const row = btn.closest('tr');
+          row.querySelector('td:nth-child(5)').innerHTML = '<span class="status-pill verified">✓ Verified</span>';
+          row.querySelector('td:nth-child(4)').innerHTML = '<span class="status-pill verified">✓ Verified</span>';
+          showToast('Student verified');
+        });
+      }
+    });
+  }
+  wireActionButtons();
+
+  // Live search filter
+  document.getElementById('searchInput').addEventListener('input', function(){
+    const q = this.value.toLowerCase();
+    document.querySelectorAll('#queueTable tbody tr').forEach(function(tr){
+      tr.style.display = tr.textContent.toLowerCase().indexOf(q) > -1 ? '' : 'none';
+    });
+  });
+
+  // Auto-refresh countdown ticker
+  let sec = 5;
+  setInterval(function(){
+    sec--;
+    if(sec <= 0){ sec = 5; }
+    document.getElementById('refreshCount').textContent = sec + 's';
+  }, 1000);
 </script>
 
 </body>

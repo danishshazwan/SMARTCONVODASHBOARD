@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SmartConvo — Cast Your Vote</title>
-<link rel="icon" type="image/x-icon" href="icon.ico">
+  <link rel="icon" type="image/svg+xml" href="smc-icon.svg?v=3">
+  <link rel="apple-touch-icon" href="smc-icon.svg?v=3">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -140,7 +141,19 @@
     display:flex;align-items:center;justify-content:space-between;
     font-family:'IBM Plex Mono',monospace;font-size:15px;color:var(--ink-soft);letter-spacing:0.04em;
   }
+/* ---------- RESPONSIVE (CONTENT) ---------- */
   @media (max-width:860px){
+    .topbar{padding:14px 20px;}
+    .wrap{padding:24px 18px 60px;}
+    .portal-hero{padding:34px 26px;}
+    .portal-hero h1{font-size:clamp(30px,6vw,44px);}
+    .portal-hero p{font-size:18px;}
+    .candidate-grid{grid-template-columns:1fr;}
+    footer{flex-direction:column;gap:8px;text-align:center;padding:24px;}
+  }
+
+  /* ---------- RESPONSIVE (SIDEBAR COLLAPSE — PHONE ONLY) ---------- */
+  @media (max-width:640px){
     .sidebar{width:64px;}
     .sidebar-brand .nav-tag,
     .nav-item .nav-label{display:none;}
@@ -149,11 +162,7 @@
     .nav-item{padding:14px;justify-content:center;}
     .sidebar-logout .nav-item{justify-content:center;}
     .main-area{margin-left:64px;}
-    .topbar{padding:14px 20px;}
-    .wrap{padding:24px 18px 60px;}
-    .portal-hero{padding:34px 26px;}
-    .candidate-grid{grid-template-columns:1fr;}
-    footer{flex-direction:column;gap:8px;text-align:center;padding:24px;}
+    .topbar-title{font-size:18px;}
   }
   :focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
 </style>
@@ -174,6 +183,12 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
         </span>
         <span class="nav-label">Dashboard</span>
+      </a>
+      <a href="guest-live-hall.html" class="nav-item">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M2 9h20"/><path d="M6 7h.01M10 7h.01"/></svg>
+        </span>
+        <span class="nav-label">Live Hall</span>
       </a>
       <a href="guest-graduate-search.html" class="nav-item">
         <span class="nav-icon">

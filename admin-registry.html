@@ -59,11 +59,30 @@
   .filter-btn:hover{border-color:var(--gold);}
   .primary-btn{display:inline-flex;align-items:center;gap:10px;padding:13px 20px;background:var(--navy);color:#fff;border:none;border-radius:var(--radius);font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:background 0.2s ease;}
   .primary-btn:hover{background:var(--navy-deep);}
+  .add-btn{background:var(--gold);}
+  .add-btn:hover{background:var(--navy-deep);}
+
+  /* Add graduate form */
+  .modal .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .form-field{display:flex;flex-direction:column;gap:6px;}
+  .form-field.full{grid-column:1 / -1;}
+  .form-field label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-soft);}
+  .form-field input,.form-field select{
+    padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;color:var(--ink);
+    background:var(--bg);border:1px solid var(--line);border-radius:var(--radius);
+    -webkit-appearance:none;appearance:none;transition:border-color 0.2s ease,box-shadow 0.2s ease;
+  }
+  .form-field input:focus,.form-field select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-soft);}
+  .save-add-btn{padding:13px 24px;background:var(--navy);color:#fff;border:none;border-radius:var(--radius);font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:background 0.2s ease;}
+  .save-add-btn:hover{background:var(--navy-deep);}
 
   .reg-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;}
   .stat-card{background:var(--surface);border:1px solid var(--line);padding:20px;display:flex;flex-direction:column;gap:6px;}
   .stat-card .stat-label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-soft);}
   .stat-card .stat-value{font-family:'Fraunces',serif;font-weight:500;font-size:28px;color:var(--navy-deep);}
+
+  /* Layout: full-width table */
+  .registry-layout{width:100%;}
 
   .section-card{background:var(--surface);border:1px solid var(--line);}
   .section-card .card-head{padding:20px 24px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;}
@@ -80,6 +99,31 @@
   .reg-table .s-name{font-weight:600;color:var(--ink);}
   .reg-table .s-id{font-size:12px;color:var(--ink-soft);font-family:'IBM Plex Mono',monospace;}
 
+  .view-btn{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;background:var(--surface);border:1px solid var(--navy);border-radius:var(--radius);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--navy);cursor:pointer;transition:background 0.2s ease,color 0.2s ease;}
+  .view-btn:hover{background:var(--navy);color:#fff;}
+
+  /* Student detail modal */
+  .modal-overlay{position:fixed;inset:0;background:rgba(20,40,63,0.45);z-index:60;display:none;align-items:flex-start;justify-content:center;padding:60px 20px;overflow-y:auto;}
+  .modal-overlay.open{display:flex;}
+  .modal{background:var(--surface);border:1px solid var(--line);width:100%;max-width:620px;}
+  .modal-head{padding:22px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;}
+  .modal-head h3{font-family:'Fraunces',serif;font-weight:500;font-size:22px;color:var(--ink);}
+  .modal-close{background:none;border:none;font-size:26px;line-height:1;color:var(--ink-soft);cursor:pointer;transition:color 0.2s ease;}
+  .modal-close:hover{color:var(--red);}
+  .modal-body{padding:26px;}
+  .detail-student{display:flex;align-items:center;gap:16px;padding-bottom:20px;border-bottom:1px solid var(--line);margin-bottom:20px;}
+  .d-avatar{width:64px;height:64px;flex-shrink:0;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:24px;font-weight:500;}
+  .d-name{font-family:'Fraunces',serif;font-weight:500;font-size:22px;color:var(--ink);}
+  .d-id{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--gold);margin-top:2px;}
+  .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .detail-field{display:flex;flex-direction:column;gap:4px;}
+  .detail-field .df-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-soft);}
+  .detail-field .df-value{font-size:14px;color:var(--ink);font-weight:500;}
+  .detail-field.full{grid-column:1 / -1;}
+  .modal-actions{display:flex;justify-content:flex-end;gap:12px;margin-top:24px;padding-top:20px;border-top:1px solid var(--line);}
+  .ghost-btn{padding:12px 20px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink);cursor:pointer;transition:border-color 0.2s ease;}
+.ghost-btn:hover{border-color:var(--gold);}
+
   .status-pill{display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;padding:5px 12px;border-radius:2px;}
   .status-pill.verified{background:var(--green-soft);color:var(--green);}
   .status-pill.waiting{background:var(--amber-soft);color:var(--amber);}
@@ -93,7 +137,21 @@
   .pagination .p-btn:hover{border-color:var(--gold);}
   .pagination .p-btn.active{background:var(--navy);color:#fff;border-color:var(--navy);}
 
+  /* Programme filter select */
+  .select-filter{position:relative;}
+  .select-filter select{
+    padding:13px 38px 13px 16px;background:var(--surface);border:1px solid var(--line);
+    border-radius:var(--radius);font-family:'Inter',sans-serif;font-size:13px;color:var(--ink);
+    cursor:pointer;-webkit-appearance:none;appearance:none;transition:border-color 0.2s ease;
+  }
+  .select-filter select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-soft);}
+  .select-filter::after{
+    content:"";position:absolute;right:16px;top:50%;transform:translateY(-70%) rotate(45deg);
+    width:7px;height:7px;border-right:1.5px solid var(--navy);border-bottom:1.5px solid var(--navy);pointer-events:none;
+  }
+
   .main-footer{border-top:1px solid var(--line);padding:20px 40px;display:flex;align-items:center;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);letter-spacing:0.04em;}
+
 
   @media (max-width:1024px){.reg-stats{grid-template-columns:repeat(2,1fr);}}
   @media (max-width:768px){
@@ -138,6 +196,10 @@
         <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8V6a2 2 0 012-2h2M2 16v2a2 2 0 002 2h2M16 4h2a2 2 0 012 2v2M16 20h2a2 2 0 002-2v-2"/><circle cx="12" cy="12" r="3"/></svg></span>
         <span class="nav-label">Face Verification</span>
       </a>
+      <a href="admin-approval.html" class="nav-item">
+        <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg></span>
+        <span class="nav-label">Approvals</span>
+      </a>
       <a href="admin-registry.html" class="nav-item active">
         <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span>
         <span class="nav-label">Student Registry</span>
@@ -172,115 +234,193 @@
 
       <section class="page-hero">
         <div class="eyebrow"><span class="dot"></span> Records</div>
-        <h1>Student Registry</h1>
-        <p>View and manage all registered students. Search, filter, and access individual student profiles.</p>
+        <h1>Students &amp; Graduates</h1>
       </section>
 
       <section class="reg-stats">
-        <div class="stat-card"><div class="stat-label">Total Registered</div><div class="stat-value">1,284</div></div>
-        <div class="stat-card"><div class="stat-label">Today's Verified</div><div class="stat-value">342</div></div>
-        <div class="stat-card"><div class="stat-label">Pending Verification</div><div class="stat-value">21</div></div>
-        <div class="stat-card"><div class="stat-label">Graduated Today</div><div class="stat-value">283</div></div>
+        <div class="stat-card"><div class="stat-label">Total Registered</div><div class="stat-value">14</div></div>
+        <div class="stat-card"><div class="stat-label">Verified</div><div class="stat-value">6</div></div>
+        <div class="stat-card"><div class="stat-label">Pending Verification</div><div class="stat-value">8</div></div>
+        <div class="stat-card"><div class="stat-label">Programme</div><div class="stat-value">1</div></div>
       </section>
 
       <div class="reg-toolbar">
         <div class="search-box">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-          <input type="text" placeholder="Search by name, ID, email...">
+          <input type="text" id="searchInput" placeholder="Search by name, ID, email..." oninput="applyFilters()">
         </div>
-        <div style="display:flex;gap:12px;align-items:center;">
-          <button class="filter-btn">Filter</button>
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+          <div class="select-filter">
+            <select id="programmeFilter" onchange="applyFilters()">
+              <option value="all">All Programmes</option>
+              <option>Diploma in Water Services Technology</option>
+              <option>Diploma in Computer Technology (Big Data Analytics)</option>
+              <option>Diploma in Engineering Technology – Smart Manufacturing</option>
+              <option>Diploma in Contemporary Furniture Production Technology</option>
+              <option>Diploma in Welding Competency</option>
+              <option>Diploma in Electrical Machinery Chargeman Competency (A4 Voltage)</option>
+              <option>Diploma in Electrical Competency (Domestic &amp; Industrial) PW4</option>
+              <option>Diploma in Automotive Technology</option>
+              <option>Diploma in Automotive Technology – Vehicle Body Repair &amp; Refinishing</option>
+              <option>Certificate in Mechanical Engineering Technology (Design Drafting)</option>
+              <option>Certificate in Building Engineering Technology</option>
+              <option>Certificate in Foundry Technology</option>
+              <option>Certificate in Architecture</option>
+            </select>
+          </div>
+          <button class="filter-btn" onclick="applyFilters()">Filter</button>
           <button class="primary-btn" onclick="alert('Export student list (prototype).')">Export</button>
+          <button class="primary-btn add-btn" onclick="openAddModal()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+            Add Graduate
+          </button>
         </div>
       </div>
 
-      <section class="section-card">
-        <div class="card-head">
-          <h3>All Students</h3>
-          <span style="font-size:13px;color:var(--ink-soft);">Showing 1–10 of 1,284</span>
-        </div>
-        <div class="card-body">
-          <table class="reg-table">
-            <thead>
-              <tr>
-                <th>Student</th>
-                <th>Student ID</th>
-                <th>Programme</th>
-                <th>Faculty</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><div class="student-cell"><span class="s-avatar">AH</span><div><div class="s-name">Aiman Hakimi bin Roslan</div><div class="s-id">aimanhakimi@tvetmara.edu.my</div></div></div></td>
-                <td>241200</td>
-                <td>Diploma in Computer Technology (Big Data Analytics)</td>
-                <td>Information Technology &amp; Engineering</td>
-                <td><span class="status-pill verified">Verified</span></td>
-              </tr>
-              <tr>
-                <td><div class="student-cell"><span class="s-avatar">NI</span><div><div class="s-name">Nurul Izzah binti Fauzi</div><div class="s-id">nurulizzah@tvetmara.edu.my</div></div></div></td>
-                <td>241035</td>
-                <td>Diploma in Electrical Competency (Domestic &amp; Industrial) PW4</td>
-                <td>Electrical &amp; Electronics</td>
-                <td><span class="status-pill completed">Completed</span></td>
-              </tr>
-              <tr>
-                <td><div class="student-cell"><span class="s-avatar">MS</span><div><div class="s-name">Muhammad Syafiq bin Azman</div><div class="s-id">syafiqazman@tvetmara.edu.my</div></div></div></td>
-                <td>241036</td>
-                <td>Diploma in Automotive Technology</td>
-                <td>Automotive</td>
-                <td><span class="status-pill verified">Verified</span></td>
-              </tr>
-              <tr>
-                <td><div class="student-cell"><span class="s-avatar">FA</span><div><div class="s-name">Farah Adibah binti Saleh</div><div class="s-id">farahadibah@tvetmara.edu.my</div></div></div></td>
-                <td>241037</td>
-                <td>Certificate in Architecture</td>
-                <td>Information Technology &amp; Engineering</td>
-                <td><span class="status-pill verified">Verified</span></td>
-              </tr>
-              <tr>
-                <td><div class="student-cell"><span class="s-avatar">LW</span><div><div class="s-name">Lim Wei Jian</div><div class="s-id">limweijian@tvetmara.edu.my</div></div></div></td>
-                <td>241034</td>
-                <td>Diploma in Engineering Technology – Smart Manufacturing</td>
-                <td>Welding &amp; Manufacturing</td>
-                <td><span class="status-pill completed">Completed</span></td>
-              </tr>
-              <tr>
-                <td><div class="student-cell"><span class="s-avatar">AS</span><div><div class="s-name">Anis Sofea binti Kamarudin</div><div class="s-id">aniss@tvetmara.edu.my</div></div></div></td>
-                <td>241038</td>
-                <td>Diploma in Water Services Technology</td>
-                <td>Welding &amp; Manufacturing</td>
-                <td><span class="status-pill verified">Verified</span></td>
-              </tr>
-              <tr>
-                <td><div class="student-cell"><span class="s-avatar">RK</span><div><div class="s-name">Rajesh a/l Kumar</div><div class="s-id">rajeshk@tvetmara.edu.my</div></div></div></td>
-                <td>241039</td>
-                <td>Certificate in Foundry Technology</td>
-                <td>Welding &amp; Manufacturing</td>
-                <td><span class="status-pill waiting">Pending</span></td>
-              </tr>
-              <tr>
-                <td><div class="student-cell"><span class="s-avatar">NA</span><div><div class="s-name">Nur Alya binti Iskandar</div><div class="s-id">nuralya@tvetmara.edu.my</div></div></div></td>
-                <td>241040</td>
-                <td>Diploma in Automotive Technology – Vehicle Body Repair &amp; Refinishing</td>
-                <td>Automotive</td>
-                <td><span class="status-pill waiting">Pending</span></td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="pagination">
-            <span class="p-info">Page 1 of 129</span>
-            <div class="p-btns">
-              <button class="p-btn active">1</button>
-              <button class="p-btn">2</button>
-              <button class="p-btn">3</button>
-              <button class="p-btn">...</button>
-              <button class="p-btn">129</button>
+      <div class="registry-layout">
+
+        <section class="section-card">
+          <div class="card-head">
+<h3>All Students</h3>
+            <span style="font-size:13px;color:var(--ink-soft);" id="showing-count">Showing 1–14 of 14</span>
+          </div>
+          <div class="card-body">
+            <table class="reg-table" id="regTable">
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Student ID</th>
+                  <th>Programme</th>
+                  <th>Faculty</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><div class="student-cell"><span class="s-avatar">DS</span><div><div class="s-name">Danish Shazwan Bin Suwandi</div><div class="s-id">danish@tvetmara.edu.my</div></div></div></td>
+                  <td>2402076</td>
+                  <td>Diploma in Computer Technology</td>
+                  <td>Information Technology &amp; Engineering</td>
+                  <td><span class="status-pill verified">Verified</span></td>
+                  <td><button class="view-btn" onclick="viewStudent('2402076')">View</button></td>
+                </tr>
+                <tr>
+                  <td><div class="student-cell"><span class="s-avatar">IZ</span><div><div class="s-name">Iskandar Zulkarnain Bin Muhamad</div><div class="s-id">iskandar@tvetmara.edu.my</div></div></div></td>
+                  <td>2402077</td>
+                  <td>Diploma in Computer Technology</td>
+                  <td>Information Technology &amp; Engineering</td>
+                  <td><span class="status-pill verified">Verified</span></td>
+                  <td><button class="view-btn" onclick="viewStudent('2402077')">View</button></td>
+                </tr>
+                <tr>
+                  <td><div class="student-cell"><span class="s-avatar">MM</span><div><div class="s-name">Mior Muhammad Ikmal Bin Mior Darul Ridzuan</div><div class="s-id">mior.ikmal@tvetmara.edu.my</div></div></div></td>
+                  <td>2402078</td>
+                  <td>Diploma in Computer Technology</td>
+                  <td>Information Technology &amp; Engineering</td>
+                  <td><span class="status-pill verified">Verified</span></td>
+                  <td><button class="view-btn" onclick="viewStudent('2402078')">View</button></td>
+                </tr>
+                <tr>
+                  <td><div class="student-cell"><span class="s-avatar">MH</span><div><div class="s-name">Mohammad Haziq Afiq Bin Yusli@Yazid</div><div class="s-id">haziq.afiq@tvetmara.edu.my</div></div></div></td>
+                  <td>2402079</td>
+                  <td>Diploma in Computer Technology</td>
+                  <td>Information Technology &amp; Engineering</td>
+                  <td><span class="status-pill verified">Verified</span></td>
+                  <td><button class="view-btn" onclick="viewStudent('2402079')">View</button></td>
+                </tr>
+                <tr>
+                  <td><div class="student-cell"><span class="s-avatar">MA</span><div><div class="s-name">Muhammad Ammar Bin Mahadir</div><div class="s-id">ammar.mahadir@tvetmara.edu.my</div></div></div></td>
+                  <td>2402080</td>
+                  <td>Diploma in Computer Technology</td>
+                  <td>Information Technology &amp; Engineering</td>
+                  <td><span class="status-pill verified">Verified</span></td>
+                  <td><button class="view-btn" onclick="viewStudent('2402080')">View</button></td>
+                </tr>
+                <tr>
+                  <td><div class="student-cell"><span class="s-avatar">HF</span><div><div class="s-name">Muhammad Hafiz Bin Hassan</div><div class="s-id">hafiz.hassan@tvetmara.edu.my</div></div></div></td>
+                  <td>2402081</td>
+                  <td>Diploma in Computer Technology</td>
+                  <td>Information Technology &amp; Engineering</td>
+                  <td><span class="status-pill verified">Verified</span></td>
+                  <td><button class="view-btn" onclick="viewStudent('2402081')">View</button></td>
+                </tr>
+                <tr>
+                  <td><div class="student-cell"><span class="s-avatar">NA</span><div><div class="s-name">Nor Adilah Binti Shamsuddin</div><div class="s-id">nor.adilah@tvetmara.edu.my</div></div></div></td>
+                  <td>2402082</td>
+                  <td>Diploma in Computer Technology</td>
+                  <td>Information Technology &amp; Engineering</td>
+                  <td><span class="status-pill waiting">Pending</span></td>
+                  <td><button class="view-btn" onclick="viewStudent('2402082')">View</button></td>
+                </tr>
+                <tr>
+                  <td><div class="student-cell"><span class="s-avatar">NF</span><div><div class="s-name">Nur Fadhilatul Akma Binti Roslan</div><div class="s-id">fadhilatul@tvetmara.edu.my</div></div></div></td>
+                  <td>2402083</td>
+                  <td>Diploma in Computer Technology</td>
+                  <td>Information Technology &amp; Engineering</td>
+                  <td><span class="status-pill waiting">Pending</span></td>
+                  <td><button class="view-btn" onclick="viewStudent('2402083')">View</button></td>
+                </tr>
+                <tr>
+                  <td><div class="student-cell"><span class="s-avatar">NN</span><div><div class="s-name">Nurfatin Nadiah Binti Mohd Khir</div><div class="s-id">nurfatin@tvetmara.edu.my</div></div></div></td>
+                  <td>2402084</td>
+                  <td>Diploma in Computer Technology</td>
+                  <td>Information Technology &amp; Engineering</td>
+                  <td><span class="status-pill waiting">Pending</span></td>
+                  <td><button class="view-btn" onclick="viewStudent('2402084')">View</button></td>
+                </tr>
+                <tr>
+                  <td><div class="student-cell"><span class="s-avatar">NS</span><div><div class="s-name">Nursyazwanie Binti Jaimi</div><div class="s-id">syazwanie@tvetmara.edu.my</div></div></div></td>
+                  <td>2402085</td>
+                  <td>Diploma in Computer Technology</td>
+                  <td>Information Technology &amp; Engineering</td>
+                  <td><span class="status-pill waiting">Pending</span></td>
+                  <td><button class="view-btn" onclick="viewStudent('2402085')">View</button></td>
+                </tr>
+                <tr>
+                  <td><div class="student-cell"><span class="s-avatar">NA</span><div><div class="s-name">Nur Ain Solehah Binti Muhamad Fauzi</div><div class="s-id">ain.solehah@tvetmara.edu.my</div></div></div></td>
+                  <td>2402086</td>
+                  <td>Diploma in Computer Technology</td>
+                  <td>Information Technology &amp; Engineering</td>
+                  <td><span class="status-pill waiting">Pending</span></td>
+                  <td><button class="view-btn" onclick="viewStudent('2402086')">View</button></td>
+                </tr>
+                <tr>
+                  <td><div class="student-cell"><span class="s-avatar">LL</span><div><div class="s-name">Lily Liyana Lorraine Binti Jale</div><div class="s-id">lily.liyana@tvetmara.edu.my</div></div></div></td>
+                  <td>2402087</td>
+                  <td>Diploma in Computer Technology</td>
+                  <td>Information Technology &amp; Engineering</td>
+                  <td><span class="status-pill waiting">Pending</span></td>
+                  <td><button class="view-btn" onclick="viewStudent('2402087')">View</button></td>
+                </tr>
+                <tr>
+                  <td><div class="student-cell"><span class="s-avatar">MS</span><div><div class="s-name">Muhammad Syamsul Nazir Bin Mohd Samsuri</div><div class="s-id">syamsul.nazir@tvetmara.edu.my</div></div></div></td>
+                  <td>2402088</td>
+                  <td>Diploma in Computer Technology</td>
+                  <td>Information Technology &amp; Engineering</td>
+                  <td><span class="status-pill waiting">Pending</span></td>
+                  <td><button class="view-btn" onclick="viewStudent('2402088')">View</button></td>
+                </tr>
+                <tr>
+                  <td><div class="student-cell"><span class="s-avatar">NJ</span><div><div class="s-name">Najjwa Aqilla Binti Mohd Khairi</div><div class="s-id">najjwa.aqilla@tvetmara.edu.my</div></div></div></td>
+                  <td>2402089</td>
+                  <td>Diploma in Computer Technology</td>
+                  <td>Information Technology &amp; Engineering</td>
+                  <td><span class="status-pill waiting">Pending</span></td>
+                  <td><button class="view-btn" onclick="viewStudent('2402089')">View</button></td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="pagination">
+              <span class="p-info">Page 1 of 1</span>
+              <div class="p-btns">
+                <button class="p-btn active">1</button>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+
+      </div><!-- /.registry-layout -->
 
     </main>
 
@@ -289,9 +429,226 @@
       <span>AI-Assisted Convocation Queue &amp; Identity Verification System</span>
     </footer>
 
-  </div>
+</div>
 
 </div>
 
+<!-- Student detail modal -->
+<div class="modal-overlay" id="studentModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Student Details</h3>
+      <button class="modal-close" onclick="closeStudentModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="detail-student">
+        <span class="d-avatar" id="dAvatar">DS</span>
+        <div>
+          <div class="d-name" id="dName">—</div>
+          <div class="d-id" id="dEmail">—</div>
+        </div>
+      </div>
+      <div class="detail-grid">
+        <div class="detail-field"><span class="df-label">Student ID</span><span class="df-value" id="dSid">—</span></div>
+        <div class="detail-field"><span class="df-label">Status</span><span class="df-value" id="dStatus">—</span></div>
+        <div class="detail-field full"><span class="df-label">Programme</span><span class="df-value" id="dProgramme">—</span></div>
+        <div class="detail-field full"><span class="df-label">Faculty</span><span class="df-value" id="dFaculty">—</span></div>
+        <div class="detail-field full"><span class="df-label">Password</span><span class="df-value" id="dPassword">—</span></div>
+      </div>
+      <div class="modal-actions">
+        <button class="ghost-btn" onclick="closeStudentModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add graduate modal -->
+<div class="modal-overlay" id="addModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Add Graduate</h3>
+      <button class="modal-close" onclick="closeAddModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-field full">
+          <label>Full Name</label>
+          <input type="text" id="newName" placeholder="e.g. Muhammad Alif bin Husin">
+        </div>
+        <div class="form-field">
+          <label>Student ID</label>
+          <input type="text" id="newSid" placeholder="e.g. 2403001">
+        </div>
+        <div class="form-field">
+          <label>Email</label>
+          <input type="email" id="newEmail" placeholder="student@tvetmara.edu.my">
+        </div>
+        <div class="form-field">
+          <label>Password (auto-set)</label>
+          <input type="text" id="newPassword" value="student123" readonly disabled>
+          <span style="font-size:11px;color:var(--ink-soft);margin-top:-2px;">Kata laluan dijana automatik dan tidak boleh diubah.</span>
+        </div>
+        <div class="form-field full">
+          <label>Programme</label>
+          <select id="newProgramme">
+            <option value="">Select a programme…</option>
+            <option>Diploma in Water Services Technology</option>
+            <option>Diploma in Computer Technology</option>
+            <option>Diploma in Computer Technology (Big Data Analytics)</option>
+            <option>Diploma in Engineering Technology – Smart Manufacturing</option>
+            <option>Diploma in Contemporary Furniture Production Technology</option>
+            <option>Diploma in Welding Competency</option>
+            <option>Diploma in Electrical Machinery Chargeman Competency (A4 Voltage)</option>
+            <option>Diploma in Electrical Competency (Domestic &amp; Industrial) PW4</option>
+            <option>Diploma in Automotive Technology</option>
+            <option>Diploma in Automotive Technology – Vehicle Body Repair &amp; Refinishing</option>
+            <option>Certificate in Mechanical Engineering Technology (Design Drafting)</option>
+            <option>Certificate in Building Engineering Technology</option>
+            <option>Certificate in Foundry Technology</option>
+            <option>Certificate in Architecture</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="ghost-btn" onclick="closeAddModal()">Cancel</button>
+        <button class="save-add-btn" onclick="addGraduate()">Add Graduate</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Student detail data
+  let studentData = {
+    '2402076': { name: 'Danish Shazwan Bin Suwandi', email: 'danish@tvetmara.edu.my', prog: 'Diploma in Computer Technology', fac: 'Information Technology & Engineering', status: 'Verified' },
+    '2402077': { name: 'Iskandar Zulkarnain Bin Muhamad', email: 'iskandar@tvetmara.edu.my', prog: 'Diploma in Computer Technology', fac: 'Information Technology & Engineering', status: 'Verified' },
+    '2402078': { name: 'Mior Muhammad Ikmal Bin Mior Darul Ridzuan', email: 'mior.ikmal@tvetmara.edu.my', prog: 'Diploma in Computer Technology', fac: 'Information Technology & Engineering', status: 'Verified' },
+    '2402079': { name: 'Mohammad Haziq Afiq Bin Yusli@Yazid', email: 'haziq.afiq@tvetmara.edu.my', prog: 'Diploma in Computer Technology', fac: 'Information Technology & Engineering', status: 'Verified' },
+    '2402080': { name: 'Muhammad Ammar Bin Mahadir', email: 'ammar.mahadir@tvetmara.edu.my', prog: 'Diploma in Computer Technology', fac: 'Information Technology & Engineering', status: 'Verified' },
+    '2402081': { name: 'Muhammad Hafiz Bin Hassan', email: 'hafiz.hassan@tvetmara.edu.my', prog: 'Diploma in Computer Technology', fac: 'Information Technology & Engineering', status: 'Verified' },
+    '2402082': { name: 'Nor Adilah Binti Shamsuddin', email: 'nor.adilah@tvetmara.edu.my', prog: 'Diploma in Computer Technology', fac: 'Information Technology & Engineering', status: 'Pending' },
+    '2402083': { name: 'Nur Fadhilatul Akma Binti Roslan', email: 'fadhilatul@tvetmara.edu.my', prog: 'Diploma in Computer Technology', fac: 'Information Technology & Engineering', status: 'Pending' },
+    '2402084': { name: 'Nurfatin Nadiah Binti Mohd Khir', email: 'nurfatin@tvetmara.edu.my', prog: 'Diploma in Computer Technology', fac: 'Information Technology & Engineering', status: 'Pending' },
+    '2402085': { name: 'Nursyazwanie Binti Jaimi', email: 'syazwanie@tvetmara.edu.my', prog: 'Diploma in Computer Technology', fac: 'Information Technology & Engineering', status: 'Pending' },
+    '2402086': { name: 'Nur Ain Solehah Binti Muhamad Fauzi', email: 'ain.solehah@tvetmara.edu.my', prog: 'Diploma in Computer Technology', fac: 'Information Technology & Engineering', status: 'Pending' },
+    '2402087': { name: 'Lily Liyana Lorraine Binti Jale', email: 'lily.liyana@tvetmara.edu.my', prog: 'Diploma in Computer Technology', fac: 'Information Technology & Engineering', status: 'Pending' },
+    '2402088': { name: 'Muhammad Syamsul Nazir Bin Mohd Samsuri', email: 'syamsul.nazir@tvetmara.edu.my', prog: 'Diploma in Computer Technology', fac: 'Information Technology & Engineering', status: 'Pending' },
+    '2402089': { name: 'Najjwa Aqilla Binti Mohd Khairi', email: 'najjwa.aqilla@tvetmara.edu.my', prog: 'Diploma in Computer Technology', fac: 'Information Technology & Engineering', status: 'Pending' }
+  };
+
+  function viewStudent(id){
+    const s = studentData[id];
+    if(!s) return;
+    document.getElementById('dAvatar').textContent = s.name.split(' ').map(function(w){ return w.charAt(0); }).join('').slice(0,2);
+    document.getElementById('dName').textContent = s.name;
+    document.getElementById('dEmail').textContent = s.email;
+    document.getElementById('dSid').textContent = id;
+    document.getElementById('dStatus').textContent = s.status;
+    document.getElementById('dProgramme').textContent = s.prog;
+    document.getElementById('dFaculty').textContent = s.fac;
+    document.getElementById('dPassword').textContent = s.password || 'student123';
+    document.getElementById('studentModal').classList.add('open');
+  }
+
+  function closeStudentModal(){
+    document.getElementById('studentModal').classList.remove('open');
+  }
+
+  // Open / close the Add Graduate modal
+  function openAddModal(){
+    document.getElementById('addModal').classList.add('open');
+  }
+
+  function closeAddModal(){
+    document.getElementById('addModal').classList.remove('open');
+  }
+
+  // Add a new graduate to the registry table by programme
+  function addGraduate(){
+    const name  = document.getElementById('newName').value.trim();
+    const sid   = document.getElementById('newSid').value.trim();
+    const email = document.getElementById('newEmail').value.trim();
+    const pw    = document.getElementById('newPassword').value.trim() || 'student123';
+    const prog  = document.getElementById('newProgramme').value;
+
+    if(!name || !sid || !email || !prog){
+      alert('Sila lengkapkan semua maklumat pelajar (Nama, ID, Email dan Program).');
+      return;
+    }
+
+    if(studentData[sid]){
+      alert('Student ID ' + sid + ' sudah wujud dalam sistem.');
+      return;
+    }
+
+    // Determine faculty from the chosen programme
+    var fac = 'Information Technology & Engineering';
+    if(prog.indexOf('Water') !== -1 || prog.indexOf('Furniture') !== -1 ||
+       prog.indexOf('Welding') !== -1 || prog.indexOf('Electrical') !== -1 ||
+       prog.indexOf('Automotive') !== -1 || prog.indexOf('Mechanical Engineering Technology') !== -1 ||
+       prog.indexOf('Building Engineering') !== -1 || prog.indexOf('Foundry') !== -1){
+      fac = 'Engineering & Technology';
+    } else if(prog.indexOf('Architecture') !== -1){
+      fac = 'Architecture';
+    }
+
+    // Store in student detail data so the View button works (including the fixed password)
+    studentData[sid] = { name: name, email: email, prog: prog, fac: fac, status: 'Verified', password: pw };
+
+    // Build the initials avatar
+    var initials = name.split(' ').map(function(w){ return w.charAt(0); }).join('').slice(0,2).toUpperCase();
+
+    // Append a new row to the registry table
+    var tbody = document.querySelector('#regTable tbody');
+    var tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td><div class="student-cell"><span class="s-avatar">' + initials + '</span>' +
+      '<div><div class="s-name">' + name + '</div><div class="s-id">' + email + '</div></div></div></td>' +
+      '<td>' + sid + '</td>' +
+      '<td>' + prog + '</td>' +
+      '<td>' + fac + '</td>' +
+      '<td><span class="status-pill verified">Verified</span></td>' +
+      '<td><button class="view-btn" onclick="viewStudent(\'' + sid + '\')">View</button></td>';
+    tbody.appendChild(tr);
+
+    // Update the showing count and reset filter to show the new record
+    document.getElementById('programmeFilter').value = 'all';
+    document.getElementById('searchInput').value = '';
+    applyFilters();
+
+    closeAddModal();
+    document.getElementById('newName').value = '';
+    document.getElementById('newSid').value = '';
+    document.getElementById('newEmail').value = '';
+    document.getElementById('newProgramme').value = '';
+    alert('Graduate "' + name + '" telah ditambah ke dalam Student Registry.');
+  }
+
+  // Filter students by search text and programme
+  function applyFilters(){
+    const search = (document.getElementById('searchInput').value || '').toLowerCase();
+    const programme = document.getElementById('programmeFilter').value;
+    const rows = document.querySelectorAll('.reg-table tbody tr');
+    let visible = 0;
+
+    rows.forEach(function(row){
+      const text = row.textContent.toLowerCase();
+      const progCell = row.children[2].textContent.trim();
+      const matchesSearch = text.indexOf(search) !== -1;
+      const matchesProg = programme === 'all' || progCell === programme;
+      if(matchesSearch && matchesProg){
+        row.style.display = '';
+        visible++;
+      } else {
+        row.style.display = 'none';
+      }
+    });
+
+    document.getElementById('showing-count').textContent =
+      'Showing ' + visible + ' of 1,284';
+  }
+</script>
+
 </body>
 </html>
+

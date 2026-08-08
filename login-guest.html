@@ -379,7 +379,7 @@ footer{
 <body>
 
 <nav class="nav">
-    <div class="nav-mark">SmartConvo</div>
+<a href="index.html" class="nav-mark">SmartConvo</a>
     <div class="nav-tag">Guest Access</div>
   </nav>
 
@@ -554,7 +554,17 @@ document.getElementById('goRegister').addEventListener('click', showRegister);
 if(!valid) return;
 
     // Placeholder: replace with real authentication call.
-    window.location.href = 'guest-portal.html';
+    // Mark the guest as logged in (demo session).
+    localStorage.setItem('sc_guest_logged', '1');
+
+    // If the user came from the Diary Gallery, take them straight to the gallery.
+    const afterLogin = localStorage.getItem('sc_after_login');
+    if (afterLogin === 'gallery') {
+      localStorage.removeItem('sc_after_login');
+      window.location.href = 'guest-gallery.html';
+    } else {
+      window.location.href = 'guest-portal.html';
+    }
   });
 
   // ----- Register form validation (demo) -----

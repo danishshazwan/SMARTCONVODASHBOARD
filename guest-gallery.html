@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diary Gallery — SmartConvo</title>
+  <link rel="icon" type="image/svg+xml" href="smc-icon.svg?v=3">
+  <link rel="apple-touch-icon" href="smc-icon.svg?v=3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #FAFAF7;
+    --surface: #FFFFFF;
+    --ink: #1A2332;
+    --ink-soft: #5B6472;
+    --line: #E4E1D8;
+    --navy: #1E3A5F;
+    --navy-deep: #14283F;
+    --gold: #B08D2B;
+    --gold-soft: #EFE6C8;
+    --error: #A3402F;
+    --success: #2E6B4F;
+    --radius: 3px;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100svh;
+    display:flex;
+    flex-direction:column;
+  }
+  a{color:inherit;text-decoration:none;}
+
+  /* ---------- NAV ---------- */
+  .nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:24px 48px;
+  }
+  .nav-mark{
+    font-family:'Fraunces', serif;
+    font-size:19px;
+    font-weight:600;
+  }
+  .nav-tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+  .nav-links{
+    display:flex;
+    align-items:center;
+    gap:22px;
+  }
+  .nav-links a{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    border-bottom:1px solid transparent;
+    padding-bottom:2px;
+    transition:color 0.2s ease, border-color 0.2s ease;
+  }
+  .nav-links a:hover{ color:var(--navy); border-color:var(--navy); }
+
+  /* ---------- MAIN ---------- */
+  main{
+    flex:1;
+    padding:30px 24px 70px;
+  }
+  .wrap{
+    max-width:1080px;
+    margin:0 auto;
+  }
+
+  .head{
+    text-align:center;
+    margin-bottom:40px;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--navy);
+    margin-bottom:16px;
+  }
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:clamp(28px, 5vw, 40px);
+    text-align:center;
+    color:var(--navy-deep);
+    margin-bottom:12px;
+  }
+  .sub{
+    text-align:center;
+    font-size:14px;
+    color:var(--ink-soft);
+    max-width:520px;
+    margin:0 auto;
+    line-height:1.6;
+  }
+
+  /* ---------- CAMERA / CAPTURE ---------- */
+  .capture-panel{
+    position:relative;
+    background:var(--surface);
+    border:1px solid var(--line);
+    padding:28px;
+    margin-bottom:36px;
+  }
+  .capture-panel::before,.capture-panel::after{
+    content:"";position:absolute;width:22px;height:22px;
+    border:1.5px solid var(--navy);opacity:0.5;
+  }
+  .capture-panel::before{ top:-1px;left:-1px;border-right:none;border-bottom:none; }
+  .capture-panel::after{ bottom:-1px;right:-1px;border-left:none;border-top:none; }
+
+  .cam-stage{
+    position:relative;
+    width:100%;
+    aspect-ratio:16/9;
+    background:var(--navy-deep);
+    border-radius:var(--radius);
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  #video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transform:scaleX(-1);
+  }
+  .cam-placeholder{
+    color:#fff;
+    text-align:center;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    line-height:1.8;
+  }
+  .cam-placeholder svg{ width:40px;height:40px; margin-bottom:12px; opacity:0.8; }
+  .cam-overlay-line{
+    position:absolute;
+    left:6%;right:6%;top:50%;
+    height:1px;
+    background:linear-gradient(90deg, transparent, var(--gold) 20%, var(--gold) 80%, transparent);
+    opacity:0;
+    animation:camscan 2.6s ease-in-out infinite;
+  }
+  .is-live .cam-overlay-line{ opacity:1; }
+  @keyframes camscan{
+    0%{ top:12%; opacity:0; }
+    12%{ opacity:0.9; }
+    50%{ top:88%; opacity:0.9; }
+    62%{ opacity:0; }
+    100%{ top:12%; opacity:0; }
+  }
+
+  .cam-actions{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    margin-top:22px;
+    flex-wrap:wrap;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    padding:12px 22px;
+    border-radius:var(--radius);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.07em;
+    text-transform:uppercase;
+    cursor:pointer;
+    border:1px solid var(--line);
+    background:var(--surface);
+    color:var(--navy);
+    transition:background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  }
+  .btn:hover{ border-color:var(--navy); background:var(--bg); transform:translateY(-1px); }
+  .btn-primary{
+    background:var(--navy);
+    color:#fff;
+    border-color:var(--navy);
+  }
+  .btn-primary:hover{ background:var(--navy-deep); color:#fff; }
+  .btn-shutter{
+    width:58px;height:58px;
+    border-radius:50%;
+    padding:0;
+    border:3px solid var(--navy);
+    background:var(--surface);
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:transform 0.15s ease, background 0.2s ease;
+  }
+  .btn-shutter::after{
+    content:"";width:42px;height:42px;border-radius:50%;
+    background:var(--gold);
+  }
+  .btn-shutter:hover{ transform:scale(1.06); }
+  .btn-shutter:active{ transform:scale(0.94); }
+  .btn-shutter:disabled{ opacity:0.4; cursor:not-allowed; }
+
+  .cam-status{
+    margin-top:16px;
+    text-align:center;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.06em;
+    color:var(--ink-soft);
+  }
+  .cam-status b{ color:var(--success); font-weight:500; }
+
+  /* ---------- GALLERY GRID ---------- */
+  .gallery-headbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:18px;
+  }
+  .gallery-title{
+    font-family:'Fraunces', serif;
+    font-size:22px;
+    font-weight:500;
+    color:var(--navy-deep);
+  }
+  .gallery-count{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+  .empty{
+    border:1px dashed var(--line);
+    padding:60px 24px;
+    text-align:center;
+    color:var(--ink-soft);
+    font-size:13.5px;
+    line-height:1.7;
+  }
+  .empty svg{ width:38px;height:38px; margin-bottom:14px; color:var(--navy); opacity:0.7; }
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .card{
+    position:relative;
+    background:var(--surface);
+    overflow:hidden;
+  }
+  .card img{
+    width:100%;
+    aspect-ratio:4/3;
+    object-fit:cover;
+    display:block;
+  }
+  .card .meta{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:10px 12px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10px;
+    letter-spacing:0.05em;
+    color:var(--ink-soft);
+  }
+  .card .del{
+    background:none;border:none;cursor:pointer;
+    color:var(--ink-soft);
+    display:inline-flex;align-items:center;gap:5px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10px;letter-spacing:0.05em;text-transform:uppercase;
+    transition:color 0.2s ease;
+  }
+  .card .del:hover{ color:var(--error); }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    border-top:1px solid var(--line);
+    padding:28px 48px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--ink-soft);
+    letter-spacing:0.04em;
+  }
+
+  :focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+
+  @media (max-width:860px){
+    .nav{ padding:20px 24px; }
+    .grid{ grid-template-columns:1fr 1fr; }
+    footer{ flex-direction:column; gap:8px; text-align:center; padding:24px; }
+  }
+  @media (max-width:520px){
+    .nav{ padding:18px 22px; }
+    .grid{ grid-template-columns:1fr; }
+    .nav-links{ gap:14px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+<a href="index.html" class="nav-mark">SmartConvo</a>
+    <div class="nav-links">
+      <a href="guest-portal.html">Guest Portal</a>
+      <a href="index.html">Home</a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="wrap">
+
+      <div class="head">
+        <div class="eyebrow">Memorial Feature</div>
+        <h1>Diary Gallery</h1>
+        <p class="sub">Capture and keep your convocation memories. Turn on your camera to take snapshots and save them as a personal keepsake of your special day.</p>
+      </div>
+
+      <!-- Camera capture panel -->
+      <div class="capture-panel" id="capturePanel">
+        <div class="cam-stage" id="camStage">
+          <video id="video" autoplay playsinline></video>
+          <div class="cam-placeholder" id="camPlaceholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            Camera is off
+          </div>
+          <div class="cam-overlay-line"></div>
+        </div>
+
+        <div class="cam-actions">
+          <button class="btn" id="btnStart" type="button">Start Camera</button>
+          <button class="btn-shutter" id="btnCapture" type="button" aria-label="Capture photo" disabled></button>
+          <button class="btn" id="btnStop" type="button">Stop Camera</button>
+        </div>
+
+        <div class="cam-status" id="camStatus">Camera is <b>off</b>. Start the camera to begin capturing.</div>
+        <canvas id="canvas" style="display:none"></canvas>
+      </div>
+
+      <!-- Gallery -->
+      <div class="gallery-headbar">
+        <span class="gallery-title">Saved Memories</span>
+        <span class="gallery-count" id="galleryCount">0 photos</span>
+      </div>
+
+      <div class="empty" id="emptyState">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="12" r="1.6"/><path d="M2 9v6M22 9v6M3 17h18"/><circle cx="15" cy="12" r="2.4"/></svg>
+        <div>No memories saved yet.<br>Start the camera and press the shutter to capture your first moment.</div>
+      </div>
+
+      <div class="grid" id="grid"></div>
+
+    </div>
+  </main>
+
+  <footer>
+    <span>© 2026 SmartConvo</span>
+    <span>AI-Assisted Convocation Queue &amp; Identity Verification System</span>
+  </footer>
+
+<script>
+  // ---- Login guard: only logged-in guests may use the gallery ----
+  if (localStorage.getItem('sc_guest_logged') !== '1') {
+    localStorage.setItem('sc_after_login', 'gallery');
+    window.location.href = 'login-guest.html';
+  }
+
+  const video = document.getElementById('video');
+  const canvas = document.getElementById('canvas');
+  const camStage = document.getElementById('camStage');
+  const camPlaceholder = document.getElementById('camPlaceholder');
+  const camStatus = document.getElementById('camStatus');
+  const btnStart = document.getElementById('btnStart');
+  const btnStop = document.getElementById('btnStop');
+  const btnCapture = document.getElementById('btnCapture');
+  const grid = document.getElementById('grid');
+  const emptyState = document.getElementById('emptyState');
+  const galleryCount = document.getElementById('galleryCount');
+
+  let stream = null;
+  let photos = [];
+
+  // Load saved photos from localStorage (persist across visits)
+  try {
+    const saved = localStorage.getItem('sc_gallery_photos');
+    photos = saved ? JSON.parse(saved) : [];
+  } catch(e){ photos = []; }
+
+  function renderGallery(){
+    grid.innerHTML = '';
+    if(photos.length === 0){
+      emptyState.style.display = 'block';
+    } else {
+      emptyState.style.display = 'none';
+    }
+    photos.forEach((src, i) => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      const time = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+      card.innerHTML =
+        '<img src="' + src + '" alt="Memory ' + (i+1) + '">' +
+        '<div class="meta"><span>MEMORY ' + String(i+1).padStart(2,'0') + ' · ' + time + '</span>' +
+        '<button class="del" type="button" data-i="' + i + '">Delete</button></div>';
+      grid.appendChild(card);
+    });
+    galleryCount.textContent = photos.length + (photos.length === 1 ? ' photo' : ' photos');
+    // wire delete buttons
+    grid.querySelectorAll('.del').forEach(btn => {
+      btn.addEventListener('click', function(){
+        photos.splice(parseInt(this.dataset.i, 10), 1);
+        savePhotos();
+        renderGallery();
+      });
+    });
+  }
+
+  function savePhotos(){
+    try { localStorage.setItem('sc_gallery_photos', JSON.stringify(photos)); } catch(e){}
+  }
+
+  // ---- Camera control ----
+  async function startCamera(){
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+      video.srcObject = stream;
+      camStage.classList.add('is-live');
+      camPlaceholder.style.display = 'none';
+      btnStart.disabled = true;
+      btnStop.disabled = false;
+      btnCapture.disabled = false;
+      camStatus.innerHTML = 'Camera is <b>live</b>. Press the shutter to capture a memory.';
+    } catch(err){
+      camStatus.innerHTML = 'Unable to access camera. Please allow camera permission and try again.';
+    }
+  }
+
+  function stopCamera(){
+    if(stream){
+      stream.getTracks().forEach(t => t.stop());
+      stream = null;
+    }
+    video.srcObject = null;
+    camStage.classList.remove('is-live');
+    camPlaceholder.style.display = 'flex';
+    btnStart.disabled = false;
+    btnStop.disabled = true;
+    btnCapture.disabled = true;
+    camStatus.innerHTML = 'Camera is <b>off</b>. Start the camera to begin capturing.';
+  }
+
+  function capturePhoto(){
+    if(!stream) return;
+    const w = video.videoWidth;
+    const h = video.videoHeight;
+    if(!w || !h) return;
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext('2d');
+    // mirror to match live preview
+    ctx.translate(w, 0);
+    ctx.scale(-1, 1);
+    ctx.drawImage(video, 0, 0, w, h);
+    const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+    photos.unshift(dataUrl);
+    savePhotos();
+    renderGallery();
+    // shutter flash feedback
+    camStage.style.boxShadow = '0 0 0 3px var(--gold)';
+    setTimeout(() => camStage.style.boxShadow = '', 260);
+  }
+
+  btnStart.addEventListener('click', startCamera);
+  btnStop.addEventListener('click', stopCamera);
+  btnCapture.addEventListener('click', capturePhoto);
+
+  renderGallery();
+</script>
+
+</body>
+</html>

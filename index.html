@@ -528,7 +528,290 @@
     cursor:pointer;
     transition:background 0.2s ease;
   }
-  .c-submit:hover{ background:var(--navy-deep); }
+.c-submit:hover{ background:var(--navy-deep); }
+
+  /* ---------- WORKFLOW ---------- */
+  .workflow{
+    padding:40px 24px 130px;
+    max-width:1080px;
+    margin:0 auto;
+  }
+  .workflow-head{
+    text-align:center;
+    margin-bottom:24px;
+  }
+  .workflow-head .eyebrow{ margin-bottom:16px; }
+  .workflow-head h2{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:clamp(28px, 4vw, 40px);
+    color:var(--navy-deep);
+    margin-bottom:14px;
+  }
+  .workflow-head p{
+    color:var(--ink-soft);
+    font-size:15px;
+    max-width:520px;
+    margin:0 auto;
+    line-height:1.7;
+  }
+
+  .workflow-track{
+    position:relative;
+    height:6px;
+    margin:0 0 56px;
+  }
+  .workflow-track::before{
+    content:"";
+    position:absolute;
+    top:2px;left:0;right:0;
+    height:1px;
+    background:var(--line);
+  }
+.track-dot{
+    position:absolute;
+    top:0;
+    left:12.5%;
+    width:6px;height:6px;
+    border-radius:50%;
+    background:var(--gold);
+    transition:left 0.7s cubic-bezier(.4,0,.2,1), opacity 0.4s ease, box-shadow 0.4s ease;
+    animation:flow 9s ease-in-out infinite;
+    box-shadow:0 0 0 0 rgba(176,141,43,0.35);
+  }
+  .track-dot.is-paused{ animation:none; }
+  .track-dot.is-active{
+    box-shadow:0 0 0 6px rgba(176,141,43,0.18);
+  }
+  @keyframes flow{
+    0%{ left:12.5%; opacity:0; }
+    5%{ left:12.5%; opacity:1; }
+    20%{ left:12.5%; }
+    27%{ left:37.5%; }
+    42%{ left:37.5%; }
+    49%{ left:62.5%; }
+    64%{ left:62.5%; }
+    71%{ left:87.5%; }
+    86%{ left:87.5%; }
+    92%{ left:87.5%; opacity:1; }
+    100%{ left:87.5%; opacity:0; }
+  }
+
+  .workflow-tools{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    margin:0 0 28px;
+  }
+  .flow-hint{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+  .flow-replay{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    padding:9px 16px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--navy);
+    cursor:pointer;
+    transition:border-color 0.2s ease, color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+  }
+  .flow-replay:hover{
+    border-color:var(--gold);
+    color:var(--gold);
+    background:#FCFBF7;
+    transform:translateY(-1px);
+  }
+  .flow-replay:active{ transform:translateY(0); }
+  .flow-replay svg{
+    transition:transform 0.4s ease;
+  }
+  .flow-replay:hover svg{ transform:rotate(-180deg); }
+
+  .workflow-row{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .workflow-step{
+    background:var(--surface);
+    padding:38px 30px;
+    opacity:0;
+    transform:translateY(18px);
+    transition:opacity 0.6s ease, transform 0.6s ease, background 0.25s ease, box-shadow 0.25s ease;
+    cursor:pointer;
+    position:relative;
+  }
+  .workflow-step.is-visible{ opacity:1; transform:translateY(0); }
+  .workflow-step:hover{ background:#FCFBF7; }
+  .workflow-step.active{
+    background:#FCFBF7;
+    box-shadow:inset 0 0 0 1px var(--gold);
+  }
+  .workflow-step.active .step-num{ color:var(--navy); }
+  .workflow-step.active .step-icon{
+    color:var(--gold);
+    transform:scale(1.12);
+  }
+  .workflow-step .step-num{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.1em;
+    color:var(--gold);
+    margin-bottom:20px;
+    transition:color 0.25s ease;
+  }
+  .workflow-step .step-icon{
+    width:34px;height:34px;
+    color:var(--navy);
+    margin-bottom:18px;
+    transition:color 0.25s ease, transform 0.25s ease;
+  }
+  .workflow-step h3{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:19px;
+    color:var(--ink);
+    margin-bottom:8px;
+  }
+  .workflow-step p{
+    font-size:13px;
+    line-height:1.6;
+    color:var(--ink-soft);
+  }
+
+  /* ---------- DIARY GALLERY FEATURE ---------- */
+  .gallery{
+    padding:20px 24px 130px;
+    max-width:1080px;
+    margin:0 auto;
+  }
+  .gallery-head{
+    text-align:center;
+    margin-bottom:40px;
+  }
+  .gallery-head .eyebrow{ margin-bottom:16px; }
+  .gallery-head h2{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:clamp(28px, 4vw, 40px);
+    color:var(--navy-deep);
+    margin-bottom:14px;
+  }
+  .gallery-head p{
+    color:var(--ink-soft);
+    font-size:15px;
+    max-width:540px;
+    margin:0 auto;
+    line-height:1.7;
+  }
+
+  .gallery-feature{
+    position:relative;
+    background:var(--surface);
+    border:1px solid var(--line);
+    padding:52px 48px;
+    display:grid;
+    grid-template-columns:1.1fr 1fr;
+    gap:40px;
+    align-items:center;
+  }
+  .gallery-feature::before,.gallery-feature::after{
+    content:"";position:absolute;width:26px;height:26px;
+    border:1.5px solid var(--navy);opacity:0.5;
+  }
+  .gallery-feature::before{ top:-1px;left:-1px;border-right:none;border-bottom:none; }
+  .gallery-feature::after{ bottom:-1px;right:-1px;border-left:none;border-top:none; }
+
+  .gf-copy .gf-index{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.1em;
+    color:var(--gold);
+    margin-bottom:16px;
+  }
+  .gf-copy h3{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:clamp(22px,3vw,28px);
+    color:var(--navy-deep);
+    margin-bottom:12px;
+  }
+  .gf-copy p{
+    font-size:14px;
+    line-height:1.7;
+    color:var(--ink-soft);
+    max-width:460px;
+    margin-bottom:28px;
+  }
+  .gf-action{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:13px 22px;
+    background:var(--navy);
+    color:#fff;
+    border:none;
+    border-radius:var(--radius);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:background 0.2s ease, transform 0.2s ease;
+  }
+  .gf-action:hover{ background:var(--navy-deep); transform:translateY(-1px); }
+  .gf-action svg{ transition:transform 0.25s ease; }
+  .gf-action:hover svg{ transform:translateX(4px); }
+  .gf-note{
+    margin-top:14px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--ink-soft);
+  }
+
+  .gf-visual{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .gf-thumb{
+    position:relative;
+    aspect-ratio:4/3;
+    background:var(--bg);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--navy);
+    overflow:hidden;
+  }
+  .gf-thumb svg{ width:34px;height:34px; transition:transform 0.3s ease; }
+  .gf-thumb:hover svg{ transform:scale(1.15); }
+  .gf-thumb .gf-tag{
+    position:absolute;
+    bottom:8px;left:8px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:9px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    background:var(--surface);
+    padding:3px 7px;
+    border:1px solid var(--line);
+  }
 
   /* ---------- FOOTER ---------- */
   footer{
@@ -553,6 +836,11 @@
     .nav{ padding:20px 24px; }
     .frame{ padding:40px 22px; }
     footer{ flex-direction:column; gap:8px; text-align:center; padding:24px; }
+.workflow-row{ grid-template-columns:1fr; }
+    .workflow-track{ display:none; }
+    .workflow{ padding:70px 24px 90px; }
+    .gallery-feature{ grid-template-columns:1fr; padding:40px 26px; }
+    .gallery{ padding:70px 24px 90px; }
   }
 
   :focus-visible{
@@ -568,9 +856,10 @@
 <body>
 
 <nav class="nav">
-    <div class="nav-mark">SmartConvo</div>
-    <div class="nav-links">
+<a href="index.html" class="nav-mark">SmartConvo</a>
+<div class="nav-links">
       <a href="#about">About Us</a>
+      <a href="#gallery">Diary Gallery</a>
       <a href="#contact">Contact Us</a>
     </div>
   </nav>
@@ -660,6 +949,57 @@
 </div>
 </section>
 
+  <!-- ================= SYSTEM WORKFLOW ================= -->
+  <section class="workflow" id="workflow">
+    <div class="workflow-head">
+      <div class="eyebrow">How It Works</div>
+      <h2>System Workflow</h2>
+      <p>A streamlined journey from registration to stage, guided by face-based identity verification at every step.</p>
+    </div>
+
+<div class="workflow-tools">
+      <span class="flow-hint">Click a step to explore</span>
+      <button class="flow-replay" type="button" onclick="flowReplay()" aria-label="Replay workflow animation">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        Replay
+      </button>
+    </div>
+
+    <div class="workflow-track" aria-hidden="true"><span class="track-dot"></span></div>
+
+    <div class="workflow-row">
+
+      <div class="workflow-step" data-reveal>
+        <span class="step-num">STEP 01</span>
+        <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M17 11h6"/></svg>
+        <h3>Registration</h3>
+        <p>Students create or update their account and enrol a face profile ahead of convocation day.</p>
+      </div>
+
+      <div class="workflow-step" data-reveal>
+        <span class="step-num">STEP 02</span>
+        <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8V6a2 2 0 012-2h2M2 16v2a2 2 0 002 2h2M16 4h2a2 2 0 012 2v2M16 20h2a2 2 0 002-2v-2"/><circle cx="12" cy="12" r="3"/></svg>
+        <h3>Face Verification</h3>
+        <p>Identity is confirmed securely with face recognition before joining the active queue.</p>
+      </div>
+
+      <div class="workflow-step" data-reveal>
+        <span class="step-num">STEP 03</span>
+        <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18M3 12h18M3 19h18"/><path d="M7 5v14M17 5v14"/></svg>
+        <h3>Queue</h3>
+        <p>Verified attendees are placed in the live queue and tracked in real time until it is their turn.</p>
+      </div>
+
+      <div class="workflow-step" data-reveal>
+        <span class="step-num">STEP 04</span>
+        <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9l10-4.5L22 9l-10 4.5L2 9z"/><path d="M6 11v5c0 1.1 2.7 2.5 6 2.5s6-1.4 6-2.5v-5"/><path d="M22 9v6"/></svg>
+        <h3>Convocation</h3>
+        <p>Graduates proceed smoothly to the ceremony, completing the journey with ease.</p>
+      </div>
+
+    </div>
+  </section>
+
   <!-- ================= ABOUT US ================= -->
   <section class="about" id="about">
     <div class="about-head">
@@ -691,6 +1031,47 @@
       <div>
         <h3>Making convocation day effortless</h3>
         <p>We combine intelligent queue orchestration with face-based identity verification so that every graduate, guest and administrator can navigate the ceremony with confidence, speed and peace of mind.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= DIARY GALLERY ================= -->
+  <section class="gallery" id="gallery">
+    <div class="gallery-head">
+      <div class="eyebrow">Memorial Feature</div>
+      <h2>Diary Gallery</h2>
+      <p>Capture and keep your convocation memories. Log in as a guest to open the gallery, then use your camera to preserve the day forever.</p>
+    </div>
+
+    <div class="gallery-feature">
+      <div class="gf-copy">
+        <div class="gf-index">SMARTCONVO // MEMORIES</div>
+        <h3>Create your convocation memorial</h3>
+        <p>Sign in with your guest account, open the Diary Gallery and capture photos with your camera. Every snapshot is saved as a personal keepsake of your special day.</p>
+        <button class="gf-action" type="button" onclick="openDiaryGallery()">
+          Open Diary Gallery
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <p class="gf-note">Requires guest login. You will be redirected to the login page first.</p>
+      </div>
+
+      <div class="gf-visual">
+        <div class="gf-thumb">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          <span class="gf-tag">Capture</span>
+        </div>
+        <div class="gf-thumb">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="12" r="1.6"/><path d="M2 9v6M22 9v6M3 17h18"/><circle cx="15" cy="12" r="2.4"/></svg>
+          <span class="gf-tag">Polaroid</span>
+        </div>
+        <div class="gf-thumb">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8V6a2 2 0 012-2h2M2 16v2a2 2 0 002 2h2M16 4h2a2 2 0 012 2v2M16 20h2a2 2 0 002-2v-2"/><circle cx="12" cy="12" r="3"/></svg>
+          <span class="gf-tag">Faces</span>
+        </div>
+        <div class="gf-thumb">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/><circle cx="12" cy="12" r="3.2"/></svg>
+          <span class="gf-tag">Moment</span>
+        </div>
       </div>
     </div>
   </section>
@@ -772,6 +1153,63 @@
     });
   }, { threshold: 0.2 });
   cards.forEach(card => observer.observe(card));
+
+  // ---- Interactive workflow ----
+  const flowDot = document.querySelector('.track-dot');
+  const flowSteps = document.querySelectorAll('.workflow-step');
+  const stepPositions = [12.5, 37.5, 62.5, 87.5];
+  let flowTimer = null;
+
+  function setActiveStep(index){
+    flowSteps.forEach((s, i) => s.classList.toggle('active', i === index));
+    flowDot.style.left = stepPositions[index] + '%';
+    flowDot.classList.add('is-active');
+  }
+
+  flowSteps.forEach((step, i) => {
+    step.addEventListener('click', () => {
+      clearTimeout(flowTimer);
+      flowDot.classList.add('is-paused');
+      setActiveStep(i);
+    });
+    // hover also pauses and highlights the dot position
+    step.addEventListener('mouseenter', () => {
+      clearTimeout(flowTimer);
+      flowDot.classList.add('is-paused');
+      flowDot.style.left = stepPositions[i] + '%';
+    });
+    step.addEventListener('mouseleave', () => {
+      if (!flowDot.classList.contains('is-paused')) return;
+    });
+  });
+
+  function flowReplay(){
+    clearTimeout(flowTimer);
+    flowDot.classList.remove('is-paused', 'is-active');
+    flowDot.style.left = '';
+    flowSteps.forEach(s => s.classList.remove('active'));
+    // restart CSS animation
+    flowDot.style.animation = 'none';
+    void flowDot.offsetWidth; // reflow
+    flowDot.style.animation = '';
+    // briefly re-highlight each step as the dot passes
+    for (let k = 0; k < stepPositions.length; k++){
+      flowTimer = setTimeout(() => setActiveStep(k), k * 2000);
+    }
+// clear active highlight after the loop
+    flowTimer = setTimeout(() => {
+      flowSteps.forEach(s => s.classList.remove('active'));
+      flowDot.classList.remove('is-active');
+      flowDot.classList.remove('is-paused');
+    }, stepPositions.length * 2000 + 400);
+  }
+
+  // ---- Diary Gallery redirect ----
+  function openDiaryGallery(){
+    // Remember the user wants the gallery after login
+    localStorage.setItem('sc_after_login', 'gallery');
+    window.location.href = 'login-guest.html';
+  }
 </script>
 
 </body>

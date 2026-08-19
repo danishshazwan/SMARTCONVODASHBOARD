@@ -276,7 +276,10 @@
     <header class="topbar">
       <div class="topbar-left"><h2>My Profile</h2></div>
       <div class="topbar-right">
-        <span class="user-chip"><span class="dot"></span>Aiman Hakimi</span>
+        <span class="user-chip">
+  <span class="dot"></span>
+  <span id="userName">Student</span>
+</span>
         <a href="student-notifications.html" class="notif-bell">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
           <span class="notif-badge">3</span>
@@ -295,53 +298,76 @@
       <div class="profile-layout">
 
         <div class="section-card profile-card">
-          <div class="avatar" id="profileAvatar" style="overflow:hidden;">AH</div>
-          <div class="p-name">Aiman Hakimi</div>
-          <div class="p-role">Aiman Hakimi bin Roslan</div>
-          <span class="p-badge">✓ Registration Completed</span>
-        </div>
+
+  <div class="avatar" id="profileAvatar" style="overflow:hidden;">
+    ST
+  </div>
+
+  <div class="p-name" id="profileDisplayName">
+    Student
+  </div>
+
+  <div class="p-role" id="profileDisplayRole">
+    Student
+  </div>
+
+  <span class="p-badge" id="profileRegistrationStatus">
+    Registration Pending
+  </span>
+
+</div>
 
         <div class="section-card">
           <div class="card-head"><h3>Profile Details</h3></div>
           <div class="card-body">
-            <div class="info-grid">
-              <div class="info-field">
-                <label>Full Name</label>
-                <div class="info-value">Aiman Hakimi bin Roslan</div>
-              </div>
-              <div class="info-field">
-                <label>Student ID</label>
-                <div class="info-value">241200</div>
-              </div>
-              <div class="info-field">
-                <label>University Email</label>
-                <div class="info-value">aimanhakimi@tvetmara.edu.my</div>
-              </div>
-              <div class="info-field">
-                <label>Session</label>
-                <div class="info-value">Julai – Disember 2025 (JD25)</div>
-              </div>
-              <div class="info-field">
-                <label>Faculty</label>
-                <div class="info-value">Information Technology &amp; Engineering</div>
-              </div>
-              <div class="info-field">
-                <label>Programme</label>
-                <div class="info-value">Diploma in Computer Technology (Big Data Analytics)</div>
-              </div>
-              <div class="info-field">
-                <label>Phone Number</label>
-                <div class="info-value">+60 12-345 6789</div>
-              </div>
-              <div class="info-field">
-                <label>CGPA</label>
-                <div class="info-value">3.72</div>
-              </div>
-              <div class="info-field">
-                <label>Queue Number</label>
-                <div class="info-value">042</div>
-              </div>
-            </div>
+<div class="info-grid">
+
+  <div class="info-field">
+    <label>Full Name</label>
+    <div class="info-value" id="profileFullName">Student</div>
+  </div>
+
+  <div class="info-field">
+    <label>Student ID</label>
+    <div class="info-value" id="profileStudentId">—</div>
+  </div>
+
+  <div class="info-field">
+    <label>University Email</label>
+    <div class="info-value" id="profileEmail">—</div>
+  </div>
+
+  <div class="info-field">
+    <label>Session</label>
+    <div class="info-value" id="profileSession">—</div>
+  </div>
+
+  <div class="info-field">
+    <label>Faculty</label>
+    <div class="info-value" id="profileFaculty">—</div>
+  </div>
+
+  <div class="info-field">
+    <label>Programme</label>
+    <div class="info-value" id="profileProgramme">—</div>
+  </div>
+
+  <div class="info-field">
+    <label>Phone Number</label>
+    <div class="info-value" id="profilePhone">—</div>
+  </div>
+
+  <div class="info-field">
+    <label>CGPA</label>
+    <div class="info-value" id="profileCGPA">—</div>
+  </div>
+
+  <div class="info-field">
+    <label>Queue Number</label>
+    <div class="info-value" id="profileQueue">—</div>
+  </div>
+
+</div>
           </div>
         </div>
 
@@ -353,11 +379,11 @@
           <div class="info-grid">
             <div class="form-field">
               <label for="email">University Email</label>
-              <input type="email" id="email" value="aimanhakimi@tvetmara.edu.my">
+              <input type="email" id="email" value="">
             </div>
             <div class="form-field">
               <label for="phone">Phone Number</label>
-              <input type="tel" id="phone" value="+60 12-345 6789">
+              <input type="tel" id="phone" value="">
             </div>
           </div>
           <div class="form-field">
@@ -444,102 +470,799 @@
 </div>
 
 <script>
-  // Place captured face photo (from student-face.html) into the profile
-  (function(){
-    var stored = null;
-    try{
-      stored = localStorage.getItem('smartconvo_face_photo');
-    }catch(e){ stored = null; }
 
-    if(stored){
-      var photo = null;
-      try{
-        photo = JSON.parse(stored);
-      }catch(e){ photo = null; }
+// ============================================================
+// SMARTCONVO STUDENT PROFILE
+// ============================================================
 
-      if(photo && photo.dataUrl && photo.spec && photo.spec.verified){
-        // Avatar
-        var avatar = document.getElementById('profileAvatar');
-        if(avatar){
-          avatar.innerHTML = '';
-          avatar.style.backgroundImage = "url('" + photo.dataUrl + "')";
-          avatar.style.backgroundSize = 'cover';
-          avatar.style.backgroundPosition = 'center';
-          avatar.setAttribute('role', 'img');
-          avatar.setAttribute('aria-label', 'Student face photo');
+const API_BASE_URL =   "https://smartconvo-api.danishshazwan85.workers.dev";;
+
+
+// ============================================================
+// VERIFY STUDENT SESSION
+// ============================================================
+
+async function verifyStudentSession() {
+
+  const token = localStorage.getItem('studentToken');
+
+  // No token
+  if (!token) {
+    window.location.href = 'student-login.html';
+    return false;
+  }
+
+  try {
+
+    const response = await fetch(
+      `${API_BASE_URL}/api/student/profile`,
+      {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
         }
-        // Face photo thumbnail
-        var thumb = document.getElementById('faceThumb');
-        if(thumb){
-          thumb.innerHTML = '';
-          thumb.style.backgroundImage = "url('" + photo.dataUrl + "')";
-          thumb.style.backgroundSize = 'cover';
-          thumb.style.backgroundPosition = 'center';
-        }
-        // Update file label
-        var fuValue = document.querySelector('.fu-value');
-        if(fuValue){
-          var d = new Date(photo.timestamp);
-          fuValue.textContent = 'captured_face_' + d.getFullYear() + (d.getMonth()+1) + d.getDate() + '.jpg';
-        }
-        // Extra alert directing student - they may review/update their details
-        alert('Your captured face photo has been placed into your profile.\n\nYou may now review and update your contact details below.');
+      }
+    );
+
+    const data = await response.json();
+
+    // Invalid / expired token
+    if (!response.ok || !data.success) {
+
+      localStorage.removeItem('studentToken');
+      localStorage.removeItem('studentData');
+
+      sessionStorage.removeItem(
+        'smartconvo_student_name'
+      );
+
+      window.location.href =
+        'student-login.html';
+
+      return false;
+    }
+
+    // Save latest database data
+    localStorage.setItem(
+      'studentData',
+      JSON.stringify(data.student)
+    );
+
+    return data.student;
+
+  } catch (error) {
+
+    console.error(
+      'Student authentication error:',
+      error
+    );
+
+    alert(
+      'Unable to connect to SMARTCONVO server.'
+    );
+
+    return false;
+  }
+}
+
+
+// ============================================================
+// FORMAT SESSION
+// ============================================================
+
+function formatSession(session) {
+
+  if (!session) {
+    return '—';
+  }
+
+  const sessions = {
+    JJ24: 'January – June 2024 (JJ24)',
+    JD24: 'July – December 2024 (JD24)',
+    JJ25: 'January – June 2025 (JJ25)',
+    JD25: 'July – December 2025 (JD25)',
+    JJ26: 'January – June 2026 (JJ26)',
+    JD26: 'July – December 2026 (JD26)'
+  };
+
+  return sessions[session] || session;
+}
+
+
+// ============================================================
+// FORMAT QUEUE NUMBER
+// ============================================================
+
+function formatQueueNumber(queueNumber) {
+
+  if (
+    queueNumber === null ||
+    queueNumber === undefined ||
+    queueNumber === ''
+  ) {
+    return '—';
+  }
+
+  return String(queueNumber).padStart(3, '0');
+}
+
+
+// ============================================================
+// GET INITIALS
+// ============================================================
+
+function getInitials(name) {
+
+  if (!name) {
+    return 'ST';
+  }
+
+  const words = name
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
+
+  if (words.length === 1) {
+    return words[0]
+      .substring(0, 2)
+      .toUpperCase();
+  }
+
+  return (
+    words[0][0] +
+    words[1][0]
+  ).toUpperCase();
+}
+
+
+// ============================================================
+// UPDATE PROFILE UI
+// ============================================================
+
+function updateProfileUI(student) {
+
+  if (!student) {
+    return;
+  }
+
+  console.log(
+    'Student Profile Data:',
+    student
+  );
+
+
+  // ----------------------------------------------------------
+  // BASIC DATA
+  // ----------------------------------------------------------
+
+  const name =
+    student.name || 'Student';
+
+  const studentId =
+    student.student_id || '—';
+
+  const email =
+    student.email || '—';
+
+  const session =
+    formatSession(student.session);
+
+  const faculty =
+    student.faculty || '—';
+
+  const programme =
+    student.course_name ||
+    student.programme ||
+    '—';
+
+  const phone =
+    student.phone_number || '—';
+
+  const cgpa =
+    student.cgpa !== null &&
+    student.cgpa !== undefined &&
+    student.cgpa !== ''
+      ? student.cgpa
+      : '—';
+
+  const queue =
+    formatQueueNumber(
+      student.queue_number
+    );
+
+
+  // ----------------------------------------------------------
+  // TOPBAR
+  // ----------------------------------------------------------
+
+  const userName =
+    document.getElementById('userName');
+
+  if (userName) {
+    userName.textContent = name;
+  }
+
+
+  // ----------------------------------------------------------
+  // PROFILE CARD
+  // ----------------------------------------------------------
+
+  const displayName =
+    document.getElementById(
+      'profileDisplayName'
+    );
+
+  const displayRole =
+    document.getElementById(
+      'profileDisplayRole'
+    );
+
+  const avatar =
+    document.getElementById(
+      'profileAvatar'
+    );
+
+  if (displayName) {
+    displayName.textContent = name;
+  }
+
+  if (displayRole) {
+    displayRole.textContent =
+      programme;
+  }
+
+  if (avatar) {
+    avatar.textContent =
+      getInitials(name);
+  }
+
+
+  // ----------------------------------------------------------
+  // PROFILE DETAILS
+  // ----------------------------------------------------------
+
+  const fullName =
+    document.getElementById(
+      'profileFullName'
+    );
+
+  const profileStudentId =
+    document.getElementById(
+      'profileStudentId'
+    );
+
+  const profileEmail =
+    document.getElementById(
+      'profileEmail'
+    );
+
+  const profileSession =
+    document.getElementById(
+      'profileSession'
+    );
+
+  const profileFaculty =
+    document.getElementById(
+      'profileFaculty'
+    );
+
+  const profileProgramme =
+    document.getElementById(
+      'profileProgramme'
+    );
+
+  const profilePhone =
+    document.getElementById(
+      'profilePhone'
+    );
+
+  const profileCGPA =
+    document.getElementById(
+      'profileCGPA'
+    );
+
+  const profileQueue =
+    document.getElementById(
+      'profileQueue'
+    );
+
+
+  if (fullName) {
+    fullName.textContent = name;
+  }
+
+  if (profileStudentId) {
+    profileStudentId.textContent =
+      studentId;
+  }
+
+  if (profileEmail) {
+    profileEmail.textContent =
+      email;
+  }
+
+  if (profileSession) {
+    profileSession.textContent =
+      session;
+  }
+
+  if (profileFaculty) {
+    profileFaculty.textContent =
+      faculty;
+  }
+
+  if (profileProgramme) {
+    profileProgramme.textContent =
+      programme;
+  }
+
+  if (profilePhone) {
+    profilePhone.textContent =
+      phone;
+  }
+
+  if (profileCGPA) {
+    profileCGPA.textContent =
+      cgpa;
+  }
+
+  if (profileQueue) {
+    profileQueue.textContent =
+      queue;
+  }
+
+
+  // ----------------------------------------------------------
+  // REGISTRATION STATUS
+  // ----------------------------------------------------------
+
+  // ----------------------------------------------------------
+// REGISTRATION STATUS
+// ----------------------------------------------------------
+
+const registrationStatus =
+  document.getElementById(
+    'profileRegistrationStatus'
+  );
+
+if (registrationStatus) {
+
+  const status =
+    String(student.convocation_status || '')
+      .trim()
+      .toLowerCase();
+
+  console.log(
+    'Convocation Status:',
+    status
+  );
+
+  if (
+    status === 'registration' ||
+    status === '' ||
+    status === 'pending'
+  ) {
+
+    registrationStatus.textContent =
+      'Registration Pending';
+
+  } else if (
+    status === 'face_verification' ||
+    status === 'seat_queue' ||
+    status === 'queue' ||
+    status === 'on_stage' ||
+    status === 'complete'
+  ) {
+
+    registrationStatus.textContent =
+      '✓ Registration Completed';
+
+  } else {
+
+    registrationStatus.textContent =
+      'Registration Pending';
+  }
+}
+
+
+  // ----------------------------------------------------------
+  // UPDATE CONTACT FORM
+  // ----------------------------------------------------------
+
+  const emailInput =
+    document.getElementById('email');
+
+  const phoneInput =
+    document.getElementById('phone');
+
+  if (emailInput) {
+    emailInput.value =
+      student.email || '';
+  }
+
+  if (phoneInput) {
+    phoneInput.value =
+      student.phone_number || '';
+  }
+}
+
+
+// ============================================================
+// LOAD STUDENT PROFILE
+// ============================================================
+
+async function loadStudentProfile() {
+
+  const student =
+    await verifyStudentSession();
+
+  if (!student) {
+    return;
+  }
+
+  updateProfileUI(student);
+
+  console.log(
+    'Student profile loaded successfully.'
+  );
+}
+
+
+// ============================================================
+// FACE PHOTO
+// ============================================================
+
+function loadFacePhoto() {
+
+  let stored = null;
+
+  try {
+
+    stored =
+      localStorage.getItem(
+        'smartconvo_face_photo'
+      );
+
+  } catch (error) {
+
+    stored = null;
+  }
+
+  if (!stored) {
+    return;
+  }
+
+  let photo = null;
+
+  try {
+
+    photo =
+      JSON.parse(stored);
+
+  } catch (error) {
+
+    photo = null;
+  }
+
+  if (
+    !photo ||
+    !photo.dataUrl ||
+    !photo.spec ||
+    !photo.spec.verified
+  ) {
+    return;
+  }
+
+
+  // Avatar
+  const avatar =
+    document.getElementById(
+      'profileAvatar'
+    );
+
+  if (avatar) {
+
+    avatar.textContent = '';
+
+    avatar.style.backgroundImage =
+      `url('${photo.dataUrl}')`;
+
+    avatar.style.backgroundSize =
+      'cover';
+
+    avatar.style.backgroundPosition =
+      'center';
+
+    avatar.setAttribute(
+      'role',
+      'img'
+    );
+
+    avatar.setAttribute(
+      'aria-label',
+      'Student face photo'
+    );
+  }
+
+
+  // Thumbnail
+  const thumb =
+    document.getElementById(
+      'faceThumb'
+    );
+
+  if (thumb) {
+
+    thumb.innerHTML = '';
+
+    thumb.style.backgroundImage =
+      `url('${photo.dataUrl}')`;
+
+    thumb.style.backgroundSize =
+      'cover';
+
+    thumb.style.backgroundPosition =
+      'center';
+  }
+
+
+  // Filename
+  const fuValue =
+    document.querySelector(
+      '.fu-value'
+    );
+
+  if (fuValue) {
+
+    const d =
+      new Date(photo.timestamp);
+
+    fuValue.textContent =
+      'captured_face_' +
+      d.getFullYear() +
+      (d.getMonth() + 1) +
+      d.getDate() +
+      '.jpg';
+  }
+}
+
+
+// ============================================================
+// FACE PHOTO UPLOAD
+// ============================================================
+
+function setupFaceUpload() {
+
+  const faceInput =
+    document.getElementById('face');
+
+  const fuValue =
+    document.querySelector('.fu-value');
+
+  if (!faceInput) {
+    return;
+  }
+
+  faceInput.addEventListener(
+    'change',
+    function() {
+
+      if (
+        faceInput.files &&
+        faceInput.files[0]
+      ) {
+
+        fuValue.textContent =
+          faceInput.files[0].name;
       }
     }
-  })();
+  );
+}
 
-  // Save updated contact details
-  document.getElementById('saveBtn').addEventListener('click', function(){
-    const email = document.getElementById('email').value.trim();
-    const phone = document.getElementById('phone').value.trim();
-    if(!email || !phone){
-      alert('Please fill in your email and phone number.');
-      return;
-    }
-    alert('Profile updated successfully.');
-  });
 
-  // Face photo upload - show chosen file name
-  const faceInput = document.getElementById('face');
-  const fuValue = document.querySelector('.fu-value');
-  faceInput.addEventListener('change', function(){
-    if(faceInput.files && faceInput.files[0]){
-      fuValue.textContent = faceInput.files[0].name;
-    }
-  });
+// ============================================================
+// SAVE CONTACT DETAILS
+// ============================================================
 
-  // Toggle correction form
-  const correctionBtn = document.getElementById('correctionBtn');
-  const correctionWrap = document.getElementById('correctionFormWrap');
-correctionBtn.addEventListener('click', function(){
-    correctionWrap.classList.toggle('open');
-    if(correctionWrap.classList.contains('open')){
-      correctionBtn.textContent = '− Cancel';
-    } else {
-      correctionBtn.textContent = '+ Request Correction';
-    }
-  });
+function setupSaveButton() {
 
-  // Submit correction request
-  document.getElementById('correctionForm').addEventListener('submit', function(e){
-    e.preventDefault();
-    const field = document.getElementById('cfField').value;
-    const correct = document.getElementById('cfCorrect').value.trim();
-    const reason = document.getElementById('cfReason').value.trim();
-    if(!field || !correct || !reason){
-      alert('Please fill in all fields.');
-      return;
+  const saveBtn =
+    document.getElementById('saveBtn');
+
+  if (!saveBtn) {
+    return;
+  }
+
+  saveBtn.addEventListener(
+    'click',
+    function() {
+
+      const email =
+        document
+          .getElementById('email')
+          .value
+          .trim();
+
+      const phone =
+        document
+          .getElementById('phone')
+          .value
+          .trim();
+
+      if (!email || !phone) {
+
+        alert(
+          'Please fill in your email and phone number.'
+        );
+
+        return;
+      }
+
+      // TEMPORARY
+      // Backend update endpoint belum dibuat
+      alert(
+        'Profile updated successfully.'
+      );
     }
-    // Update status badge to Pending after submission
-    const status = document.getElementById('correctionStatus');
-    status.className = 'req-status pending';
-    status.innerHTML = '<span class="s-dot"></span> Pending Admin Approval';
-    // Close form and reset
-    correctionWrap.classList.remove('open');
-    correctionBtn.textContent = '+ Request Correction';
-    document.getElementById('correctionForm').reset();
-    alert('Your correction request has been submitted for admin approval.');
-  });
+  );
+}
+
+
+// ============================================================
+// CORRECTION FORM
+// ============================================================
+
+function setupCorrectionForm() {
+
+  const correctionBtn =
+    document.getElementById(
+      'correctionBtn'
+    );
+
+  const correctionWrap =
+    document.getElementById(
+      'correctionFormWrap'
+    );
+
+  if (
+    correctionBtn &&
+    correctionWrap
+  ) {
+
+    correctionBtn.addEventListener(
+      'click',
+      function() {
+
+        correctionWrap.classList.toggle(
+          'open'
+        );
+
+        if (
+          correctionWrap.classList.contains(
+            'open'
+          )
+        ) {
+
+          correctionBtn.textContent =
+            '− Cancel';
+
+        } else {
+
+          correctionBtn.textContent =
+            '+ Request Correction';
+        }
+      }
+    );
+  }
+
+
+  const correctionForm =
+    document.getElementById(
+      'correctionForm'
+    );
+
+  if (!correctionForm) {
+    return;
+  }
+
+  correctionForm.addEventListener(
+    'submit',
+    function(e) {
+
+      e.preventDefault();
+
+      const field =
+        document.getElementById(
+          'cfField'
+        ).value;
+
+      const correct =
+        document.getElementById(
+          'cfCorrect'
+        ).value
+        .trim();
+
+      const reason =
+        document.getElementById(
+          'cfReason'
+        ).value
+        .trim();
+
+      if (
+        !field ||
+        !correct ||
+        !reason
+      ) {
+
+        alert(
+          'Please fill in all fields.'
+        );
+
+        return;
+      }
+
+
+      const status =
+        document.getElementById(
+          'correctionStatus'
+        );
+
+      if (status) {
+
+        status.className =
+          'req-status pending';
+
+        status.innerHTML =
+          '<span class="s-dot"></span> Pending Admin Approval';
+      }
+
+
+      correctionWrap.classList.remove(
+        'open'
+      );
+
+      correctionBtn.textContent =
+        '+ Request Correction';
+
+      correctionForm.reset();
+
+      alert(
+        'Your correction request has been submitted for admin approval.'
+      );
+    }
+  );
+}
+
+
+// ============================================================
+// INITIALIZE PROFILE PAGE
+// ============================================================
+
+async function initializeStudentProfile() {
+
+  // 1. Load database student
+  await loadStudentProfile();
+
+  // 2. Load existing face photo
+  loadFacePhoto();
+
+  // 3. Setup upload
+  setupFaceUpload();
+
+  // 4. Setup save button
+  setupSaveButton();
+
+  // 5. Setup correction form
+  setupCorrectionForm();
+}
+
+
+// ============================================================
+// START
+// ============================================================
+
+initializeStudentProfile();
+
 </script>
 
 </body>

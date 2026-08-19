@@ -255,16 +255,16 @@
               <option value="all">All Programmes</option>
               <option>Diploma in Water Services Technology</option>
               <option>Diploma in Computer Technology (Big Data Analytics)</option>
-              <option>Diploma in Engineering Technology – Smart Manufacturing</option>
+              <option>Diploma in Electrical Chargeman Competency (A4)</option>
+              <option>Diploma in Electrical Competency (Domestic &amp; Industrial) (PW4)</option>
+              <option>Diploma in Smart Manufacturing Technology</option>
               <option>Diploma in Contemporary Furniture Production Technology</option>
-              <option>Diploma in Welding Competency</option>
-              <option>Diploma in Electrical Machinery Chargeman Competency (A4 Voltage)</option>
-              <option>Diploma in Electrical Competency (Domestic &amp; Industrial) PW4</option>
-              <option>Diploma in Automotive Technology</option>
-              <option>Diploma in Automotive Technology – Vehicle Body Repair &amp; Refinishing</option>
-              <option>Certificate in Mechanical Engineering Technology (Design Drafting)</option>
-              <option>Certificate in Building Engineering Technology</option>
+              <option>Certificate in Mechanical Engineering Technology (Engineering Drawing)</option>
               <option>Certificate in Foundry Technology</option>
+              <option>Diploma in Welding Competency</option>
+              <option>Diploma in Automotive Technology</option>
+              <option>Diploma in Automotive Technology (Vehicle Body Repair &amp; Refinishing)</option>
+              <option>Certificate in Building Technology</option>
               <option>Certificate in Architecture</option>
             </select>
           </div>
@@ -299,7 +299,7 @@
               <tbody>
                 <tr>
                   <td><div class="student-cell"><span class="s-avatar">DS</span><div><div class="s-name">Danish Shazwan Bin Suwandi</div><div class="s-id">danish@tvetmara.edu.my</div></div></div></td>
-                  <td>2402076</td>
+<td>2402076</td>
                   <td>Diploma in Computer Technology</td>
                   <td>Information Technology &amp; Engineering</td>
                   <td><span class="status-pill verified">Verified</span></td>
@@ -307,7 +307,7 @@
                 </tr>
                 <tr>
                   <td><div class="student-cell"><span class="s-avatar">IZ</span><div><div class="s-name">Iskandar Zulkarnain Bin Muhamad</div><div class="s-id">iskandar@tvetmara.edu.my</div></div></div></td>
-                  <td>2402077</td>
+<td>2402077</td>
                   <td>Diploma in Computer Technology</td>
                   <td>Information Technology &amp; Engineering</td>
                   <td><span class="status-pill verified">Verified</span></td>
@@ -448,11 +448,15 @@
           <div class="d-id" id="dEmail">—</div>
         </div>
       </div>
-      <div class="detail-grid">
+<div class="detail-grid">
         <div class="detail-field"><span class="df-label">Student ID</span><span class="df-value" id="dSid">—</span></div>
         <div class="detail-field"><span class="df-label">Status</span><span class="df-value" id="dStatus">—</span></div>
         <div class="detail-field full"><span class="df-label">Programme</span><span class="df-value" id="dProgramme">—</span></div>
         <div class="detail-field full"><span class="df-label">Faculty</span><span class="df-value" id="dFaculty">—</span></div>
+        <div class="detail-field"><span class="df-label">Session</span><span class="df-value" id="dSession">—</span></div>
+        <div class="detail-field"><span class="df-label">Queue Number</span><span class="df-value" id="dQueue">—</span></div>
+        <div class="detail-field"><span class="df-label">Phone Number</span><span class="df-value" id="dPhone">—</span></div>
+        <div class="detail-field"><span class="df-label">CGPA</span><span class="df-value" id="dCgpa">—</span></div>
         <div class="detail-field full"><span class="df-label">Password</span><span class="df-value" id="dPassword">—</span></div>
       </div>
       <div class="modal-actions">
@@ -469,7 +473,7 @@
       <h3>Add Graduate</h3>
       <button class="modal-close" onclick="closeAddModal()">&times;</button>
     </div>
-    <div class="modal-body">
+<div class="modal-body">
       <div class="form-grid">
         <div class="form-field full">
           <label>Full Name</label>
@@ -480,33 +484,59 @@
           <input type="text" id="newSid" placeholder="e.g. 2403001">
         </div>
         <div class="form-field">
-          <label>Email</label>
+          <label>University Email</label>
           <input type="email" id="newEmail" placeholder="student@tvetmara.edu.my">
+        </div>
+        <div class="form-field">
+          <label>Session</label>
+          <input type="text" id="newSession" placeholder="e.g. Julai – Disember 2025 (JD25)">
+        </div>
+        <div class="form-field">
+          <label>Faculty</label>
+          <select id="newFaculty">
+            <option value="">Select a faculty…</option>
+            <option>Electrical &amp; Electronics</option>
+            <option>Mechanical &amp; Manufacturing</option>
+            <option>Welding</option>
+            <option>Automotive</option>
+            <option>Civil &amp; Services</option>
+          </select>
+        </div>
+        <div class="form-field full">
+          <label>Programme</label>
+          <select id="newProgramme" onchange="autoSetFaculty()">
+            <option value="">Select a programme…</option>
+            <option>Diploma in Water Services Technology</option>
+            <option>Diploma in Computer Technology (Big Data Analytics)</option>
+            <option>Diploma in Electrical Chargeman Competency (A4)</option>
+            <option>Diploma in Electrical Competency (Domestic &amp; Industrial) (PW4)</option>
+            <option>Diploma in Smart Manufacturing Technology</option>
+            <option>Diploma in Contemporary Furniture Production Technology</option>
+            <option>Certificate in Mechanical Engineering Technology (Engineering Drawing)</option>
+            <option>Certificate in Foundry Technology</option>
+            <option>Diploma in Welding Competency</option>
+            <option>Diploma in Automotive Technology</option>
+            <option>Diploma in Automotive Technology (Vehicle Body Repair &amp; Refinishing)</option>
+            <option>Certificate in Building Technology</option>
+            <option>Certificate in Architecture</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Phone Number</label>
+          <input type="tel" id="newPhone" placeholder="e.g. +60 12-345 6789">
+        </div>
+        <div class="form-field">
+          <label>CGPA</label>
+          <input type="text" id="newCgpa" placeholder="e.g. 3.72">
+        </div>
+        <div class="form-field">
+          <label>Queue Number</label>
+          <input type="text" id="newQueue" placeholder="e.g. 042">
         </div>
         <div class="form-field">
           <label>Password (auto-set)</label>
           <input type="text" id="newPassword" value="student123" readonly disabled>
           <span style="font-size:11px;color:var(--ink-soft);margin-top:-2px;">Kata laluan dijana automatik dan tidak boleh diubah.</span>
-        </div>
-        <div class="form-field full">
-          <label>Programme</label>
-          <select id="newProgramme">
-            <option value="">Select a programme…</option>
-            <option>Diploma in Water Services Technology</option>
-            <option>Diploma in Computer Technology</option>
-            <option>Diploma in Computer Technology (Big Data Analytics)</option>
-            <option>Diploma in Engineering Technology – Smart Manufacturing</option>
-            <option>Diploma in Contemporary Furniture Production Technology</option>
-            <option>Diploma in Welding Competency</option>
-            <option>Diploma in Electrical Machinery Chargeman Competency (A4 Voltage)</option>
-            <option>Diploma in Electrical Competency (Domestic &amp; Industrial) PW4</option>
-            <option>Diploma in Automotive Technology</option>
-            <option>Diploma in Automotive Technology – Vehicle Body Repair &amp; Refinishing</option>
-            <option>Certificate in Mechanical Engineering Technology (Design Drafting)</option>
-            <option>Certificate in Building Engineering Technology</option>
-            <option>Certificate in Foundry Technology</option>
-            <option>Certificate in Architecture</option>
-          </select>
         </div>
       </div>
       <div class="modal-actions">
@@ -546,6 +576,10 @@
     document.getElementById('dStatus').textContent = s.status;
     document.getElementById('dProgramme').textContent = s.prog;
     document.getElementById('dFaculty').textContent = s.fac;
+    document.getElementById('dSession').textContent = s.session || '—';
+    document.getElementById('dQueue').textContent = s.queue || '—';
+    document.getElementById('dPhone').textContent = s.phone || '—';
+    document.getElementById('dCgpa').textContent = s.cgpa || '—';
     document.getElementById('dPassword').textContent = s.password || 'student123';
     document.getElementById('studentModal').classList.add('open');
   }
@@ -559,17 +593,50 @@
     document.getElementById('addModal').classList.add('open');
   }
 
-  function closeAddModal(){
+function closeAddModal(){
     document.getElementById('addModal').classList.remove('open');
+  }
+
+  // Map a programme to its faculty automatically
+  function facultyForProgramme(prog){
+    if(prog.indexOf('Water') !== -1 || prog.indexOf('Computer Technology (Big Data') !== -1 ||
+       prog.indexOf('Chargeman Competency') !== -1 || prog.indexOf('Electrical Competency') !== -1){
+      return 'Electrical & Electronics';
+    }
+    if(prog.indexOf('Smart Manufacturing') !== -1 || prog.indexOf('Furniture') !== -1 ||
+       prog.indexOf('Mechanical Engineering Technology') !== -1 || prog.indexOf('Foundry') !== -1){
+      return 'Mechanical & Manufacturing';
+    }
+    if(prog.indexOf('Welding') !== -1){
+      return 'Welding';
+    }
+    if(prog.indexOf('Automotive') !== -1){
+      return 'Automotive';
+    }
+    if(prog.indexOf('Building Technology') !== -1 || prog.indexOf('Architecture') !== -1){
+      return 'Civil & Services';
+    }
+    return '';
+  }
+
+  // Auto-set the Faculty dropdown whenever a Programme is chosen
+  function autoSetFaculty(){
+    const prog = document.getElementById('newProgramme').value;
+    document.getElementById('newFaculty').value = facultyForProgramme(prog);
   }
 
   // Add a new graduate to the registry table by programme
   function addGraduate(){
-    const name  = document.getElementById('newName').value.trim();
-    const sid   = document.getElementById('newSid').value.trim();
-    const email = document.getElementById('newEmail').value.trim();
-    const pw    = document.getElementById('newPassword').value.trim() || 'student123';
-    const prog  = document.getElementById('newProgramme').value;
+    const name    = document.getElementById('newName').value.trim();
+    const sid     = document.getElementById('newSid').value.trim();
+    const email   = document.getElementById('newEmail').value.trim();
+    const session = document.getElementById('newSession').value.trim();
+    const fac     = document.getElementById('newFaculty').value;
+    const prog    = document.getElementById('newProgramme').value;
+    const phone   = document.getElementById('newPhone').value.trim();
+    const cgpa    = document.getElementById('newCgpa').value.trim();
+    const queue   = document.getElementById('newQueue').value.trim();
+    const pw      = document.getElementById('newPassword').value.trim() || 'student123';
 
     if(!name || !sid || !email || !prog){
       alert('Sila lengkapkan semua maklumat pelajar (Nama, ID, Email dan Program).');
@@ -581,19 +648,14 @@
       return;
     }
 
-    // Determine faculty from the chosen programme
-    var fac = 'Information Technology & Engineering';
-    if(prog.indexOf('Water') !== -1 || prog.indexOf('Furniture') !== -1 ||
-       prog.indexOf('Welding') !== -1 || prog.indexOf('Electrical') !== -1 ||
-       prog.indexOf('Automotive') !== -1 || prog.indexOf('Mechanical Engineering Technology') !== -1 ||
-       prog.indexOf('Building Engineering') !== -1 || prog.indexOf('Foundry') !== -1){
-      fac = 'Engineering & Technology';
-    } else if(prog.indexOf('Architecture') !== -1){
-      fac = 'Architecture';
+// If faculty is not chosen, infer it from the chosen programme
+    var finalFac = fac;
+    if(!finalFac){
+      finalFac = facultyForProgramme(prog);
     }
 
     // Store in student detail data so the View button works (including the fixed password)
-    studentData[sid] = { name: name, email: email, prog: prog, fac: fac, status: 'Verified', password: pw };
+    studentData[sid] = { name: name, email: email, session: session, prog: prog, fac: finalFac, phone: phone, cgpa: cgpa, queue: queue, status: 'Verified', password: pw };
 
     // Build the initials avatar
     var initials = name.split(' ').map(function(w){ return w.charAt(0); }).join('').slice(0,2).toUpperCase();
@@ -605,8 +667,8 @@
       '<td><div class="student-cell"><span class="s-avatar">' + initials + '</span>' +
       '<div><div class="s-name">' + name + '</div><div class="s-id">' + email + '</div></div></div></td>' +
       '<td>' + sid + '</td>' +
-      '<td>' + prog + '</td>' +
-      '<td>' + fac + '</td>' +
+'<td>' + prog + '</td>' +
+      '<td>' + finalFac + '</td>' +
       '<td><span class="status-pill verified">Verified</span></td>' +
       '<td><button class="view-btn" onclick="viewStudent(\'' + sid + '\')">View</button></td>';
     tbody.appendChild(tr);
@@ -620,7 +682,12 @@
     document.getElementById('newName').value = '';
     document.getElementById('newSid').value = '';
     document.getElementById('newEmail').value = '';
+    document.getElementById('newSession').value = '';
+    document.getElementById('newFaculty').value = '';
     document.getElementById('newProgramme').value = '';
+    document.getElementById('newPhone').value = '';
+    document.getElementById('newCgpa').value = '';
+    document.getElementById('newQueue').value = '';
     alert('Graduate "' + name + '" telah ditambah ke dalam Student Registry.');
   }
 

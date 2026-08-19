@@ -495,7 +495,10 @@ footer{
     <span>AI-Assisted Convocation Queue &amp; Identity Verification System</span>
   </footer>
 
+
 <script>
+  const API_BASE_URL = "https://smartconvo-api.danishshazwan85.workers.dev";
+
   const tabLogin = document.getElementById('tabLogin');
   const tabRegister = document.getElementById('tabRegister');
   const loginView = document.getElementById('loginView');
@@ -503,7 +506,7 @@ footer{
   const pageTitle = document.getElementById('pageTitle');
   const pageSub = document.getElementById('pageSub');
 
-  function showLogin(){
+  function showLogin() {
     tabLogin.classList.add('is-active');
     tabRegister.classList.remove('is-active');
     loginView.classList.add('is-active');
@@ -512,7 +515,7 @@ footer{
     pageSub.textContent = 'Sign in with your Gmail account and password to view convocation queue status as a guest.';
   }
 
-  function showRegister(){
+  function showRegister() {
     tabRegister.classList.add('is-active');
     tabLogin.classList.remove('is-active');
     registerView.classList.add('is-active');
@@ -523,105 +526,277 @@ footer{
 
   tabLogin.addEventListener('click', showLogin);
   tabRegister.addEventListener('click', showRegister);
-document.getElementById('goRegister').addEventListener('click', showRegister);
+  document.getElementById('goRegister').addEventListener('click', showRegister);
   document.getElementById('goLogin').addEventListener('click', showLogin);
 
-  // ----- Login form validation (demo) -----
+
+  // ============================================================
+  // GUEST LOGIN API
+  // ============================================================
+
   const loginForm = document.getElementById('loginForm');
-  loginForm.addEventListener('submit', function(e){
+
+  loginForm.addEventListener('submit', async function(e) {
     e.preventDefault();
+
     let valid = true;
 
     const email = document.getElementById('loginEmail');
     const emailField = document.getElementById('loginEmailField');
-    const isGmail = /^[^\s@]+@gmail\.com$/i.test(email.value.trim());
-    if(!isGmail){
+
+    const pass = document.getElementById('loginPassword');
+    const passField = document.getElementById('loginPasswordField');
+
+    // Validate Gmail
+    const emailValue = email.value.trim();
+    const isGmail = /^[^\s@]+@gmail\.com$/i.test(emailValue);
+
+    if (!isGmail) {
       emailField.classList.add('has-error');
       valid = false;
     } else {
       emailField.classList.remove('has-error');
     }
 
-    const pass = document.getElementById('loginPassword');
-    const passField = document.getElementById('loginPasswordField');
-    if(!pass.value){
+    // Validate password
+    if (!pass.value) {
       passField.classList.add('has-error');
       valid = false;
     } else {
       passField.classList.remove('has-error');
     }
 
-if(!valid) return;
+    if (!valid) return;
 
-    // Placeholder: replace with real authentication call.
-    // Mark the guest as logged in (demo session).
-    localStorage.setItem('sc_guest_logged', '1');
+    // Disable login button while processing
+    const loginButton = loginForm.querySelector(
+      'button[type="submit"]'
+    );
 
-    // If the user came from the Diary Gallery, take them straight to the gallery.
-    const afterLogin = localStorage.getItem('sc_after_login');
-    if (afterLogin === 'gallery') {
-      localStorage.removeItem('sc_after_login');
-      window.location.href = 'guest-gallery.html';
-    } else {
-      window.location.href = 'guest-portal.html';
+    const originalButtonHTML = loginButton
+      ? loginButton.innerHTML
+      : '';
+
+    if (loginButton) {
+      loginButton.disabled = true;
+      loginButton.textContent = 'Logging in...';
+    }
+
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/guest/login`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: emailValue,
+            password: pass.value
+          })
+        }
+      );
+
+      const data = await response.json();
+
+      console.log('Guest login response:', data);
+
+      // Login failed
+      if (!response.ok || !data.success) {
+        alert(data.message || 'Invalid email or password.');
+        return;
+      }
+
+      // Make sure token exists
+      if (!data.token) {
+        console.error('Login successful but no token was returned.');
+        alert('Login failed: authentication token was not received.');
+        return;
+      }
+
+      // Save authentication token
+      localStorage.setItem('sc_guest_token', data.token);
+
+      // Keep compatibility with existing frontend logic
+      localStorage.setItem('sc_guest_logged', '1');
+
+      // Save basic guest information
+      if (data.guest) {
+        localStorage.setItem(
+          'sc_guest_data',
+          JSON.stringify(data.guest)
+        );
+      }
+
+      console.log('Guest login successful.');
+
+      // Redirect logic
+      const afterLogin = localStorage.getItem('sc_after_login');
+
+      if (afterLogin === 'gallery') {
+        localStorage.removeItem('sc_after_login');
+        window.location.href = 'guest-gallery.html';
+      } else {
+        window.location.href = 'guest-portal.html';
+      }
+
+    } catch (error) {
+      console.error('Guest login error:', error);
+
+      alert(
+        'Unable to connect to SMARTCONVO server. Please make sure the Worker is running.'
+      );
+
+    } finally {
+      if (loginButton) {
+        loginButton.disabled = false;
+        loginButton.innerHTML = originalButtonHTML;
+      }
     }
   });
 
-  // ----- Register form validation (demo) -----
+
+  // ============================================================
+  // GUEST REGISTER API
+  // ============================================================
+
   const registerForm = document.getElementById('registerForm');
-  const successNote = document.getElementById('successNote');
-  registerForm.addEventListener('submit', function(e){
+
+  registerForm.addEventListener('submit', async function(e) {
     e.preventDefault();
-    let valid = true;
 
-    const name = document.getElementById('regName');
-    const nameField = document.getElementById('regNameField');
-    if(!name.value.trim()){
-      nameField.classList.add('has-error');
-      valid = false;
-    } else {
-      nameField.classList.remove('has-error');
-    }
+    const name = document.getElementById('regName').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const password = document.getElementById('regPassword').value;
+    const confirmPassword = document.getElementById('regConfirm').value;
 
-    const email = document.getElementById('regEmail');
-    const emailField = document.getElementById('regEmailField');
-    const isGmail = /^[^\s@]+@gmail\.com$/i.test(email.value.trim());
-    if(!isGmail){
-      emailField.classList.add('has-error');
-      valid = false;
-    } else {
-      emailField.classList.remove('has-error');
-    }
-
-    const pw = document.getElementById('regPassword');
-    const pwField = document.getElementById('regPasswordField');
-    if(pw.value.length < 8){
-      pwField.classList.add('has-error');
-      valid = false;
-    } else {
-      pwField.classList.remove('has-error');
-    }
-
-    const confirm = document.getElementById('regConfirm');
-    const confirmField = document.getElementById('regConfirmField');
-    if(confirm.value !== pw.value || !confirm.value){
-      confirmField.classList.add('has-error');
-      valid = false;
-    } else {
-      confirmField.classList.remove('has-error');
-    }
-
-    if(!valid){
-      successNote.classList.remove('is-visible');
+    // Basic validation
+    if (!name || !email || !password || !confirmPassword) {
+      showRegisterMessage(
+        'Please fill in all fields.',
+        'error'
+      );
       return;
     }
 
-    // Placeholder: replace with real account-creation call.
-    successNote.classList.add('is-visible');
-    registerForm.reset();
-    setTimeout(showLogin, 1600);
+    // Validate Gmail
+    const isGmail = /^[^\s@]+@gmail\.com$/i.test(email);
+
+    if (!isGmail) {
+      showRegisterMessage(
+        'Please use a valid Gmail address.',
+        'error'
+      );
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      showRegisterMessage(
+        'Passwords do not match.',
+        'error'
+      );
+      return;
+    }
+
+    if (password.length < 8) {
+      showRegisterMessage(
+        'Password must be at least 8 characters.',
+        'error'
+      );
+      return;
+    }
+
+    // Disable button while processing
+    const submitButton = registerForm.querySelector(
+      'button[type="submit"]'
+    );
+
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = 'Creating account...';
+    }
+
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/guest/register`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            name: name,
+            email: email,
+            password: password,
+            confirmPassword: confirmPassword
+          })
+        }
+      );
+
+      const data = await response.json();
+
+      console.log('Guest registration response:', data);
+
+      if (!response.ok || !data.success) {
+        showRegisterMessage(
+          data.message || 'Registration failed.',
+          'error'
+        );
+        return;
+      }
+
+      // Registration successful
+      showRegisterMessage(
+        'Account created successfully! You can now login.',
+        'success'
+      );
+
+      // Clear password fields
+      document.getElementById('regPassword').value = '';
+      document.getElementById('regConfirm').value = '';
+
+      // Switch to login tab after short delay
+      setTimeout(() => {
+        showLogin();
+      }, 1200);
+
+    } catch (error) {
+      console.error('Guest registration error:', error);
+
+      showRegisterMessage(
+        'Unable to connect to SMARTCONVO server.',
+        'error'
+      );
+
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Create Account';
+      }
+    }
   });
+
+
+  // ============================================================
+  // REGISTER MESSAGE
+  // ============================================================
+
+  function showRegisterMessage(message, type) {
+    const messageElement = document.getElementById(
+      'registerMessage'
+    );
+
+    if (!messageElement) {
+      alert(message);
+      return;
+    }
+
+    messageElement.textContent = message;
+    messageElement.className = `form-message ${type}`;
+  }
 </script>
+
+
 
 </body>
 </html>

@@ -48,8 +48,18 @@
   }
   .dt-left{display:flex;align-items:center;gap:20px;}
   .dt-logo{
-    font-family:'Fraunces',serif;font-size:28px;font-weight:600;color:var(--navy-deep);
-  }
+  font-family:'Fraunces',serif;
+  font-size:28px;
+  font-weight:600;
+  color:var(--navy-deep);
+  text-decoration:none;
+  cursor:pointer;
+  transition:opacity 0.2s ease;
+}
+
+.dt-logo:hover{
+  opacity:0.7;
+}
   .dt-divider{width:1px;height:26px;background:var(--line);}
   .dt-event{
     font-family:'IBM Plex Mono',monospace;font-size:14px;
@@ -287,10 +297,10 @@
   <!-- ================= TOP BAR ================= -->
   <header class="display-top">
     <div class="dt-left">
-      <span class="dt-logo">SmartConvo</span>
-      <span class="dt-divider"></span>
-      <span class="dt-event">Convocation 2026 · Session 2</span>
-    </div>
+  <a href="admin-dashboard.html" class="dt-logo">SmartConvo</a>
+  <span class="dt-divider"></span>
+  <span class="dt-event">Convocation 2026 · Session 2</span>
+</div>
     <div class="dt-right">
       <span class="live-chip"><span class="live-dot"></span> Live</span>
       <span class="dt-clock" id="clock">10:24:30</span>
@@ -318,7 +328,6 @@
         </svg>
         <span>Student Photo</span>
       </div>
-<div class="photo-cap">ID: 2402076</div>
     </div>
 
     <!-- Info -->
@@ -337,19 +346,7 @@
       <div class="now-label"><span class="dot"></span>Face Verified</div>
       <div class="now-faculty">Faculty of Information Technology &amp; Engineering</div>
       <div class="now-name">Danish Shazwan Bin Suwandi</div>
-      <div class="now-programme">Diploma in Computer Technology</div>
-
-      <div class="now-meta">
-        <div class="meta-item">
-          <span class="meta-label">Student ID</span>
-          <span class="meta-val">2402076</span>
-        </div>
-        <div class="meta-sep"></div>
-        <div class="meta-item">
-          <span class="meta-label">CGPA</span>
-          <span class="meta-val">3.78</span>
-        </div>
-      </div>
+      <div class="now-programme">Diploma in Computer Technology (Big Data Analysis)</div>
 
       <div class="status-strip">
         <span class="ss-dot"></span>
@@ -370,8 +367,8 @@
   <footer class="display-bottom">
 
     <div class="recents-head">
-      <span class="rh-title">Recently Scanned</span>
-      <span class="rh-sub">Students who completed face verification</span>
+      <span class="rh-title">Queue Status</span>
+      <span class="rh-sub">Next In Line</span>
     </div>
 
     <div class="recent-list">

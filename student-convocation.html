@@ -190,10 +190,15 @@
 
   <div class="main-area">
 
-    <header class="topbar">
-      <div class="topbar-left"><h2>Convocation Information</h2></div>
+        <header class="topbar">
+      <div class="topbar-left">
+        <h2>Dashboard</h2>
+      </div>
       <div class="topbar-right">
-        <span class="user-chip"><span class="dot"></span>Aiman Hakimi</span>
+        <span class="user-chip">
+          <span class="dot"></span>
+          <span id="userName">Student</span>
+        </span>
         <a href="student-notifications.html" class="notif-bell">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
           <span class="notif-badge">3</span>
@@ -214,9 +219,9 @@
           <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9l10-4.5L22 9l-10 4.5L2 9z"/><path d="M6 11v5c0 1.1 2.7 2.5 6 2.5s6-1.4 6-2.5v-5"/></svg>
         </div>
         <div>
-          <div class="cb-date">Session 2 · Saturday, 21 February 2026</div>
-          <div class="cb-title">Your Convocation Session</div>
-          <div class="cb-sub">10:00 AM – 12:30 PM · Dewan Seri Budaya</div>
+          <div class="cb-date">Session 1· Saturday, 21 February 2026</div>
+          <div class="cb-title">Session 1 </div>
+          <div class="cb-sub">8:00 AM – 12:30 PM · Independence Hall (WTCKL)</div>
         </div>
       </div>
 
@@ -250,7 +255,7 @@
                 </span>
                 <div>
                   <div class="ii-label">Venue</div>
-                  <div class="ii-value">Dewan Seri Budaya, Main Auditorium</div>
+                  <div class="ii-value">Independence Hall (WTCKL)</div>
                 </div>
               </div>
               <div class="info-row">
@@ -306,7 +311,7 @@
               <tr>
                 <td class="time">08:00 — 09:00</td>
                 <td class="evt">Student Registration &amp; Seating</td>
-                <td>Main Entrance, Dewan Seri Budaya</td>
+                <td>Independence Hall (WTCKL)</td>
               </tr>
               <tr>
                 <td class="time">09:00 — 09:30</td>
@@ -348,6 +353,41 @@
   </div>
 
 </div>
+<script>
+const API_BASE_URL = "https://smartconvo-api.danishshazwan85.workers.dev";
 
+async function loadStudentName() {
+  const token = localStorage.getItem("studentToken");
+
+  if (!token) {
+    window.location.href = "login-student.html";
+    return;
+  }
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/student/profile`, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error("Unable to load student profile");
+    }
+
+    const data = await response.json();
+
+    if (data.success && data.student) {
+      document.getElementById("userName").textContent = data.student.name;
+    }
+  } catch (error) {
+    console.error("Student profile error:", error);
+  }
+}
+
+loadStudentName();
+</script>
 </body>
 </html>

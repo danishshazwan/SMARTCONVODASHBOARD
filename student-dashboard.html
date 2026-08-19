@@ -804,80 +804,135 @@
           <span class="sim-live"><span class="live-dot"></span> Live Simulation</span>
         </div>
 
-        <div class="sim-here">
-          <div>
-            <div class="here-label">You Are Here</div>
-            <div class="here-value">Queue — Waiting Area</div>
-            <div class="here-sub">Queue #042 · Estimated 15 min remaining</div>
-          </div>
-          <div class="sim-instruction">
-            <div class="inst-label">Please Stay</div>
-            <div class="inst-text">Stay at the <span class="dest">Waiting Area</span> near the Main Auditorium until your queue number is called.</div>
-          </div>
-          <div class="sim-instruction">
-            <div class="inst-label">Please Go To</div>
-            <div class="inst-text">When <span class="dest">#042 is called</span>, proceed to the <span class="dest">Stage Entrance</span> for face verification.</div>
-          </div>
-        </div>
+<div class="sim-here">
 
+  <div>
+    <div class="here-label">You Are Here</div>
+
+    <div
+      class="here-value"
+      id="simCurrentLocation"
+    >
+      Queue — Waiting Area
+    </div>
+
+    <div
+      class="here-sub"
+      id="simCurrentSub"
+    >
+      Queue #042 · Estimated 15 min remaining
+    </div>
+  </div>
+
+
+  <div class="sim-instruction">
+
+    <div class="inst-label">
+      Please Stay
+    </div>
+
+    <div
+      class="inst-text"
+      id="simStayInstruction"
+    >
+      Stay at the
+      <span class="dest">Waiting Area</span>
+      near the Main Auditorium until your queue number is called.
+    </div>
+
+  </div>
+
+
+  <div class="sim-instruction">
+
+    <div class="inst-label">
+      Please Go To
+    </div>
+
+    <div
+      class="inst-text"
+      id="simGoInstruction"
+    >
+      When
+      <span class="dest">#042 is called</span>,
+      proceed to the
+      <span class="dest">Stage Entrance</span>
+      for face verification.
+    </div>
+  </div>
+</div>
 <div class="sim-flow">
-          <div class="sim-checkpoint done c-reg">
-            <div class="sim-dot">✓</div>
-            <span class="sim-label">Registration</span>
-            <span class="sim-loc">Main Entrance</span>
-          </div>
-          <div class="sim-checkpoint done c-face">
-            <div class="sim-dot">✓</div>
-            <span class="sim-label">Face Verification</span>
-            <span class="sim-loc">Verification Booth</span>
-          </div>
-          <div class="sim-checkpoint done c-seat">
-            <div class="sim-dot">✓</div>
-            <span class="sim-label">Seat Queue</span>
-            <span class="sim-loc">Seating Area</span>
-          </div>
-          <div class="sim-checkpoint active c-queue">
-            <div class="sim-dot">4</div>
-            <span class="sim-label">Queue</span>
-            <span class="sim-loc">Waiting Area</span>
-            <span class="you-here">You are here</span>
-          </div>
-          <div class="sim-checkpoint c-stage">
-            <div class="sim-dot">5</div>
-            <span class="sim-label">On Stage</span>
-            <span class="sim-loc">Stage Entrance</span>
-          </div>
-          <div class="sim-checkpoint c-exit">
-            <div class="sim-dot">6</div>
-            <span class="sim-label">Completed</span>
-            <span class="sim-loc">Exit / Foyer</span>
-          </div>
-        </div>
+
+  <div class="sim-checkpoint" id="simStep-registration">
+    <div class="sim-dot">1</div>
+    <div class="sim-label">Registration</div>
+    <div class="sim-loc">Main Entrance</div>
+  </div>
+
+  <div class="sim-checkpoint" id="simStep-seated">
+    <div class="sim-dot">2</div>
+    <div class="sim-label">Seated</div>
+    <div class="sim-loc">Seating Area</div>
+  </div>
+
+  <div class="sim-checkpoint" id="simStep-called">
+    <div class="sim-dot">3</div>
+    <div class="sim-label">Called</div>
+    <div class="sim-loc">Announcement</div>
+  </div>
+
+  <div class="sim-checkpoint" id="simStep-verification">
+    <div class="sim-dot">4</div>
+    <div class="sim-label">Verification Queue</div>
+    <div class="sim-loc">Verification Booth</div>
+  </div>
+
+  <div class="sim-checkpoint" id="simStep-verified">
+    <div class="sim-dot">5</div>
+    <div class="sim-label">Verified</div>
+    <div class="sim-loc">Verification Booth</div>
+  </div>
+
+  <div class="sim-checkpoint" id="simStep-on_stage">
+    <div class="sim-dot">6</div>
+    <div class="sim-label">On Stage</div>
+    <div class="sim-loc">Stage Entrance</div>
+  </div>
+
+  <div class="sim-checkpoint" id="simStep-complete">
+    <div class="sim-dot">7</div>
+    <div class="sim-label">Complete</div>
+    <div class="sim-loc">Exit / Foyer</div>
+  </div>
+</div>
       </section>
 
       <!-- STATS GRID -->
-      <section class="stats-grid">
-        <div class="stat-card">
-          <span class="stat-label">Registration Status</span>
-          <span class="stat-value">Completed</span>
-          <span class="stat-badge completed">✓ Completed</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-label">Face Verification</span>
-          <span class="stat-value">Verified</span>
-          <span class="stat-badge verified">✓ Verified</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-label">Queue Number</span>
-          <span class="stat-value">042</span>
-          <span class="stat-badge waiting">Waiting</span>
-        </div>
-        <div class="stat-card">
-          <span class="stat-label">Current Status</span>
-          <span class="stat-value">In Queue</span>
-          <span class="stat-badge waiting">Waiting</span>
-        </div>
-      </section>
+     <section class="stats-grid">
+  <div class="stat-card">
+    <span class="stat-label">Face Registration Status</span>
+    <span class="stat-value" id="registrationStatusValue">Not Register</span>
+    <span class="stat-badge completed" id="registrationStatusBadge">Not Completed</span>
+  </div>
+
+  <div class="stat-card">
+    <span class="stat-label">Face Verification</span>
+    <span class="stat-value" id="faceVerificationValue">Pending</span>
+    <span class="stat-badge waiting" id="faceVerificationBadge">Waiting</span>
+  </div>
+
+  <div class="stat-card">
+    <span class="stat-label">Queue Number</span>
+    <span class="stat-value" id="queueNumberValue">—</span>
+    <span class="stat-badge waiting" id="queueNumberBadge">Not Assigned</span>
+  </div>
+
+  <div class="stat-card">
+    <span class="stat-label">Current Status</span>
+    <span class="stat-value" id="currentStatusValue">Pending Verification</span>
+    <span class="stat-badge waiting" id="currentStatusBadge">Waiting</span>
+  </div>
+</section>
 
       <!-- ROW: QUEUE + CONVOCATION INFO -->
       <section class="dashboard-row">
@@ -890,14 +945,14 @@
           </div>
           <div class="card-body">
             <div class="queue-info">
-              <div class="queue-number">042</div>
-              <div class="queue-details">
-                <div class="queue-label">Queue Number</div>
-                <div class="queue-status-text">Waiting — Approximately 15 min</div>
-                <div class="queue-time">Estimated wait: 1:45 PM – 2:00 PM</div>
-              </div>
-            </div>
-          </div>
+              <div class="queue-number" id="dashboardQueueNumber">—</div>
+<div class="queue-status-text" id="dashboardQueueStatus">
+  Queue number not assigned
+</div>
+
+<div class="queue-time" id="dashboardQueueTime">
+  Waiting for queue assignment
+</div>
         </div>
 
         <!-- CONVOCATION INFO -->
@@ -929,7 +984,7 @@
                 </span>
                 <div>
                   <div class="ci-label">Time</div>
-                  <div class="ci-value">10:00 AM – 12:30 PM (Session 2)</div>
+                  <div class="ci-value">8:00 AM – 12:30 PM (Session 1)</div>
                 </div>
               </div>
               <div class="convo-info-row">
@@ -941,7 +996,7 @@
                 </span>
                 <div>
                   <div class="ci-label">Venue</div>
-                  <div class="ci-value">Dewan Seri Budaya, Main Auditorium</div>
+                  <div class="ci-value">Independence Hall (WTCKL)</div>
                 </div>
               </div>
             </div>
@@ -990,56 +1045,775 @@
 </div>
 
 <script>
-  // Load the logged-in student's name from the database-backed session.
-  // Placeholder function — replace with your auth/session fetch (e.g. from localStorage, sessionStorage
-  // set after login, or an API call that returns the logged-in user's record).
-  function getCurrentUserName(){
-    try{
-      // e.g. value stored at login from the database
-      const name = sessionStorage.getItem('smartconvo_student_name')
-                || localStorage.getItem('smartconvo_student_name');
-      return name ? name.trim() : null;
-    }catch(e){ return null; }
+
+const API_BASE_URL = "https://smartconvo-api.danishshazwan85.workers.dev";
+
+async function verifyStudentSession() {
+
+  const token = localStorage.getItem("studentToken");
+
+  if (!token) {
+    window.location.href = "login-student.html";
+    return false;
   }
 
-const currentName = getCurrentUserName() || 'Student';
+  try {
 
-  function applyUserName(){
-    const userNameEl = document.getElementById('userName');
-    const greetingEl = document.getElementById('greetingName');
-    const entryNameEl = document.getElementById('entryName');
-    if(userNameEl)  userNameEl.textContent = currentName;
-    if(greetingEl)  greetingEl.textContent = currentName;
-    if(entryNameEl) entryNameEl.textContent = currentName;
-  }
+    const response = await fetch(
+      `${API_BASE_URL}/api/student/profile`,
+      {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      }
+    );
 
-  // ---------- ENTRY ANIMATION SEQUENCE ----------
-  function runEntryAnimation(){
-    const steps = Array.from(document.querySelectorAll('.entry-step'));
-    let current = 0;
+    const data = await response.json();
 
-    function advance(){
-      if(current >= steps.length){ finishEntry(); return; }
-      const prev = steps[current - 1];
-      const cur  = steps[current];
-      if(prev) prev.classList.add('done');
-      if(cur)  cur.classList.add('active');
-      current++;
-      setTimeout(advance, 700);
+    if (!response.ok || !data.success) {
+
+      console.error("Student profile failed:", {
+        status: response.status,
+        data: data
+      });
+
+      localStorage.removeItem("studentToken");
+      localStorage.removeItem("studentData");
+
+      window.location.href = "login-student.html";
+
+      return false;
     }
 
-    function finishEntry(){
-      document.body.classList.add('entry-done');
-      const overlay = document.getElementById('entryOverlay');
-      if(overlay) overlay.classList.add('hidden');
+    localStorage.setItem(
+      "studentData",
+      JSON.stringify(data.student)
+    );
+
+    updateStudentDashboard(data.student);
+
+    return data.student;
+
+  } catch (error) {
+
+    console.error(
+      "Student authentication error:",
+      error
+    );
+
+    alert(
+      "Unable to connect to SMARTCONVO server."
+    );
+
+    return false;
+  }
+}
+
+
+function getCurrentUserName(student) {
+
+  try {
+
+    if (student && student.name) {
+      return student.name.trim();
     }
 
-    advance();
+    const savedStudent =
+      localStorage.getItem("studentData");
+
+    if (savedStudent) {
+
+      const studentData =
+        JSON.parse(savedStudent);
+
+      if (studentData.name) {
+        return studentData.name.trim();
+      }
+    }
+
+    return "Student";
+
+  } catch (error) {
+
+    return "Student";
+  }
+}
+
+
+function applyUserName(student) {
+
+  const currentName =
+    getCurrentUserName(student);
+
+  const userNameEl =
+    document.getElementById("userName");
+
+  const greetingEl =
+    document.getElementById("greetingName");
+
+  const entryNameEl =
+    document.getElementById("entryName");
+
+  if (userNameEl) {
+    userNameEl.textContent = currentName;
   }
 
-  applyUserName();
+  if (greetingEl) {
+    greetingEl.textContent = currentName;
+  }
+
+  if (entryNameEl) {
+    entryNameEl.textContent = currentName;
+  }
+}
+
+
+function runEntryAnimation() {
+
+  const steps =
+    Array.from(
+      document.querySelectorAll(".entry-step")
+    );
+
+  let current = 0;
+
+  function advance() {
+
+    if (current >= steps.length) {
+      finishEntry();
+      return;
+    }
+
+    const prev = steps[current - 1];
+    const cur = steps[current];
+
+    if (prev) {
+      prev.classList.add("done");
+    }
+
+    if (cur) {
+      cur.classList.add("active");
+    }
+
+    current++;
+
+    setTimeout(
+      advance,
+      700
+    );
+  }
+
+  function finishEntry() {
+
+    document.body.classList.add("entry-done");
+
+    const overlay =
+      document.getElementById("entryOverlay");
+
+    if (overlay) {
+      overlay.classList.add("hidden");
+    }
+  }
+
+  advance();
+}
+
+
+async function loadLiveSimulation() {
+
+  const token =
+    localStorage.getItem("studentToken");
+
+  if (!token) {
+    return;
+  }
+
+  try {
+
+    const response = await fetch(
+      `${API_BASE_URL}/api/student/simulation`,
+      {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      }
+    );
+
+    const data =
+      await response.json();
+
+    if (!response.ok || !data.success) {
+
+      console.error(
+        "Live simulation error:",
+        data.message
+      );
+
+      if (response.status === 401) {
+
+        localStorage.removeItem("studentToken");
+        localStorage.removeItem("studentData");
+
+        window.location.href =
+          "login-student.html";
+      }
+
+      return;
+    }
+
+    const simulation =
+      data.simulation;
+
+    console.log(
+      "Live Simulation Data:",
+      simulation
+    );
+
+    updateSimulationUI(simulation);
+
+  } catch (error) {
+
+    console.error(
+      "Failed to load live simulation:",
+      error
+    );
+  }
+}
+
+
+function updateSimulationUI(simulation) {
+
+  if (!simulation) {
+    return;
+  }
+
+  const status =
+    String(
+      simulation.convocation_status ||
+      "registration"
+    ).toLowerCase();
+
+  const queueNumber =
+    simulation.queue_number;
+
+  const formattedQueue =
+    queueNumber !== null &&
+    queueNumber !== undefined
+      ? String(queueNumber).padStart(3, "0")
+      : "—";
+
+  const currentLocation =
+    document.getElementById(
+      "simCurrentLocation"
+    );
+
+  const currentSub =
+    document.getElementById(
+      "simCurrentSub"
+    );
+
+  const stayInstruction =
+    document.getElementById(
+      "simStayInstruction"
+    );
+
+  const goInstruction =
+    document.getElementById(
+      "simGoInstruction"
+    );
+
+
+  if (status === "registration") {
+
+    if (currentLocation) {
+      currentLocation.textContent =
+        "Registration";
+    }
+
+    if (currentSub) {
+      currentSub.textContent =
+        "Your convocation registration is being processed.";
+    }
+
+    if (stayInstruction) {
+      stayInstruction.textContent =
+        "Please remain available and wait for your registration to be completed.";
+    }
+
+    if (goInstruction) {
+      goInstruction.innerHTML =
+        'Next: <span class="dest">Face Registration</span>';
+    }
+
+    return;
+  }
+
+
+  if (status === "face_verification") {
+
+    if (currentLocation) {
+      currentLocation.textContent =
+        "Face Verification";
+    }
+
+    if (currentSub) {
+      currentSub.textContent =
+        "Your identity verification is in progress.";
+    }
+
+    if (stayInstruction) {
+      stayInstruction.textContent =
+        "Please stay at the verification area until your identity has been confirmed.";
+    }
+
+    if (goInstruction) {
+      goInstruction.innerHTML =
+        'Proceed to <span class="dest">Face Verification Area</span>.';
+    }
+
+    return;
+  }
+
+
+  if (status === "seat_queue") {
+
+    if (currentLocation) {
+      currentLocation.textContent =
+        "Seat Queue";
+    }
+
+    if (currentSub) {
+      currentSub.textContent =
+        `Queue number ${formattedQueue} has been assigned.`;
+    }
+
+    if (stayInstruction) {
+      stayInstruction.textContent =
+        "Please proceed to your assigned waiting area and remain seated.";
+    }
+
+    if (goInstruction) {
+      goInstruction.innerHTML =
+        `Your queue: <span class="dest">#${formattedQueue}</span>`;
+    }
+
+    return;
+  }
+
+
+  if (status === "queue") {
+
+    if (currentLocation) {
+      currentLocation.textContent =
+        "Queue — Waiting Area";
+    }
+
+    if (currentSub) {
+      currentSub.textContent =
+        `Queue #${formattedQueue} · Waiting to be called.`;
+    }
+
+    if (stayInstruction) {
+      stayInstruction.textContent =
+        "Stay at the Waiting Area near the Main Auditorium until your queue number is called.";
+    }
+
+    if (goInstruction) {
+      goInstruction.innerHTML =
+        `When <span class="dest">#${formattedQueue} is called</span>, proceed to the Stage Entrance.`;
+    }
+
+    return;
+  }
+
+
+  if (status === "on_stage") {
+
+    if (currentLocation) {
+      currentLocation.textContent =
+        "On Stage";
+    }
+
+    if (currentSub) {
+      currentSub.textContent =
+        "You are currently proceeding through the graduation stage.";
+    }
+
+    if (stayInstruction) {
+      stayInstruction.textContent =
+        "Please follow the ceremony staff instructions.";
+    }
+
+    if (goInstruction) {
+      goInstruction.innerHTML =
+        'Proceed through the <span class="dest">Graduation Stage</span>.';
+    }
+
+    return;
+  }
+
+
+  if (status === "complete") {
+
+    if (currentLocation) {
+      currentLocation.textContent =
+        "Convocation Complete";
+    }
+
+    if (currentSub) {
+      currentSub.textContent =
+        "Congratulations! Your convocation process is complete.";
+    }
+
+    if (stayInstruction) {
+      stayInstruction.textContent =
+        "You may leave the ceremony area after completing the process.";
+    }
+
+    if (goInstruction) {
+      goInstruction.innerHTML =
+        'Status: <span class="dest">Completed</span>';
+    }
+
+    return;
+  }
+
+
+  if (currentLocation) {
+    currentLocation.textContent =
+      "Waiting for Update";
+  }
+
+  if (currentSub) {
+    currentSub.textContent =
+      "Your convocation status is being updated.";
+  }
+
+  if (stayInstruction) {
+    stayInstruction.textContent =
+      "Please wait for further instructions.";
+  }
+
+  if (goInstruction) {
+    goInstruction.innerHTML =
+      "SMARTCONVO will provide your next instruction.";
+  }
+}
+
+
+function updateStudentDashboard(student) {
+
+  const registrationStatus =
+    String(
+      student.face_registration_status ||
+      "not_registered"
+    ).toLowerCase();
+
+  const verificationStatus =
+    String(
+      student.face_verification_status ||
+      "pending"
+    ).toLowerCase();
+
+  const convocationStatus =
+    String(
+      student.convocation_status ||
+      "registration"
+    ).toLowerCase();
+
+  const queueNumber =
+    student.queue_number;
+
+  const registrationValue =
+    document.getElementById(
+      "registrationStatusValue"
+    );
+
+  const registrationBadge =
+    document.getElementById(
+      "registrationStatusBadge"
+    );
+
+  const faceValue =
+    document.getElementById(
+      "faceVerificationValue"
+    );
+
+  const faceBadge =
+    document.getElementById(
+      "faceVerificationBadge"
+    );
+
+  const queueValue =
+    document.getElementById(
+      "queueNumberValue"
+    );
+
+  const queueBadge =
+    document.getElementById(
+      "queueNumberBadge"
+    );
+
+  const currentValue =
+    document.getElementById(
+      "currentStatusValue"
+    );
+
+  const currentBadge =
+    document.getElementById(
+      "currentStatusBadge"
+    );
+
+  const dashboardQueueNumber =
+    document.getElementById(
+      "dashboardQueueNumber"
+    );
+
+  const dashboardQueueStatus =
+    document.getElementById(
+      "dashboardQueueStatus"
+    );
+
+  const dashboardQueueTime =
+    document.getElementById(
+      "dashboardQueueTime"
+    );
+
+
+  if (registrationStatus === "registered") {
+
+    if (registrationValue) {
+      registrationValue.textContent =
+        "Registered";
+    }
+
+    if (registrationBadge) {
+      registrationBadge.textContent =
+        "✓ Completed";
+
+      registrationBadge.className =
+        "stat-badge completed";
+    }
+
+  } else {
+
+    if (registrationValue) {
+      registrationValue.textContent =
+        "Not Registered";
+    }
+
+    if (registrationBadge) {
+      registrationBadge.textContent =
+        "Not Completed";
+
+      registrationBadge.className =
+        "stat-badge waiting";
+    }
+  }
+
+
+  if (verificationStatus === "verified") {
+
+    if (faceValue) {
+      faceValue.textContent =
+        "Verified";
+    }
+
+    if (faceBadge) {
+      faceBadge.textContent =
+        "✓ Verified";
+
+      faceBadge.className =
+        "stat-badge verified";
+    }
+
+  } else if (verificationStatus === "failed") {
+
+    if (faceValue) {
+      faceValue.textContent =
+        "Failed";
+    }
+
+    if (faceBadge) {
+      faceBadge.textContent =
+        "Failed";
+
+      faceBadge.className =
+        "stat-badge unverified";
+    }
+
+  } else {
+
+    if (faceValue) {
+      faceValue.textContent =
+        "Pending";
+    }
+
+    if (faceBadge) {
+      faceBadge.textContent =
+        "Waiting";
+
+      faceBadge.className =
+        "stat-badge waiting";
+    }
+  }
+
+
+  if (
+    queueNumber !== null &&
+    queueNumber !== undefined
+  ) {
+
+    const formattedQueue =
+      String(queueNumber).padStart(3, "0");
+
+    if (queueValue) {
+      queueValue.textContent =
+        `#${formattedQueue}`;
+    }
+
+    if (queueBadge) {
+      queueBadge.textContent =
+        "Assigned";
+
+      queueBadge.className =
+        "stat-badge completed";
+    }
+
+    if (dashboardQueueNumber) {
+      dashboardQueueNumber.textContent =
+        formattedQueue;
+    }
+
+    if (dashboardQueueStatus) {
+      dashboardQueueStatus.textContent =
+        "Queue number assigned";
+    }
+
+    if (dashboardQueueTime) {
+      dashboardQueueTime.textContent =
+        "Waiting for your queue to be called";
+    }
+
+  } else {
+
+    if (queueValue) {
+      queueValue.textContent =
+        "—";
+    }
+
+    if (queueBadge) {
+      queueBadge.textContent =
+        "Not Assigned";
+
+      queueBadge.className =
+        "stat-badge waiting";
+    }
+
+    if (dashboardQueueNumber) {
+      dashboardQueueNumber.textContent =
+        "—";
+    }
+
+    if (dashboardQueueStatus) {
+      dashboardQueueStatus.textContent =
+        "Queue number not assigned";
+    }
+
+    if (dashboardQueueTime) {
+      dashboardQueueTime.textContent =
+        "Waiting for queue assignment";
+    }
+  }
+
+
+  const statusMap = {
+
+    registration: {
+      value: "Registration",
+      badge: "Waiting",
+      className: "stat-badge waiting"
+    },
+
+    face_verification: {
+      value: "Face Verification",
+      badge: "In Progress",
+      className: "stat-badge pending"
+    },
+
+    seat_queue: {
+      value: "Seat Queue",
+      badge: "Ready",
+      className: "stat-badge completed"
+    },
+
+    queue: {
+      value: "In Queue",
+      badge: "Waiting",
+      className: "stat-badge waiting"
+    },
+
+    on_stage: {
+      value: "On Stage",
+      badge: "Called",
+      className: "stat-badge called"
+    },
+
+    complete: {
+      value: "Complete",
+      badge: "Completed",
+      className: "stat-badge completed"
+    }
+  };
+
+  const currentStatus =
+    statusMap[convocationStatus] || {
+      value: "Pending",
+      badge: "Waiting",
+      className: "stat-badge waiting"
+    };
+
+  if (currentValue) {
+    currentValue.textContent =
+      currentStatus.value;
+  }
+
+  if (currentBadge) {
+    currentBadge.textContent =
+      currentStatus.badge;
+
+    currentBadge.className =
+      currentStatus.className;
+  }
+}
+
+
+async function initializeStudentDashboard() {
+
+  const student =
+    await verifyStudentSession();
+
+  if (!student) {
+    return;
+  }
+
+  applyUserName(student);
+
   runEntryAnimation();
+
+  loadLiveSimulation();
+}
+
+
+initializeStudentDashboard();
+
 </script>
+
+
+
+
 
 </body>
 </html>

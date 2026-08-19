@@ -304,14 +304,24 @@
 
 <form id="loginForm" onsubmit="handleLogin(event)">
         <div class="form-field">
-          <label for="nama">Name</label>
-          <input type="text" id="nama" name="nama" placeholder="Enter your name" required>
-        </div>
+  <label for="nama">Username</label>
+  <input
+    type="text"
+    id="nama"
+    name="nama"
+    placeholder="Enter your username"
+  >
+</div>
 
         <div class="form-field">
-          <label for="emel">University Email</label>
-          <input type="email" id="emel" name="emel" placeholder="@tvetmara.edu.my" required>
-        </div>
+  <label for="emel">University Email</label>
+  <input
+    type="email"
+    id="emel"
+    name="emel"
+    placeholder="@lumut.tvetmara.edu.my"
+  >
+</div>
 
         <div class="form-field">
           <label for="password">Password</label>
@@ -345,19 +355,76 @@
   </footer>
 
 <script>
-  function handleLogin(event){
-    event.preventDefault();
-    const nama = document.getElementById('nama').value.trim();
-    const emel = document.getElementById('emel').value.trim();
-    const password = document.getElementById('password').value;
+const API_BASE_URL =
+  "https://smartconvo-api.danishshazwan85.workers.dev";
 
-if(nama && emel && password){
-      alert('Login successful. Welcome, ' + nama + '!');
-      window.location.href = 'admin-dashboard.html';
-    } else {
-      alert('Please fill in all the details.');
-    }
+async function handleLogin(event) {
+  event.preventDefault();
+
+  const username =
+    document.getElementById("nama").value.trim();
+
+  const email =
+    document.getElementById("emel").value.trim();
+
+  const password =
+    document.getElementById("password").value;
+
+  if (!username && !email) {
+    alert("Please enter your username or university email.");
+    return;
   }
+
+  if (!password) {
+    alert("Please enter your password.");
+    return;
+  }
+
+  const identifier = email || username;
+
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/api/admin/login`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          identifier: identifier,
+          password: password
+        })
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      alert(data.message || "Admin login failed.");
+      return;
+    }
+
+    localStorage.setItem(
+      "adminToken",
+      data.token
+    );
+
+    localStorage.setItem(
+      "adminUser",
+      JSON.stringify(data.admin)
+    );
+
+    window.location.href =
+      "admin-dashboard.html";
+
+  } catch (error) {
+    console.error("Admin login error:", error);
+
+    alert(
+      "Unable to connect to SMARTCONVO server."
+    );
+  }
+}
 </script>
 
 </body>

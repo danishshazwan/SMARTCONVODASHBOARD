@@ -363,31 +363,19 @@
         </span>
         <span class="nav-label">Graduate Search</span>
       </a>
-      <a href="guest-graduate.html" class="nav-item">
-        <span class="nav-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9l10-4.5L22 9l-10 4.5L2 9z"/><path d="M6 11v5c0 1.1 2.7 2.5 6 2.5s6-1.4 6-2.5v-5"/></svg>
-        </span>
-        <span class="nav-label">Graduate &amp; Voting</span>
-      </a>
       <a href="guest-announcement.html" class="nav-item">
         <span class="nav-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l16-6v14L3 13v-2z"/><path d="M3 13l3 2 2 3"/></svg>
         </span>
         <span class="nav-label">Announcements</span>
       </a>
-      <a href="guest-profile.html" class="nav-item">
-        <span class="nav-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.6 3.1-6.4 7-6.4s7 2.8 7 6.4"/></svg>
-        </span>
-        <span class="nav-label">My Profile</span>
-      </a>
     </nav>
-    <div class="sidebar-logout">
-      <a href="login-guest.html" class="nav-item">
+<div class="sidebar-logout">
+      <a href="index.html" class="nav-item">
         <span class="nav-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
         </span>
-        <span class="nav-label">Logout</span>
+        <span class="nav-label">Back To Main Page</span>
       </a>
     </div>
   </aside>
@@ -432,9 +420,9 @@
           </thead>
           <tbody>
             <tr>
-              <td class="time">08:00 — 09:00</td>
+              <td class="time">08:00 – 09:00</td>
               <td class="evt">Guest Registration &amp; Seating</td>
-              <td class="loc">Main Entrance, Dewan Seri Budaya</td>
+              <td class="loc">Main Entrance, Independence Hall (WTCKL)</td>
             </tr>
             <tr>
               <td class="time">09:00 — 09:30</td>
@@ -475,7 +463,7 @@
         <div class="section-head">
           <div>
             <h2>Award Categories</h2>
-            <p class="sub">Ten categories will be contested at this convocation.</p>
+            <p class="sub">Ten award categories will be presented in this convocation.</p>
           </div>
         </div>
 
@@ -565,53 +553,114 @@
 </div>
 
 <script>
-  (function(){
-    var overlay = document.getElementById('introOverlay');
-    var statusEl = document.getElementById('introStatus');
-    var progressEl = document.getElementById('introProgress');
-    var appLayout = document.getElementById('appLayout');
+  (function () {
 
-    var steps = [
-      { text: 'Initializing SmartConvo...', progress: 30 },
-      { text: 'Verifying Guest Access...', progress: 65 },
-      { text: 'Welcome to Guest Portal', progress: 100 }
-    ];
+    const overlay = document.getElementById('introOverlay');
+    const statusEl = document.getElementById('introStatus');
+    const progressEl = document.getElementById('introProgress');
+    const appLayout = document.getElementById('appLayout');
 
-    var stepIndex = 0;
+    // =========================================================
+    // GUEST PORTAL — PUBLIC ACCESS
+    // =========================================================
+    // Guest does NOT need to login.
+    // Authentication APIs can remain in the backend for now,
+    // but this portal is accessible directly from index.html.
+    // =========================================================
 
-    function runStep(){
-      if(stepIndex >= steps.length){
+
+    // =========================================================
+    // 1. REVEAL DASHBOARD
+    // =========================================================
+
+    function finishIntro() {
+
+      if (appLayout) {
+        appLayout.classList.add('ready');
+      }
+
+      if (overlay) {
+        overlay.classList.add('hidden');
+
+        setTimeout(function () {
+
+          if (overlay && overlay.parentNode) {
+            overlay.parentNode.removeChild(overlay);
+          }
+
+        }, 700);
+      }
+    }
+
+
+    // =========================================================
+    // 2. GUEST INTRO
+    // =========================================================
+
+    function startGuestIntro() {
+
+      if (!statusEl || !progressEl) {
         finishIntro();
         return;
       }
-      var step = steps[stepIndex];
-      statusEl.textContent = step.text;
-      progressEl.style.width = step.progress + '%';
-      stepIndex++;
-      setTimeout(runStep, 700);
-    }
 
-    function finishIntro(){
-      // Reveal the dashboard
-      appLayout.classList.add('ready');
-      // Fade out the overlay
-      overlay.classList.add('hidden');
-      // Remove the overlay from the DOM after the transition completes
-      setTimeout(function(){
-        if(overlay && overlay.parentNode){
-          overlay.parentNode.removeChild(overlay);
-        }
+      statusEl.textContent = 'Initializing SmartConvo...';
+      progressEl.style.width = '30%';
+
+      setTimeout(function () {
+
+        statusEl.textContent = 'Welcome, Guest';
+        progressEl.style.width = '65%';
+
       }, 700);
+
+      setTimeout(function () {
+
+        statusEl.textContent = 'Welcome to Guest Portal';
+        progressEl.style.width = '100%';
+
+      }, 1400);
+
+      setTimeout(function () {
+
+        finishIntro();
+
+      }, 1900);
     }
 
-    // Respect reduced-motion: skip the animation and show the dashboard immediately
-    if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-      finishIntro();
-      return;
+
+    // =========================================================
+    // 3. LOGOUT / LOGIN
+    // =========================================================
+    // Guest authentication is disabled for the public portal.
+    // Therefore, no logout action is required.
+    // =========================================================
+
+    const logoutLink = document.getElementById('guestLogout');
+
+    if (logoutLink) {
+
+      logoutLink.addEventListener('click', function (event) {
+
+        event.preventDefault();
+
+        console.log('Guest authentication is disabled.');
+
+        // Since Guest Portal is public,
+        // simply return to the main page.
+        window.location.href = 'index.html';
+
+      });
+
     }
 
-    // Small delay before starting so the first message is visible
-    setTimeout(runStep, 300);
+
+    // =========================================================
+    // 4. START PUBLIC GUEST PORTAL
+    // =========================================================
+
+    startGuestIntro();
+
   })();
 </script>
 

@@ -1,0 +1,24 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "smartconvo-api",
+  "main": "src/index.js",
+  "compatibility_date": "2026-08-08",
+
+  "observability": {
+    "enabled": true
+  },
+
+  "upload_source_maps": true,
+
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "smartconvo-db",
+      "database_id": "6b315065-3208-4fa8-8fa7-5c949326c695"
+    }
+  ]
+}

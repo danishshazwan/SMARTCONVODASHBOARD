@@ -228,12 +228,14 @@
       <section class="queue-layout">
         <div class="queue-tile highlight">
           <div class="q-label"><span class="live-dot"></span> Current Queue Status</div>
-          <div class="q-value">Waiting</div>
-          <div class="q-note">Proceed to stage when called</div>
+          <div class="q-value" id="currentStatusValue">Loading...</div>
+          <div class="q-note">Proceed to stage when called</div><div class="q-note" id="currentStatusNote">
+  Loading queue status...
+</div>
         </div>
         <div class="queue-tile">
           <div class="q-label">Your Queue Number</div>
-          <div class="q-value">042</div>
+          <div class="q-value" id="myQueueNumber">---</div>
           <div class="q-note">Assigned at registration</div>
         </div>
 <div class="queue-tile">
@@ -251,28 +253,39 @@
       <section class="section-card" style="margin-bottom:24px;">
         <div class="card-head"><h3>Queue Journey</h3></div>
         <div class="card-body">
-          <div class="timeline">
-            <div class="tl-step done">
-              <div class="tl-dot">✓</div>
-              <span class="tl-label">Registered</span>
-            </div>
-            <div class="tl-step done">
-              <div class="tl-dot">✓</div>
-              <span class="tl-label">Face Verified</span>
-            </div>
-            <div class="tl-step active">
-              <div class="tl-dot">3</div>
-              <span class="tl-label">In Queue</span>
-            </div>
-            <div class="tl-step">
-              <div class="tl-dot">4</div>
-              <span class="tl-label">On Stage</span>
-            </div>
-            <div class="tl-step">
-              <div class="tl-dot">5</div>
-              <span class="tl-label">Completed</span>
-            </div>
-          </div>
+       <div class="timeline" id="queueTimeline">
+
+  <div class="tl-step" data-status="registration">
+    <div class="tl-dot">1</div>
+    <span class="tl-label">Registered</span>
+  </div>
+
+  <div class="tl-step" data-status="face_verification">
+    <div class="tl-dot">2</div>
+    <span class="tl-label">Face Verified</span>
+  </div>
+
+  <div class="tl-step" data-status="seat_queue">
+    <div class="tl-dot">3</div>
+    <span class="tl-label">Seat Queue</span>
+  </div>
+
+  <div class="tl-step" data-status="queue">
+    <div class="tl-dot">4</div>
+    <span class="tl-label">In Queue</span>
+  </div>
+
+  <div class="tl-step" data-status="on_stage">
+    <div class="tl-dot">5</div>
+    <span class="tl-label">On Stage</span>
+  </div>
+
+  <div class="tl-step" data-status="complete">
+    <div class="tl-dot">✓</div>
+    <span class="tl-label">Completed</span>
+  </div>
+
+</div>
         </div>
       </section>
 
@@ -288,91 +301,13 @@
                 <th>Status</th>
               </tr>
             </thead>
-<tbody>
-              <tr>
-                <td class="row-num">035</td>
-                <td>Danish Shazwan bin Azlan</td>
-                <td>Diploma in Computer Technology (Big Data Analytics)</td>
-                <td><span class="status-pill onstage">On Stage</span></td>
-              </tr>
-              <tr>
-                <td class="row-num">036</td>
-                <td>Iskandar Zulkarnain bin Rahim</td>
-                <td>Diploma in Computer Technology (Big Data Analytics)</td>
-                <td><span class="status-pill waiting">Waiting</span></td>
-              </tr>
-              <tr>
-                <td class="row-num">037</td>
-                <td>Mior Muhammad Ikmal bin Mokhtar</td>
-                <td>Diploma in Computer Technology (Big Data Analytics)</td>
-                <td><span class="status-pill waiting">Waiting</span></td>
-              </tr>
-              <tr>
-                <td class="row-num">038</td>
-                <td>Mohd Haziq Afiq bin Zulkifli</td>
-                <td>Diploma in Computer Technology (Big Data Analytics)</td>
-                <td><span class="status-pill waiting">Waiting</span></td>
-              </tr>
-              <tr>
-                <td class="row-num">039</td>
-                <td>Muhammad Ammar bin Mahadir</td>
-                <td>Diploma in Computer Technology (Big Data Analytics)</td>
-                <td><span class="status-pill waiting">Waiting</span></td>
-              </tr>
-              <tr>
-                <td class="row-num">040</td>
-                <td>Mohd Hafiz bin Abd Rahman</td>
-                <td>Diploma in Computer Technology (Big Data Analytics)</td>
-                <td><span class="status-pill waiting">Waiting</span></td>
-              </tr>
-              <tr>
-                <td class="row-num">041</td>
-                <td>Nor Adilah binti Roslan</td>
-                <td>Diploma in Computer Technology (Big Data Analytics)</td>
-                <td><span class="status-pill waiting">Waiting</span></td>
-              </tr>
-              <tr class="current">
-                <td class="row-num">042</td>
-                <td>Aiman Hakimi bin Roslan</td>
-                <td>Diploma in Computer Technology (Big Data Analytics)</td>
-                <td><span class="status-pill waiting">Waiting</span></td>
-              </tr>
-              <tr>
-                <td class="row-num">043</td>
-                <td>Nur Fadhilatul Akma binti Zainudin</td>
-                <td>Diploma in Computer Technology (Big Data Analytics)</td>
-                <td><span class="status-pill waiting">Waiting</span></td>
-              </tr>
-              <tr>
-                <td class="row-num">044</td>
-                <td>Nurfatin Nadiah binti Kamaruzaman</td>
-                <td>Diploma in Computer Technology (Big Data Analytics)</td>
-                <td><span class="status-pill waiting">Waiting</span></td>
-              </tr>
-              <tr>
-                <td class="row-num">045</td>
-                <td>Nursyazwanie binti Mohd Fauzi</td>
-                <td>Diploma in Computer Technology (Big Data Analytics)</td>
-                <td><span class="status-pill waiting">Waiting</span></td>
-              </tr>
-              <tr>
-                <td class="row-num">046</td>
-                <td>Nur Ain Solehah binti Hassan</td>
-                <td>Diploma in Computer Technology (Big Data Analytics)</td>
-                <td><span class="status-pill waiting">Waiting</span></td>
-              </tr>
-              <tr>
-                <td class="row-num">047</td>
-                <td>Lily Liyana binti Rosli</td>
-                <td>Diploma in Computer Technology (Big Data Analytics)</td>
-                <td><span class="status-pill waiting">Waiting</span></td>
-              </tr>
-              <tr>
-                <td class="row-num">048</td>
-                <td>Syamsul Nazir bin Ismail</td>
-                <td>Diploma in Computer Technology (Big Data Analytics)</td>
-                <td><span class="status-pill waiting">Waiting</span></td>
-              </tr>
+<tbody id="queueTableBody">
+  <tr>
+    <td colspan="4" style="text-align:center;color:var(--ink-soft);">
+      Loading queue...
+    </td>
+  </tr>
+</tbody>
             </tbody>
           </table>
         </div>
@@ -390,51 +325,380 @@
 </div>
 
 <script>
-  // Live queue countdown simulation (Aiman: queue 042)
-  const MY_QUEUE = 42;
-  let nowServing = 35;   // current number being served
-  let secondsLeft = 15 * 60; // 15 minutes estimated wait
+const API_BASE_URL =
+  "https://smartconvo-api.danishshazwan85.workers.dev";
 
-  function pad2(n){ return String(n).padStart(3,'0'); }
+const STATUS_CONFIG = {
+  registration: {
+    label: "Registration",
+    note: "Registration completed"
+  },
 
-  function fmt(sec){
-    const m = Math.floor(sec / 60);
-    const s = sec % 60;
-    return m + ':' + String(s).padStart(2,'0');
+  face_verification: {
+    label: "Face Verification",
+    note: "Proceed for face verification"
+  },
+
+  seat_queue: {
+    label: "Seat Queue",
+    note: "Proceed to your assigned seat"
+  },
+
+  queue: {
+    label: "Waiting",
+    note: "Proceed to stage when called"
+  },
+
+  on_stage: {
+    label: "On Stage",
+    note: "Your number is being called — proceed to stage"
+  },
+
+  complete: {
+    label: "Completed",
+    note: "Convocation process completed"
+  }
+};
+
+function formatQueueNumber(number) {
+  if (number === null || number === undefined) {
+    return "---";
   }
 
-  // Compute estimated call time (1:45 PM + remaining)
-  function callTime(){
-    const d = new Date();
-    d.setHours(13, 45, 0, 0);
-    d.setSeconds(d.getSeconds() + secondsLeft - (15 * 60));
-    return d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+  return String(number).padStart(3, "0");
+}
+
+function getStatusLabel(status) {
+  return STATUS_CONFIG[status]?.label || "Unknown";
+}
+
+function getStatusNote(status) {
+  return (
+    STATUS_CONFIG[status]?.note ||
+    "Queue status is being updated"
+  );
+}
+
+function getStatusClass(status) {
+  switch (status) {
+    case "queue":
+      return "waiting";
+
+    case "face_verification":
+    case "seat_queue":
+      return "verified";
+
+    case "on_stage":
+      return "onstage";
+
+    case "complete":
+      return "completed";
+
+    default:
+      return "waiting";
+  }
+}
+
+function getStatusOrder(status) {
+  const order = [
+    "registration",
+    "face_verification",
+    "seat_queue",
+    "queue",
+    "on_stage",
+    "complete"
+  ];
+
+  return order.indexOf(status);
+}
+
+function updateCurrentStudent(student, aheadOfYou) {
+  const statusValue =
+    document.getElementById("currentStatusValue");
+
+  const statusNote =
+    document.getElementById("currentStatusNote");
+
+  const queueNumber =
+    document.getElementById("myQueueNumber");
+
+  const aheadValue =
+    document.getElementById("aheadValue");
+
+  const aheadNote =
+    document.getElementById("aheadNote");
+
+  if (!student) {
+    return;
   }
 
-  function tick(){
-    const ahead = Math.max(MY_QUEUE - nowServing, 0);
-    document.getElementById('aheadValue').textContent = String(ahead).padStart(2,'0');
-    document.getElementById('callTimeValue').textContent = callTime();
+  const status =
+    student.convocation_status || "registration";
 
-    if (ahead === 0){
-      document.getElementById('aheadNote').textContent = 'Your number is being called — proceed to stage';
-      document.getElementById('callTimeNote').textContent = 'Now — head to the stage entrance';
+  statusValue.textContent =
+    getStatusLabel(status);
+
+  statusNote.textContent =
+    getStatusNote(status);
+
+  queueNumber.textContent =
+    formatQueueNumber(student.queue_number);
+
+  aheadValue.textContent =
+    String(aheadOfYou).padStart(2, "0");
+
+  if (status === "on_stage") {
+    aheadNote.textContent =
+      "Your number is being called";
+
+  } else if (status === "complete") {
+    aheadNote.textContent =
+      "Convocation completed";
+
+  } else if (student.queue_number === null) {
+    aheadNote.textContent =
+      "Queue number not assigned";
+
+  } else if (aheadOfYou === 0) {
+    aheadNote.textContent =
+      "You are next in line";
+
+  } else {
+    aheadNote.textContent =
+      aheadOfYou +
+      " student" +
+      (aheadOfYou === 1 ? "" : "s") +
+      " ahead of you";
+  }
+}
+
+function updateTimeline(currentStatus) {
+  const steps =
+    document.querySelectorAll(
+      "#queueTimeline .tl-step"
+    );
+
+  const currentIndex =
+    getStatusOrder(currentStatus);
+
+  steps.forEach((step) => {
+    const status =
+      step.dataset.status;
+
+    const index =
+      getStatusOrder(status);
+
+    const dot =
+      step.querySelector(".tl-dot");
+
+    step.classList.remove(
+      "done",
+      "active"
+    );
+
+    if (index < currentIndex) {
+      step.classList.add("done");
+
+      if (dot) {
+        dot.textContent = "✓";
+      }
+
+    } else if (index === currentIndex) {
+      step.classList.add("active");
+
+      if (dot) {
+        dot.textContent =
+          currentStatus === "complete"
+            ? "✓"
+            : String(index + 1);
+      }
     } else {
-      document.getElementById('aheadNote').textContent = 'Approximately ' + fmt(secondsLeft) + ' min wait';
-      document.getElementById('callTimeNote').textContent = 'Subject to live updates';
+      if (dot) {
+        dot.textContent =
+          String(index + 1);
+      }
     }
+  });
+}
+
+function renderQueueTable(queue, currentStudentId) {
+  const tbody =
+    document.getElementById(
+      "queueTableBody"
+    );
+
+  if (!tbody) {
+    return;
   }
 
-  // Simulate the queue advancing every few seconds for a lively demo
-  setInterval(function(){
-    if (nowServing < MY_QUEUE){
-      nowServing++;
-      secondsLeft = Math.max(secondsLeft - 60, Math.max(MY_QUEUE - nowServing, 0) * 60);
-      tick();
-    }
-  }, 6000);
+  if (!queue || queue.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="4"
+            style="text-align:center;color:var(--ink-soft);">
+          No queue assigned yet.
+        </td>
+      </tr>
+    `;
 
-  tick();
+    return;
+  }
+
+  tbody.innerHTML = queue
+    .map((student) => {
+      const isCurrent =
+        String(student.id) ===
+        String(currentStudentId);
+
+      const status =
+        student.convocation_status ||
+        "registration";
+
+      const statusClass =
+        getStatusClass(status);
+
+      return `
+        <tr class="${isCurrent ? "current" : ""}">
+          <td class="row-num">
+            ${formatQueueNumber(student.queue_number)}
+          </td>
+
+          <td>
+            ${escapeHtml(student.name)}
+            ${
+              isCurrent
+                ? '<strong> (You)</strong>'
+                : ""
+            }
+          </td>
+
+          <td>
+            ${escapeHtml(
+              student.course_name || "-"
+            )}
+          </td>
+
+          <td>
+            <span class="status-pill ${statusClass}">
+              ${escapeHtml(
+                getStatusLabel(status)
+              )}
+            </span>
+          </td>
+        </tr>
+      `;
+    })
+    .join("");
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+async function loadQueue() {
+  const token =
+    localStorage.getItem("studentToken");
+
+  if (!token) {
+    window.location.href =
+      "login-student.html";
+
+    return;
+  }
+
+  try {
+    const response =
+      await fetch(
+        `${API_BASE_URL}/api/student/queue`,
+        {
+          method: "GET",
+          headers: {
+            Authorization:
+              `Bearer ${token}`
+          }
+        }
+      );
+
+    const data =
+      await response.json();
+
+    if (!response.ok || !data.success) {
+      throw new Error(
+        data.message ||
+        "Failed to load queue."
+      );
+    }
+
+    const student =
+      data.current_student;
+
+    const status =
+      student.convocation_status ||
+      "registration";
+
+    updateCurrentStudent(
+      student,
+      data.ahead_of_you || 0
+    );
+
+    updateTimeline(status);
+
+    renderQueueTable(
+      data.queue || [],
+      student.id
+    );
+
+    const userChip =
+      document.querySelector(
+        ".user-chip"
+      );
+
+    if (userChip) {
+      userChip.innerHTML = `
+        <span class="dot"></span>
+        ${escapeHtml(student.name)}
+      `;
+    }
+
+  } catch (error) {
+    console.error(
+      "Queue loading error:",
+      error
+    );
+
+    const statusValue =
+      document.getElementById(
+        "currentStatusValue"
+      );
+
+    const statusNote =
+      document.getElementById(
+        "currentStatusNote"
+      );
+
+    if (statusValue) {
+      statusValue.textContent =
+        "Unavailable";
+    }
+
+    if (statusNote) {
+      statusNote.textContent =
+        "Unable to load live queue status";
+    }
+  }
+}
+
+loadQueue();
+
+setInterval(
+  loadQueue,
+  5000
+);
 </script>
 
 </body>

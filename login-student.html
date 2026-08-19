@@ -74,7 +74,7 @@
   }
 
   .frame{
-    position:relative;
+    position:relative; 
     padding:56px 64px;
     background:var(--surface);
     max-width:460px;
@@ -327,14 +327,14 @@
 
         <div class="form-field">
           <label for="emel">Student Email</label>
-          <input type="email" id="emel" name="emel" placeholder="name@tvetmara.edu.my" required>
-          <div class="note-hint">Use your university email (@tvetmara.edu.my)</div>
+          <input type="email" id="emel" name="emel" placeholder="name@lumut.tvetmara.edu.my" required>
+          <div class="note-hint">Use your university email (@lumut.tvetmara.edu.my)</div>
         </div>
 
         <div class="form-field">
           <label for="studentId">Student ID</label>
           <input type="text" id="studentId" name="studentId" placeholder="0000000" maxlength="7" pattern="\d{7}" inputmode="numeric" required>
-          <div class="note-hint">Must be 6 numbers only</div>
+          <div class="note-hint">Must be 7 numbers only</div>
         </div>
 
         <div class="form-field">
@@ -382,27 +382,95 @@
     <span>AI-Assisted Convocation Queue &amp; Identity Verification System</span>
   </footer>
 
-<script>
-  function handleLogin(event){
-    event.preventDefault();
-    const emel = document.getElementById('emel').value.trim();
-    const studentId = document.getElementById('studentId').value.trim();
-    const password = document.getElementById('password').value;
-    const sesi = document.getElementById('sesi').value;
 
-    if(emel && studentId && password && sesi){
-      const idValid = /^\d{7}$/.test(studentId);
-      if(!idValid){
-        alert('Student ID must be exactly 6 numbers.');
+```html
+<script>
+  const API_BASE_URL =
+  "https://smartconvo-api.danishshazwan85.workers.dev";
+
+  async function handleLogin(event) {
+    event.preventDefault();
+
+    const emel = document.getElementById("emel").value.trim().toLowerCase();
+    const studentId = document.getElementById("studentId").value.trim();
+    const password = document.getElementById("password").value;
+
+    if (!emel || !studentId || !password) {
+      alert("Please fill in all the details.");
+      return;
+    }
+
+    const idValid = /^\d{7}$/.test(studentId);
+
+    if (!idValid) {
+      alert("Student ID must be exactly 7 numbers.");
+      return;
+    }
+
+    const emailValid = /^[^\s@]+@lumut\.tvetmara\.edu\.my$/i.test(emel);
+
+    if (!emailValid) {
+      alert("Please use your university email (@lumut.tvetmara.edu.my).");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/student/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+  email: emel,
+  student_id: studentId,
+  password: password
+})
+        }
+      );
+
+      const data = await response.json();
+
+      console.log("Student login response:", data);
+
+      if (!response.ok || !data.success) {
+        alert(data.message || "Login failed.");
         return;
       }
-      alert('Login successful. Welcome back, student!');
-      window.location.href = 'student-dashboard.html';
-    } else {
-      alert('Please fill in all the details.');
+
+      if (!data.token) {
+        console.error("Login successful but no token was returned.");
+        alert("Login failed: authentication token was not received.");
+        return;
+      }
+
+      localStorage.setItem("studentToken", data.token);
+
+      if (data.student) {
+        localStorage.setItem(
+          "studentData",
+          JSON.stringify(data.student)
+        );
+      }
+
+      alert("Login successful. Welcome back, student!");
+
+      window.location.href = "student-dashboard.html";
+
+    } catch (error) {
+      console.error("Student login error:", error);
+
+      alert(
+        "Unable to connect to SMARTCONVO server. Please try again."
+      );
     }
   }
 </script>
+```
+
+
+
 
 </body>
 </html>

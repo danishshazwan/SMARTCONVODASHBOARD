@@ -186,10 +186,15 @@
 
   <div class="main-area">
 
-    <header class="topbar">
-      <div class="topbar-left"><h2>Notifications</h2></div>
+        <header class="topbar">
+      <div class="topbar-left">
+        <h2>Dashboard</h2>
+      </div>
       <div class="topbar-right">
-        <span class="user-chip"><span class="dot"></span>Aiman Hakimi</span>
+        <span class="user-chip">
+          <span class="dot"></span>
+          <span id="userName">Student</span>
+        </span>
         <a href="student-notifications.html" class="notif-bell">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
           <span class="notif-badge">3</span>
@@ -296,6 +301,40 @@
     if(badge) badge.style.display = 'none';
     alert('All notifications marked as read.');
   }
+  const API_BASE_URL = "https://smartconvo-api.danishshazwan85.workers.dev";
+
+async function loadStudentName() {
+  const token = localStorage.getItem("studentToken");
+
+  if (!token) {
+    window.location.href = "login-student.html";
+    return;
+  }
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/student/profile`, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error("Unable to load student profile");
+    }
+
+    const data = await response.json();
+
+    if (data.success && data.student) {
+      document.getElementById("userName").textContent = data.student.name;
+    }
+  } catch (error) {
+    console.error("Student profile error:", error);
+  }
+}
+
+loadStudentName();
 </script>
 
 </body>

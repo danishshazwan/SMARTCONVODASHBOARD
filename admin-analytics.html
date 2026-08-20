@@ -384,7 +384,8 @@ a{
 .section-banner h3{
   font-family:'Fraunces',serif;
   font-weight:500;
-  font-size:19px;
+  font-size:25px;
+  letter-spacing:.01em;
 }
 
 .stat-grid{
@@ -810,10 +811,10 @@ a{
 
   <h1>Analytics & Reports</h1>
 
-  <p>
-    Monitor convocation progress, identity verification,
-    queue performance and student completion in real time.
-  </p>
+<p>
+  Monitor convocation progress, identity verification,
+  queue performance, and student completion in real time.
+</p>
 
 </section>
 
@@ -821,7 +822,7 @@ a{
 
   <div class="date-range">
 
-    <span>Report Period:</span>
+    <span>Reporting Period:</span>
 
     <div class="select-wrap">
       <select id="periodSelect">
@@ -836,18 +837,28 @@ a{
 
   <div class="date-range">
 
-    <span>View by:</span>
+    <span>Filter by:</span>
 
     <div class="select-wrap">
-      <select id="facultySelect">
-        <option value="all">All Faculties</option>
-        <option value="Electrical & Electronics">Electrical & Electronics</option>
-        <option value="Mechanical & Manufacturing">Mechanical & Manufacturing</option>
-        <option value="Welding">Welding</option>
-        <option value="Automotive">Automotive</option>
-        <option value="Civil & Services">Civil & Services</option>
-      </select>
-    </div>
+  <select id="facultySelect">
+    <option value="all">All Faculties</option>
+    <option value="faculty of Electrical & Computing Engineering Technology">
+      Electrical & Computing Engineering Technology
+    </option>
+    <option value="faculty of Mechanical & Manufacturing Engineering Technology">
+      Mechanical & Manufacturing Engineering Technology
+    </option>
+    <option value="faculty of Welding Engineering Technology">
+      Welding Engineering Technology
+    </option>
+    <option value="faculty of Automotive Engineering Technology">
+      Automotive Engineering Technology
+    </option>
+    <option value="faculty of Civil & Services Engineering Technology">
+      Civil & Services Engineering Technology
+    </option>
+  </select>
+</div>
 
   </div>
 
@@ -894,7 +905,7 @@ a{
   <div class="section-card">
 
     <div class="card-head">
-      <h3>Convocation Completion</h3>
+      <h3>Convocation Completion Progress</h3>
     </div>
 
     <div class="card-body">
@@ -966,14 +977,14 @@ a{
     <div class="stat-card">
       <div class="stat-label">Verified</div>
       <div class="stat-value" id="verificationVerified">0</div>
-      <div class="stat-note">Successful identity verification</div>
+      <div class="stat-note">Successfully verified students</div>
     </div>
 
     <div class="stat-card">
       <div class="stat-label">Failed</div>
       <div class="stat-value" id="verificationFailed"
            style="color:var(--red);">0</div>
-      <div class="stat-note">Rejected or failed verification</div>
+      <div class="stat-note">Failed or rejected verification</div>
     </div>
 
     <div class="stat-card">
@@ -1045,7 +1056,7 @@ a{
     <div class="stat-card">
       <div class="stat-label">Called</div>
       <div class="stat-value" id="calledStudents">0</div>
-      <div class="stat-note">Students currently called</div>
+      <div class="stat-note">Students currently called to queue</div>
     </div>
 
     <div class="stat-card">
@@ -1231,10 +1242,10 @@ a{
   </div>
 
   <div class="report-note">
-    Analytics are calculated from student registration,
-    verification and convocation status data. Historical
-    waiting-time and processing-time analytics will be
-    available when timestamp records are enabled.
+Analytics are calculated from student registration, verification,
+and convocation status data. Historical waiting-time and
+processing-time analytics will be available when timestamp
+records are enabled.
   </div>
 
 </section>

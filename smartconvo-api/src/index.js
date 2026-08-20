@@ -123,6 +123,31 @@ if (
       });
     }
 
+    if (
+  request.method === "GET" &&
+  url.pathname === "/api/admin/stats"
+) {
+  try {
+    const result = await env.DB
+      .prepare("SELECT COUNT(*) AS total FROM students")
+      .first();
+
+    return jsonResponse({
+      success: true,
+      totalRegistered: Number(result?.total || 0),
+      quota: 600,
+    });
+  } catch (error) {
+    return jsonResponse(
+      {
+        success: false,
+        error: error.message,
+      },
+      500
+    );
+  }
+}
+
     return jsonResponse(
       {
         success: false,

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SmartConvo — Student Registry</title>
-<link rel="icon" type="image/x-icon" href="icon.ico">
+<link rel="icon" href="/smc-icon.svg?v=10" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -238,10 +238,10 @@
       </section>
 
       <section class="reg-stats">
-        <div class="stat-card"><div class="stat-label">Total Registered</div><div class="stat-value">14</div></div>
-        <div class="stat-card"><div class="stat-label">Verified</div><div class="stat-value">6</div></div>
-        <div class="stat-card"><div class="stat-label">Pending Verification</div><div class="stat-value">8</div></div>
-        <div class="stat-card"><div class="stat-label">Programme</div><div class="stat-value">1</div></div>
+        <div class="stat-card"><div class="stat-label">Total Registered</div><div class="stat-value" id="statTotal">0</div></div>
+        <div class="stat-card"><div class="stat-label">Verified</div><div class="stat-value" id="statVerified">0</div></div>
+        <div class="stat-card"><div class="stat-label">Pending Verification</div><div class="stat-value" id="statPending">0</div></div>
+        <div class="stat-card"><div class="stat-label">Programme</div><div class="stat-value" id="statProgramme">0</div></div>
       </section>
 
       <div class="reg-toolbar">
@@ -282,7 +282,7 @@
         <section class="section-card">
           <div class="card-head">
 <h3>All Students</h3>
-            <span style="font-size:13px;color:var(--ink-soft);" id="showing-count">Showing 1–14 of 14</span>
+            <span style="font-size:13px;color:var(--ink-soft);" id="showing-count">Loading...</span>
           </div>
           <div class="card-body">
             <table class="reg-table" id="regTable">
@@ -296,126 +296,17 @@
                   <th>Action</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody id="registryBody">
                 <tr>
-                  <td><div class="student-cell"><span class="s-avatar">DS</span><div><div class="s-name">Danish Shazwan Bin Suwandi</div><div class="s-id">danish@tvetmara.edu.my</div></div></div></td>
-<td>2402076</td>
-                  <td>Diploma in Computer Technology</td>
-                  <td>Information Technology &amp; Engineering</td>
-                  <td><span class="status-pill verified">Verified</span></td>
-                  <td><button class="view-btn" onclick="viewStudent('2402076')">View</button></td>
-                </tr>
-                <tr>
-                  <td><div class="student-cell"><span class="s-avatar">IZ</span><div><div class="s-name">Iskandar Zulkarnain Bin Muhamad</div><div class="s-id">iskandar@tvetmara.edu.my</div></div></div></td>
-<td>2402077</td>
-                  <td>Diploma in Computer Technology</td>
-                  <td>Information Technology &amp; Engineering</td>
-                  <td><span class="status-pill verified">Verified</span></td>
-                  <td><button class="view-btn" onclick="viewStudent('2402077')">View</button></td>
-                </tr>
-                <tr>
-                  <td><div class="student-cell"><span class="s-avatar">MM</span><div><div class="s-name">Mior Muhammad Ikmal Bin Mior Darul Ridzuan</div><div class="s-id">mior.ikmal@tvetmara.edu.my</div></div></div></td>
-                  <td>2402078</td>
-                  <td>Diploma in Computer Technology</td>
-                  <td>Information Technology &amp; Engineering</td>
-                  <td><span class="status-pill verified">Verified</span></td>
-                  <td><button class="view-btn" onclick="viewStudent('2402078')">View</button></td>
-                </tr>
-                <tr>
-                  <td><div class="student-cell"><span class="s-avatar">MH</span><div><div class="s-name">Mohammad Haziq Afiq Bin Yusli@Yazid</div><div class="s-id">haziq.afiq@tvetmara.edu.my</div></div></div></td>
-                  <td>2402079</td>
-                  <td>Diploma in Computer Technology</td>
-                  <td>Information Technology &amp; Engineering</td>
-                  <td><span class="status-pill verified">Verified</span></td>
-                  <td><button class="view-btn" onclick="viewStudent('2402079')">View</button></td>
-                </tr>
-                <tr>
-                  <td><div class="student-cell"><span class="s-avatar">MA</span><div><div class="s-name">Muhammad Ammar Bin Mahadir</div><div class="s-id">ammar.mahadir@tvetmara.edu.my</div></div></div></td>
-                  <td>2402080</td>
-                  <td>Diploma in Computer Technology</td>
-                  <td>Information Technology &amp; Engineering</td>
-                  <td><span class="status-pill verified">Verified</span></td>
-                  <td><button class="view-btn" onclick="viewStudent('2402080')">View</button></td>
-                </tr>
-                <tr>
-                  <td><div class="student-cell"><span class="s-avatar">HF</span><div><div class="s-name">Muhammad Hafiz Bin Hassan</div><div class="s-id">hafiz.hassan@tvetmara.edu.my</div></div></div></td>
-                  <td>2402081</td>
-                  <td>Diploma in Computer Technology</td>
-                  <td>Information Technology &amp; Engineering</td>
-                  <td><span class="status-pill verified">Verified</span></td>
-                  <td><button class="view-btn" onclick="viewStudent('2402081')">View</button></td>
-                </tr>
-                <tr>
-                  <td><div class="student-cell"><span class="s-avatar">NA</span><div><div class="s-name">Nor Adilah Binti Shamsuddin</div><div class="s-id">nor.adilah@tvetmara.edu.my</div></div></div></td>
-                  <td>2402082</td>
-                  <td>Diploma in Computer Technology</td>
-                  <td>Information Technology &amp; Engineering</td>
-                  <td><span class="status-pill waiting">Pending</span></td>
-                  <td><button class="view-btn" onclick="viewStudent('2402082')">View</button></td>
-                </tr>
-                <tr>
-                  <td><div class="student-cell"><span class="s-avatar">NF</span><div><div class="s-name">Nur Fadhilatul Akma Binti Roslan</div><div class="s-id">fadhilatul@tvetmara.edu.my</div></div></div></td>
-                  <td>2402083</td>
-                  <td>Diploma in Computer Technology</td>
-                  <td>Information Technology &amp; Engineering</td>
-                  <td><span class="status-pill waiting">Pending</span></td>
-                  <td><button class="view-btn" onclick="viewStudent('2402083')">View</button></td>
-                </tr>
-                <tr>
-                  <td><div class="student-cell"><span class="s-avatar">NN</span><div><div class="s-name">Nurfatin Nadiah Binti Mohd Khir</div><div class="s-id">nurfatin@tvetmara.edu.my</div></div></div></td>
-                  <td>2402084</td>
-                  <td>Diploma in Computer Technology</td>
-                  <td>Information Technology &amp; Engineering</td>
-                  <td><span class="status-pill waiting">Pending</span></td>
-                  <td><button class="view-btn" onclick="viewStudent('2402084')">View</button></td>
-                </tr>
-                <tr>
-                  <td><div class="student-cell"><span class="s-avatar">NS</span><div><div class="s-name">Nursyazwanie Binti Jaimi</div><div class="s-id">syazwanie@tvetmara.edu.my</div></div></div></td>
-                  <td>2402085</td>
-                  <td>Diploma in Computer Technology</td>
-                  <td>Information Technology &amp; Engineering</td>
-                  <td><span class="status-pill waiting">Pending</span></td>
-                  <td><button class="view-btn" onclick="viewStudent('2402085')">View</button></td>
-                </tr>
-                <tr>
-                  <td><div class="student-cell"><span class="s-avatar">NA</span><div><div class="s-name">Nur Ain Solehah Binti Muhamad Fauzi</div><div class="s-id">ain.solehah@tvetmara.edu.my</div></div></div></td>
-                  <td>2402086</td>
-                  <td>Diploma in Computer Technology</td>
-                  <td>Information Technology &amp; Engineering</td>
-                  <td><span class="status-pill waiting">Pending</span></td>
-                  <td><button class="view-btn" onclick="viewStudent('2402086')">View</button></td>
-                </tr>
-                <tr>
-                  <td><div class="student-cell"><span class="s-avatar">LL</span><div><div class="s-name">Lily Liyana Lorraine Binti Jale</div><div class="s-id">lily.liyana@tvetmara.edu.my</div></div></div></td>
-                  <td>2402087</td>
-                  <td>Diploma in Computer Technology</td>
-                  <td>Information Technology &amp; Engineering</td>
-                  <td><span class="status-pill waiting">Pending</span></td>
-                  <td><button class="view-btn" onclick="viewStudent('2402087')">View</button></td>
-                </tr>
-                <tr>
-                  <td><div class="student-cell"><span class="s-avatar">MS</span><div><div class="s-name">Muhammad Syamsul Nazir Bin Mohd Samsuri</div><div class="s-id">syamsul.nazir@tvetmara.edu.my</div></div></div></td>
-                  <td>2402088</td>
-                  <td>Diploma in Computer Technology</td>
-                  <td>Information Technology &amp; Engineering</td>
-                  <td><span class="status-pill waiting">Pending</span></td>
-                  <td><button class="view-btn" onclick="viewStudent('2402088')">View</button></td>
-                </tr>
-                <tr>
-                  <td><div class="student-cell"><span class="s-avatar">NJ</span><div><div class="s-name">Najjwa Aqilla Binti Mohd Khairi</div><div class="s-id">najjwa.aqilla@tvetmara.edu.my</div></div></div></td>
-                  <td>2402089</td>
-                  <td>Diploma in Computer Technology</td>
-                  <td>Information Technology &amp; Engineering</td>
-                  <td><span class="status-pill waiting">Pending</span></td>
-                  <td><button class="view-btn" onclick="viewStudent('2402089')">View</button></td>
+                  <td colspan="6" style="text-align:center;padding:36px;color:var(--ink-soft);">
+                    Loading graduates...
+                  </td>
                 </tr>
               </tbody>
             </table>
             <div class="pagination">
-              <span class="p-info">Page 1 of 1</span>
-              <div class="p-btns">
-                <button class="p-btn active">1</button>
-              </div>
+              <span class="p-info" id="pageInfo">Page 1 of 1</span>
+              <div class="p-btns" id="paginationButtons"></div>
             </div>
           </div>
         </section>
@@ -548,174 +439,514 @@
 </div>
 
 <script>
-  // Student detail data
-  let studentData = {
-    '2402076': { name: 'Danish Shazwan Bin Suwandi', email: 'danish@tvetmara.edu.my', prog: 'Diploma in Computer Technology', fac: 'Information Technology & Engineering', status: 'Verified' },
-    '2402077': { name: 'Iskandar Zulkarnain Bin Muhamad', email: 'iskandar@tvetmara.edu.my', prog: 'Diploma in Computer Technology', fac: 'Information Technology & Engineering', status: 'Verified' },
-    '2402078': { name: 'Mior Muhammad Ikmal Bin Mior Darul Ridzuan', email: 'mior.ikmal@tvetmara.edu.my', prog: 'Diploma in Computer Technology', fac: 'Information Technology & Engineering', status: 'Verified' },
-    '2402079': { name: 'Mohammad Haziq Afiq Bin Yusli@Yazid', email: 'haziq.afiq@tvetmara.edu.my', prog: 'Diploma in Computer Technology', fac: 'Information Technology & Engineering', status: 'Verified' },
-    '2402080': { name: 'Muhammad Ammar Bin Mahadir', email: 'ammar.mahadir@tvetmara.edu.my', prog: 'Diploma in Computer Technology', fac: 'Information Technology & Engineering', status: 'Verified' },
-    '2402081': { name: 'Muhammad Hafiz Bin Hassan', email: 'hafiz.hassan@tvetmara.edu.my', prog: 'Diploma in Computer Technology', fac: 'Information Technology & Engineering', status: 'Verified' },
-    '2402082': { name: 'Nor Adilah Binti Shamsuddin', email: 'nor.adilah@tvetmara.edu.my', prog: 'Diploma in Computer Technology', fac: 'Information Technology & Engineering', status: 'Pending' },
-    '2402083': { name: 'Nur Fadhilatul Akma Binti Roslan', email: 'fadhilatul@tvetmara.edu.my', prog: 'Diploma in Computer Technology', fac: 'Information Technology & Engineering', status: 'Pending' },
-    '2402084': { name: 'Nurfatin Nadiah Binti Mohd Khir', email: 'nurfatin@tvetmara.edu.my', prog: 'Diploma in Computer Technology', fac: 'Information Technology & Engineering', status: 'Pending' },
-    '2402085': { name: 'Nursyazwanie Binti Jaimi', email: 'syazwanie@tvetmara.edu.my', prog: 'Diploma in Computer Technology', fac: 'Information Technology & Engineering', status: 'Pending' },
-    '2402086': { name: 'Nur Ain Solehah Binti Muhamad Fauzi', email: 'ain.solehah@tvetmara.edu.my', prog: 'Diploma in Computer Technology', fac: 'Information Technology & Engineering', status: 'Pending' },
-    '2402087': { name: 'Lily Liyana Lorraine Binti Jale', email: 'lily.liyana@tvetmara.edu.my', prog: 'Diploma in Computer Technology', fac: 'Information Technology & Engineering', status: 'Pending' },
-    '2402088': { name: 'Muhammad Syamsul Nazir Bin Mohd Samsuri', email: 'syamsul.nazir@tvetmara.edu.my', prog: 'Diploma in Computer Technology', fac: 'Information Technology & Engineering', status: 'Pending' },
-    '2402089': { name: 'Najjwa Aqilla Binti Mohd Khairi', email: 'najjwa.aqilla@tvetmara.edu.my', prog: 'Diploma in Computer Technology', fac: 'Information Technology & Engineering', status: 'Pending' }
-  };
+  const API_BASE_URL = "https://smartconvo-api.danishshazwan85.workers.dev";
+  const PAGE_SIZE = 10;
 
-  function viewStudent(id){
-    const s = studentData[id];
-    if(!s) return;
-    document.getElementById('dAvatar').textContent = s.name.split(' ').map(function(w){ return w.charAt(0); }).join('').slice(0,2);
-    document.getElementById('dName').textContent = s.name;
-    document.getElementById('dEmail').textContent = s.email;
-    document.getElementById('dSid').textContent = id;
-    document.getElementById('dStatus').textContent = s.status;
-    document.getElementById('dProgramme').textContent = s.prog;
-    document.getElementById('dFaculty').textContent = s.fac;
-    document.getElementById('dSession').textContent = s.session || '—';
-    document.getElementById('dQueue').textContent = s.queue || '—';
-    document.getElementById('dPhone').textContent = s.phone || '—';
-    document.getElementById('dCgpa').textContent = s.cgpa || '—';
-    document.getElementById('dPassword').textContent = s.password || 'student123';
-    document.getElementById('studentModal').classList.add('open');
+  let students = [];
+  let filteredStudents = [];
+  let currentPage = 1;
+
+  function getAdminToken() {
+    return localStorage.getItem("adminToken") ||
+           localStorage.getItem("admin_token") ||
+           localStorage.getItem("token") ||
+           "";
   }
 
-  function closeStudentModal(){
-    document.getElementById('studentModal').classList.remove('open');
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
   }
 
-  // Open / close the Add Graduate modal
-  function openAddModal(){
-    document.getElementById('addModal').classList.add('open');
+  function getInitials(name) {
+    return String(name || "—")
+      .trim()
+      .split(/\s+/)
+      .map(w => w.charAt(0))
+      .join("")
+      .slice(0, 2)
+      .toUpperCase();
   }
 
-function closeAddModal(){
-    document.getElementById('addModal').classList.remove('open');
+  function getProgramme(s) {
+    return s.course_name || s.programme || s.program || "—";
   }
 
-  // Map a programme to its faculty automatically
-  function facultyForProgramme(prog){
-    if(prog.indexOf('Water') !== -1 || prog.indexOf('Computer Technology (Big Data') !== -1 ||
-       prog.indexOf('Chargeman Competency') !== -1 || prog.indexOf('Electrical Competency') !== -1){
-      return 'Electrical & Electronics';
-    }
-    if(prog.indexOf('Smart Manufacturing') !== -1 || prog.indexOf('Furniture') !== -1 ||
-       prog.indexOf('Mechanical Engineering Technology') !== -1 || prog.indexOf('Foundry') !== -1){
-      return 'Mechanical & Manufacturing';
-    }
-    if(prog.indexOf('Welding') !== -1){
-      return 'Welding';
-    }
-    if(prog.indexOf('Automotive') !== -1){
-      return 'Automotive';
-    }
-    if(prog.indexOf('Building Technology') !== -1 || prog.indexOf('Architecture') !== -1){
-      return 'Civil & Services';
-    }
-    return '';
+  function getFaculty(s) {
+    return s.faculty || "—";
   }
 
-  // Auto-set the Faculty dropdown whenever a Programme is chosen
-  function autoSetFaculty(){
-    const prog = document.getElementById('newProgramme').value;
-    document.getElementById('newFaculty').value = facultyForProgramme(prog);
+  function getStatus(s) {
+    return s.verification_status || s.status || "pending";
   }
 
-  // Add a new graduate to the registry table by programme
-  function addGraduate(){
-    const name    = document.getElementById('newName').value.trim();
-    const sid     = document.getElementById('newSid').value.trim();
-    const email   = document.getElementById('newEmail').value.trim();
-    const session = document.getElementById('newSession').value.trim();
-    const fac     = document.getElementById('newFaculty').value;
-    const prog    = document.getElementById('newProgramme').value;
-    const phone   = document.getElementById('newPhone').value.trim();
-    const cgpa    = document.getElementById('newCgpa').value.trim();
-    const queue   = document.getElementById('newQueue').value.trim();
-    const pw      = document.getElementById('newPassword').value.trim() || 'student123';
-
-    if(!name || !sid || !email || !prog){
-      alert('Sila lengkapkan semua maklumat pelajar (Nama, ID, Email dan Program).');
-      return;
-    }
-
-    if(studentData[sid]){
-      alert('Student ID ' + sid + ' sudah wujud dalam sistem.');
-      return;
-    }
-
-// If faculty is not chosen, infer it from the chosen programme
-    var finalFac = fac;
-    if(!finalFac){
-      finalFac = facultyForProgramme(prog);
-    }
-
-    // Store in student detail data so the View button works (including the fixed password)
-    studentData[sid] = { name: name, email: email, session: session, prog: prog, fac: finalFac, phone: phone, cgpa: cgpa, queue: queue, status: 'Verified', password: pw };
-
-    // Build the initials avatar
-    var initials = name.split(' ').map(function(w){ return w.charAt(0); }).join('').slice(0,2).toUpperCase();
-
-    // Append a new row to the registry table
-    var tbody = document.querySelector('#regTable tbody');
-    var tr = document.createElement('tr');
-    tr.innerHTML =
-      '<td><div class="student-cell"><span class="s-avatar">' + initials + '</span>' +
-      '<div><div class="s-name">' + name + '</div><div class="s-id">' + email + '</div></div></div></td>' +
-      '<td>' + sid + '</td>' +
-'<td>' + prog + '</td>' +
-      '<td>' + finalFac + '</td>' +
-      '<td><span class="status-pill verified">Verified</span></td>' +
-      '<td><button class="view-btn" onclick="viewStudent(\'' + sid + '\')">View</button></td>';
-    tbody.appendChild(tr);
-
-    // Update the showing count and reset filter to show the new record
-    document.getElementById('programmeFilter').value = 'all';
-    document.getElementById('searchInput').value = '';
-    applyFilters();
-
-    closeAddModal();
-    document.getElementById('newName').value = '';
-    document.getElementById('newSid').value = '';
-    document.getElementById('newEmail').value = '';
-    document.getElementById('newSession').value = '';
-    document.getElementById('newFaculty').value = '';
-    document.getElementById('newProgramme').value = '';
-    document.getElementById('newPhone').value = '';
-    document.getElementById('newCgpa').value = '';
-    document.getElementById('newQueue').value = '';
-    alert('Graduate "' + name + '" telah ditambah ke dalam Student Registry.');
+  function getQueueStatus(s) {
+    return s.convocation_status || "";
   }
 
-  // Filter students by search text and programme
-  function applyFilters(){
-    const search = (document.getElementById('searchInput').value || '').toLowerCase();
-    const programme = document.getElementById('programmeFilter').value;
-    const rows = document.querySelectorAll('.reg-table tbody tr');
-    let visible = 0;
+  function statusClass(status) {
+    const value = String(status || "").toLowerCase();
 
-    rows.forEach(function(row){
-      const text = row.textContent.toLowerCase();
-      const progCell = row.children[2].textContent.trim();
-      const matchesSearch = text.indexOf(search) !== -1;
-      const matchesProg = programme === 'all' || progCell === programme;
-      if(matchesSearch && matchesProg){
-        row.style.display = '';
-        visible++;
-      } else {
-        row.style.display = 'none';
-      }
+    if (value.includes("complete") || value.includes("completed")) return "completed";
+    if (value.includes("verified")) return "verified";
+    if (value.includes("queue") || value.includes("waiting") || value.includes("pending")) return "waiting";
+    return "registered";
+  }
+
+  function statusLabel(s) {
+    const verification = String(getStatus(s)).toLowerCase();
+    const convocation = String(getQueueStatus(s)).toLowerCase();
+
+    if (convocation === "complete" || convocation === "completed") return "Completed";
+    if (convocation === "on_stage") return "On Stage";
+    if (convocation === "queue" || convocation === "seat_queue") return "In Queue";
+    if (verification === "verified") return "Verified";
+    if (verification === "pending") return "Pending";
+    return getStatus(s);
+  }
+
+  async function apiFetch(path, options = {}) {
+    const token = getAdminToken();
+    const headers = {
+      "Content-Type": "application/json",
+      ...(options.headers || {})
+    };
+
+    if (token) {
+      headers.Authorization = "Bearer " + token;
+    }
+
+    const response = await fetch(API_BASE_URL + path, {
+      ...options,
+      headers
     });
 
-    document.getElementById('showing-count').textContent =
-      'Showing ' + visible + ' of 1,284';
+    let data = {};
+    try {
+      data = await response.json();
+    } catch (_) {}
+
+    if (!response.ok) {
+      const message = data.message || data.error || ("Request failed (" + response.status + ")");
+      throw new Error(message);
+    }
+
+    return data;
   }
+
+  async function loadStudents() {
+    setTableMessage("Loading graduates...");
+    try {
+      const data = await apiFetch("/api/students");
+
+      const list =
+        Array.isArray(data) ? data :
+        Array.isArray(data.students) ? data.students :
+        Array.isArray(data.data) ? data.data :
+        [];
+
+      students = list;
+      currentPage = 1;
+
+      populateProgrammeFilter();
+      updateStats();
+      applyFilters();
+
+    } catch (error) {
+      console.error("Student Registry API error:", error);
+      students = [];
+      updateStats();
+      setTableMessage("Unable to load graduates. " + error.message);
+      document.getElementById("showing-count").textContent = "0 graduates";
+    }
+  }
+
+  function setTableMessage(message) {
+    document.getElementById("registryBody").innerHTML =
+      '<tr><td colspan="6" style="text-align:center;padding:36px;color:var(--ink-soft);">' +
+      escapeHtml(message) +
+      "</td></tr>";
+  }
+
+  function populateProgrammeFilter() {
+    const select = document.getElementById("programmeFilter");
+    const current = select.value;
+
+    const programmes = [...new Set(
+      students.map(getProgramme).filter(p => p && p !== "—")
+    )].sort();
+
+    select.innerHTML = '<option value="all">All Programmes</option>';
+
+    programmes.forEach(programme => {
+      const option = document.createElement("option");
+      option.value = programme;
+      option.textContent = programme;
+      select.appendChild(option);
+    });
+
+    if (programmes.includes(current)) {
+      select.value = current;
+    } else {
+      select.value = "all";
+    }
+  }
+
+  function updateStats() {
+    const total = students.length;
+    const verified = students.filter(s => String(getStatus(s)).toLowerCase() === "verified").length;
+    const pending = students.filter(s => String(getStatus(s)).toLowerCase() === "pending").length;
+    const programmes = new Set(students.map(getProgramme).filter(Boolean)).size;
+
+    document.getElementById("statTotal").textContent = total;
+    document.getElementById("statVerified").textContent = verified;
+    document.getElementById("statPending").textContent = pending;
+    document.getElementById("statProgramme").textContent = programmes;
+  }
+
+  function applyFilters() {
+    const search = (document.getElementById("searchInput").value || "").trim().toLowerCase();
+    const programme = document.getElementById("programmeFilter").value;
+
+    filteredStudents = students.filter(student => {
+      const searchable = [
+        student.name,
+        student.student_id,
+        student.email,
+        getProgramme(student),
+        getFaculty(student),
+        student.session,
+        student.phone_number
+      ].join(" ").toLowerCase();
+
+      const matchesSearch = !search || searchable.includes(search);
+      const matchesProgramme = programme === "all" || getProgramme(student) === programme;
+
+      return matchesSearch && matchesProgramme;
+    });
+
+    const totalPages = Math.max(1, Math.ceil(filteredStudents.length / PAGE_SIZE));
+    if (currentPage > totalPages) currentPage = totalPages;
+
+    renderTable();
+    renderPagination();
+
+    const start = filteredStudents.length ? ((currentPage - 1) * PAGE_SIZE) + 1 : 0;
+    const end = Math.min(currentPage * PAGE_SIZE, filteredStudents.length);
+
+    document.getElementById("showing-count").textContent =
+      "Showing " + start + "–" + end + " of " + filteredStudents.length;
+  }
+
+  function renderTable() {
+    const tbody = document.getElementById("registryBody");
+
+    if (!filteredStudents.length) {
+      tbody.innerHTML =
+        '<tr><td colspan="6" style="text-align:center;padding:36px;color:var(--ink-soft);">No graduates found.</td></tr>';
+      return;
+    }
+
+    const start = (currentPage - 1) * PAGE_SIZE;
+    const pageStudents = filteredStudents.slice(start, start + PAGE_SIZE);
+
+    tbody.innerHTML = pageStudents.map(student => {
+      const name = escapeHtml(student.name || "—");
+      const email = escapeHtml(student.email || "—");
+      const sid = escapeHtml(student.student_id || "—");
+      const programme = escapeHtml(getProgramme(student));
+      const faculty = escapeHtml(getFaculty(student));
+      const status = statusLabel(student);
+      const cls = statusClass(status);
+      const rawId = String(student.student_id || "");
+
+      return `
+        <tr>
+          <td>
+            <div class="student-cell">
+              <span class="s-avatar">${escapeHtml(getInitials(student.name))}</span>
+              <div>
+                <div class="s-name">${name}</div>
+                <div class="s-id">${email}</div>
+              </div>
+            </div>
+          </td>
+          <td>${sid}</td>
+          <td>${programme}</td>
+          <td>${faculty}</td>
+          <td><span class="status-pill ${cls}">${escapeHtml(status)}</span></td>
+          <td><button class="view-btn" onclick="viewStudent('${escapeHtml(rawId)}')">View</button></td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  function renderPagination() {
+    const totalPages = Math.max(1, Math.ceil(filteredStudents.length / PAGE_SIZE));
+    const buttons = document.getElementById("paginationButtons");
+
+    document.getElementById("pageInfo").textContent =
+      "Page " + currentPage + " of " + totalPages;
+
+    buttons.innerHTML = "";
+
+    for (let page = 1; page <= totalPages; page++) {
+      const button = document.createElement("button");
+      button.className = "p-btn" + (page === currentPage ? " active" : "");
+      button.textContent = page;
+      button.onclick = function() {
+        currentPage = page;
+        renderTable();
+        renderPagination();
+        updateShowingCount();
+      };
+      buttons.appendChild(button);
+    }
+  }
+
+  function updateShowingCount() {
+    const start = filteredStudents.length ? ((currentPage - 1) * PAGE_SIZE) + 1 : 0;
+    const end = Math.min(currentPage * PAGE_SIZE, filteredStudents.length);
+
+    document.getElementById("showing-count").textContent =
+      "Showing " + start + "–" + end + " of " + filteredStudents.length;
+  }
+
+  function findStudent(id) {
+    return students.find(s => String(s.student_id) === String(id));
+  }
+
+  function viewStudent(id) {
+    const s = findStudent(id);
+    if (!s) return;
+
+    document.getElementById("dAvatar").textContent = getInitials(s.name);
+    document.getElementById("dName").textContent = s.name || "—";
+    document.getElementById("dEmail").textContent = s.email || "—";
+    document.getElementById("dSid").textContent = s.student_id || "—";
+    document.getElementById("dStatus").textContent = statusLabel(s);
+    document.getElementById("dProgramme").textContent = getProgramme(s);
+    document.getElementById("dFaculty").textContent = getFaculty(s);
+    document.getElementById("dSession").textContent = s.session || "—";
+    document.getElementById("dQueue").textContent = s.queue_number || "—";
+    document.getElementById("dPhone").textContent = s.phone_number || "—";
+    document.getElementById("dCgpa").textContent = s.cgpa ?? "—";
+
+    // Passwords should not be returned or displayed by an admin registry page.
+    document.getElementById("dPassword").textContent = "Protected";
+
+    document.getElementById("studentModal").classList.add("open");
+  }
+
+  function closeStudentModal() {
+    document.getElementById("studentModal").classList.remove("open");
+  }
+
+  function openAddModal() {
+    document.getElementById("addModal").classList.add("open");
+  }
+
+  function closeAddModal() {
+    document.getElementById("addModal").classList.remove("open");
+  }
+
+  function facultyForProgramme(prog) {
+    if (
+      prog.indexOf("Computer Technology (Big Data") !== -1 ||
+      prog.indexOf("Chargeman Competency") !== -1 ||
+      prog.indexOf("Electrical Competency") !== -1
+    ) return "Electrical & Electronics";
+
+    if (
+      prog.indexOf("Smart Manufacturing") !== -1 ||
+      prog.indexOf("Furniture") !== -1 ||
+      prog.indexOf("Mechanical Engineering Technology") !== -1 ||
+      prog.indexOf("Foundry") !== -1
+    ) return "Mechanical & Manufacturing";
+
+    if (prog.indexOf("Welding") !== -1) return "Welding";
+    if (prog.indexOf("Automotive") !== -1) return "Automotive";
+
+    if (
+      prog.indexOf("Water") !== -1 ||
+      prog.indexOf("Building Technology") !== -1 ||
+      prog.indexOf("Architecture") !== -1
+    ) return "Civil & Services";
+
+    return "";
+  }
+
+  function autoSetFaculty() {
+    const prog = document.getElementById("newProgramme").value;
+    document.getElementById("newFaculty").value = facultyForProgramme(prog);
+  }
+
+  async function addGraduate() {
+    const button = document.querySelector(".save-add-btn");
+
+    const name = document.getElementById("newName").value.trim();
+    const student_id = document.getElementById("newSid").value.trim();
+    const email = document.getElementById("newEmail").value.trim();
+    const session = document.getElementById("newSession").value.trim();
+    let faculty = document.getElementById("newFaculty").value;
+    const course_name = document.getElementById("newProgramme").value;
+    const phone_number = document.getElementById("newPhone").value.trim();
+    const cgpaValue = document.getElementById("newCgpa").value.trim();
+    const queue_number = document.getElementById("newQueue").value.trim();
+    const password = document.getElementById("newPassword").value.trim() || "student123";
+
+    if (!name || !student_id || !email || !course_name) {
+      alert("Sila lengkapkan Nama, Student ID, Email dan Programme.");
+      return;
+    }
+
+    if (!/^\d{7}$/.test(student_id)) {
+      alert("Student ID mesti mengandungi 7 digit.");
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      alert("Sila masukkan email yang sah.");
+      return;
+    }
+
+    if (students.some(s => String(s.student_id) === student_id)) {
+      alert("Student ID " + student_id + " sudah wujud dalam database.");
+      return;
+    }
+
+    if (!faculty) faculty = facultyForProgramme(course_name);
+
+    const cgpa = cgpaValue === "" ? null : Number(cgpaValue);
+    if (cgpa !== null && (Number.isNaN(cgpa) || cgpa < 0 || cgpa > 4)) {
+      alert("CGPA mesti antara 0.00 hingga 4.00.");
+      return;
+    }
+
+    /*
+      If a queue number is entered, the new graduate is created directly
+      in the queue. Otherwise the normal registration status is used.
+    */
+    const convocation_status = queue_number ? "queue" : "registration";
+
+    const payload = {
+      student_id,
+      name,
+      email,
+      password,
+      session: session || null,
+      convocation_status,
+      phone_number: phone_number || null,
+      faculty: faculty || null,
+      cgpa,
+      queue_number: queue_number || null,
+      course_name: course_name || null
+    };
+
+    button.disabled = true;
+    button.textContent = "Adding...";
+
+    try {
+      /*
+        Existing SmartConvo student endpoint:
+        POST /api/students
+      */
+      const data = await apiFetch("/api/students", {
+        method: "POST",
+        body: JSON.stringify(payload)
+      });
+
+      alert(data.message || ('Graduate "' + name + '" berjaya ditambah ke database.'));
+
+      resetAddForm();
+      closeAddModal();
+      await loadStudents();
+
+    } catch (error) {
+      console.error("Add graduate error:", error);
+      alert("Gagal tambah graduate: " + error.message);
+    } finally {
+      button.disabled = false;
+      button.textContent = "Add Graduate";
+    }
+  }
+
+  function resetAddForm() {
+    document.getElementById("newName").value = "";
+    document.getElementById("newSid").value = "";
+    document.getElementById("newEmail").value = "";
+    document.getElementById("newSession").value = "";
+    document.getElementById("newFaculty").value = "";
+    document.getElementById("newProgramme").value = "";
+    document.getElementById("newPhone").value = "";
+    document.getElementById("newCgpa").value = "";
+    document.getElementById("newQueue").value = "";
+  }
+
+  function exportStudents() {
+    if (!students.length) {
+      alert("Tiada graduate untuk diexport.");
+      return;
+    }
+
+    const headers = [
+      "Student ID", "Name", "Email", "Programme", "Faculty",
+      "Session", "Phone", "CGPA", "Queue Number",
+      "Verification Status", "Convocation Status"
+    ];
+
+    const rows = students.map(s => [
+      s.student_id,
+      s.name,
+      s.email,
+      getProgramme(s),
+      getFaculty(s),
+      s.session || "",
+      s.phone_number || "",
+      s.cgpa ?? "",
+      s.queue_number || "",
+      getStatus(s),
+      s.convocation_status || ""
+    ]);
+
+    const csv = [headers, ...rows]
+      .map(row => row.map(value => '"' + String(value ?? "").replace(/"/g, '""') + '"').join(","))
+      .join("\n");
+
+    const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = "smartconvo-graduate-registry.csv";
+    link.click();
+
+    URL.revokeObjectURL(url);
+  }
+
+  document.querySelector('.primary-btn:not(.add-btn)').onclick = exportStudents;
+
+  document.getElementById("studentModal").addEventListener("click", function(e) {
+    if (e.target === this) closeStudentModal();
+  });
+
+  document.getElementById("addModal").addEventListener("click", function(e) {
+    if (e.target === this) closeAddModal();
+  });
+
+  document.addEventListener("keydown", function(e) {
+    if (e.key === "Escape") {
+      closeStudentModal();
+      closeAddModal();
+    }
+  });
+
+  document.addEventListener("DOMContentLoaded", loadStudents);
 </script>
 
 </body>
 </html>
-

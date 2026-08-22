@@ -374,18 +374,91 @@
       </div>
 
       <section class="section-card">
-        <div class="card-head"><h3>Update Contact Details</h3></div>
+        <div class="card-head"><h3>Update Graduate Details</h3></div>
         <div class="card-body">
-          <div class="info-grid">
-            <div class="form-field">
-              <label for="email">University Email</label>
-              <input type="email" id="email" value="">
-            </div>
-            <div class="form-field">
-              <label for="phone">Phone Number</label>
-              <input type="tel" id="phone" value="">
-            </div>
-          </div>
+<div class="info-grid">
+
+  <div class="form-field">
+    <label for="studentId">Student ID</label>
+    <input
+      type="text"
+      id="studentId"
+      maxlength="7"
+      inputmode="numeric"
+      placeholder="Enter student ID"
+    >
+  </div>
+
+  <div class="form-field">
+    <label for="email">University Email</label>
+    <input
+      type="email"
+      id="email"
+      value=""
+      readonly
+    >
+  </div>
+
+  <div class="form-field">
+    <label for="programme">Programme</label>
+    <div class="select-wrap">
+      <select id="programme" required>
+        <option value="" disabled selected>Select programme</option>
+
+        <option value="DTW">Diploma Teknologi Welding</option>
+        <option value="DFD">Diploma Teknologi Komputer (Analisa Data Besar)</option>
+        <option value="DNS">Diploma Network Security</option>
+
+        <option value="DTR">Diploma Teknologi Robotik</option>
+        <option value="ITW">Information Technology</option>
+        <option value="DCP">Diploma Computer Programming</option>
+        <option value="DCS">Diploma Computer Science</option>
+        <option value="DGA">Diploma Green Technology</option>
+        <option value="DTB">Diploma Teknologi Automotif</option>
+        <option value="SLR">Sijil Lanjutan Refrigeration</option>
+        <option value="SBN">Sijil Binaan</option>
+        <option value="STF">Sijil Teknologi Fabrikasi</option>
+        <option value="SSB">Sijil Sistem Bangunan</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-field">
+    <label for="faculty">Faculty</label>
+    <input
+      type="text"
+      id="faculty"
+      readonly
+      placeholder="Automatically selected"
+    >
+  </div>
+
+  <div class="form-field">
+    <label for="session">Session</label>
+    <div class="select-wrap">
+      <select id="session" required>
+        <option value="" disabled selected>Select session</option>
+        <option value="JJ24">January – June 2024 (JJ24)</option>
+        <option value="JD24">July – December 2024 (JD24)</option>
+        <option value="JJ25">January – June 2025 (JJ25)</option>
+        <option value="JD25">July – December 2025 (JD25)</option>
+        <option value="JJ26">January – June 2026 (JJ26)</option>
+        <option value="JD26">July – December 2026 (JD26)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-field">
+    <label for="phone">Phone Number</label>
+    <input
+      type="tel"
+      id="phone"
+      value=""
+      placeholder="Enter phone number"
+    >
+  </div>
+
+</div>
           <div class="form-field">
             <label>Face Photo</label>
             <div class="face-upload">
@@ -396,8 +469,60 @@
                 <div class="fu-label">Current Photo</div>
                 <div class="fu-value">face_profile.jpg</div>
               </div>
-              <label class="upload-btn" for="face">Upload</label>
-              <input type="file" id="face" accept="image/*" style="display:none">
+<div class="form-field">
+  <label>Face Photo</label>
+
+  <div class="face-upload">
+    <div class="face-thumb" id="faceThumb">
+      <svg width="26" height="26" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="1.5"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 8V6a2 2 0 012-2h2"/>
+        <path d="M2 16v2a2 2 0 002 2h2"/>
+        <path d="M16 4h2a2 2 0 012 2v2"/>
+        <path d="M16 20h2a2 2 0 002-2v-2"/>
+        <circle cx="12" cy="12" r="3"/>
+      </svg>
+    </div>
+
+    <div class="face-info">
+      <div class="fu-label">Registered Face Photo</div>
+      <div class="fu-value" id="facePhotoName">
+        No registered face photo
+      </div>
+    </div>
+
+    <span
+      style="
+        font-family:'IBM Plex Mono',monospace;
+        font-size:11px;
+        letter-spacing:0.08em;
+        text-transform:uppercase;
+        color:var(--green);
+        background:var(--green-soft);
+        padding:7px 12px;
+        border-radius:2px;
+        white-space:nowrap;
+      "
+      id="facePhotoStatus"
+    >
+      Not Registered
+    </span>
+  </div>
+
+  <div
+    style="
+      margin-top:8px;
+      font-family:'IBM Plex Mono',monospace;
+      font-size:10px;
+      letter-spacing:0.06em;
+      text-transform:uppercase;
+      color:var(--ink-soft);
+    "
+  >
+    Face photo can only be updated through Face Registration.
+  </div>
+</div>
             </div>
           </div>
           <button type="button" class="save-btn" id="saveBtn">
@@ -449,6 +574,24 @@
                 <label for="cfReason">Reason for Correction</label>
                 <textarea class="textarea" id="cfReason" placeholder="Briefly explain why this needs to be corrected." required></textarea>
               </div>
+<div class="form-field">
+  <label for="cfCorrect">Correct Information</label>
+
+  <input
+    type="text"
+    id="cfCorrect"
+    placeholder="Provide the correct information"
+    required
+  >
+
+  <select id="cfProgramme" style="display:none;">
+    <option value="" disabled selected>Select programme</option>
+    <option value="Diploma Teknologi Welding">Diploma Teknologi Welding</option>
+    <option value="Diploma Teknologi Komputer (Analisa Data Besar)">Diploma Teknologi Komputer (Analisa Data Besar)</option>
+    <option value="Diploma Network Security">Diploma Network Security</option>
+  </select>
+</div>
+
               <button type="submit" class="save-btn">
                 Submit Request
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
@@ -586,6 +729,56 @@ function formatQueueNumber(queueNumber) {
   return String(queueNumber).padStart(3, '0');
 }
 
+// ============================================================
+// PROGRAMME → FACULTY
+// ============================================================
+const PROGRAMME_FACULTY = {
+  DTW: 'Civil & Services',           // Water Services Technology
+  DFD: 'Electrical & Electronics',    // Computer Technology (Big Data Analytics)
+  DNS: 'Mechanical & Manufacturing', // Smart Manufacturing
+  DTR: 'Mechanical & Manufacturing', // Furniture
+  ITW: 'Welding',                    // Welding
+  DCP: 'Electrical & Electronics',    // Chargeman Competency
+  DCS: 'Electrical & Electronics',    // Electrical Competency
+  DGA: 'Automotive',                 // Automotive
+  DTB: 'Automotive',                 // Automotive
+  SLR: 'Mechanical & Manufacturing', // Mechanical Engineering Technology
+  SBN: 'Civil & Services',           // Building Technology
+  STF: 'Mechanical & Manufacturing', // Foundry
+  SSB: 'Civil & Services'            // Architecture
+};
+
+function updateFacultyFromProgramme() {
+  const programmeInput = document.getElementById('programme');
+  const facultyInput = document.getElementById('faculty');
+
+  if (!programmeInput || !facultyInput) return;
+
+ const programmeFaculty = {
+  "DTW": "Civil & Services",           // Diploma Teknologi Perkhidmatan Air (Water)
+  "DFD": "Electrical & Electronics",    // Diploma Teknologi Komputer (Analisa Data Besar)
+  "DNS": "Mechanical & Manufacturing", // Diploma Teknologi Kejuruteraan — Pembuatan Pintar
+
+  "DTR": "Mechanical & Manufacturing", // Diploma Teknologi Pengeluaran Perabot Kontemporari
+  "ITW": "Welding",                    // Diploma Kompetensi Kimpalan
+  "DCP": "Electrical & Electronics",    // Diploma Kompetensi Penjaga Jentera Elektrik Voltan A4
+
+  "DCS": "Electrical & Electronics",    // Diploma Kompetensi Elektrik (Domestik & Industri) PW4
+  "DGA": "Automotive",                 // Diploma Teknologi Automotif
+  "DTB": "Automotive",                 // Diploma Teknologi Automotif — Baikpulih & Kemas Badan
+
+  "SLR": "Mechanical & Manufacturing", // Sijil Teknologi Kejuruteraan Mekanikal (Lukisan Rekabentuk)
+  "SBN": "Civil & Services",           // Sijil Teknologi Kejuruteraan Bangunan
+  "STF": "Mechanical & Manufacturing", // Sijil Teknologi Foundri
+  "SSB": "Civil & Services"            // Sijil Senibina
+};
+
+  const programme = programmeInput.value;
+
+  if (programmeFaculty[programme]) {
+    facultyInput.value = programmeFaculty[programme];
+  }
+}
 
 // ============================================================
 // GET INITIALS
@@ -869,21 +1062,55 @@ if (registrationStatus) {
   // UPDATE CONTACT FORM
   // ----------------------------------------------------------
 
-  const emailInput =
-    document.getElementById('email');
+  const studentIdInput =
+  document.getElementById('studentId');
 
-  const phoneInput =
-    document.getElementById('phone');
+const emailInput =
+  document.getElementById('email');
 
-  if (emailInput) {
-    emailInput.value =
-      student.email || '';
-  }
+const programmeInput =
+  document.getElementById('programme');
 
-  if (phoneInput) {
-    phoneInput.value =
-      student.phone_number || '';
-  }
+const facultyInput =
+  document.getElementById('faculty');
+
+const sessionInput =
+  document.getElementById('session');
+
+const phoneInput =
+  document.getElementById('phone');
+
+if (studentIdInput) {
+  studentIdInput.value =
+    student.student_id || '';
+}
+
+if (emailInput) {
+  emailInput.value =
+    student.email || '';
+}
+
+if (programmeInput) {
+  programmeInput.value =
+    student.course_code ||
+    student.programme ||
+    '';
+}
+
+if (facultyInput) {
+  facultyInput.value =
+    student.faculty || '';
+}
+
+if (sessionInput) {
+  sessionInput.value =
+    student.session || '';
+}
+
+if (phoneInput) {
+  phoneInput.value =
+    student.phone_number || '';
+}
 }
 
 
@@ -1254,6 +1481,16 @@ async function initializeStudentProfile() {
 
   // 5. Setup correction form
   setupCorrectionForm();
+
+  const programmeInput =
+    document.getElementById('programme');
+
+  if (programmeInput) {
+    programmeInput.addEventListener(
+      'change',
+      updateFacultyFromProgramme
+    );
+  }
 }
 
 

@@ -3,19 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>SmartConvo — Analytics & Reports</title>
-
 <link rel="icon" type="image/svg+xml" href="smc-icon.svg?v=3">
 <link rel="apple-touch-icon" href="smc-icon.svg?v=3">
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-
 <style>
 :root{
   --bg:#FAFAF7;
@@ -23,36 +17,27 @@
   --ink:#1A2332;
   --ink-soft:#5B6472;
   --line:#E4E1D8;
-
   --navy:#1E3A5F;
   --navy-deep:#14283F;
-
   --gold:#B08D2B;
   --gold-soft:#EFE6C8;
-
   --green:#2E7D5E;
   --green-soft:#E2F0EA;
-
   --amber:#C97B2B;
   --amber-soft:#F5EDE0;
-
   --red:#B34A4A;
   --red-soft:#F5E6E6;
-
   --radius:3px;
   --sidebar-w:260px;
 }
-
 *{
   margin:0;
   padding:0;
   box-sizing:border-box;
 }
-
 html{
   scroll-behavior:smooth;
 }
-
 body{
   background:var(--bg);
   color:var(--ink);
@@ -60,17 +45,14 @@ body{
   -webkit-font-smoothing:antialiased;
   min-height:100svh;
 }
-
 a{
   color:inherit;
   text-decoration:none;
 }
-
 .app-layout{
   display:flex;
   min-height:100svh;
 }
-
 .sidebar{
   position:fixed;
   top:0;
@@ -84,19 +66,16 @@ a{
   z-index:40;
   overflow-y:auto;
 }
-
 .sidebar-brand{
   padding:28px 24px 24px;
   border-bottom:1px solid var(--line);
 }
-
 .sidebar-brand .nav-mark{
   font-family:'Fraunces',serif;
   font-size:22px;
   font-weight:600;
   color:var(--navy-deep);
 }
-
 .sidebar-brand .nav-tag{
   font-family:'IBM Plex Mono',monospace;
   font-size:11px;
@@ -105,7 +84,6 @@ a{
   color:var(--ink-soft);
   margin-top:4px;
 }
-
 .sidebar-nav{
   flex:1;
   padding:16px 12px;
@@ -113,7 +91,6 @@ a{
   flex-direction:column;
   gap:2px;
 }
-
 .nav-item{
   display:flex;
   align-items:center;
@@ -125,17 +102,14 @@ a{
   color:var(--ink-soft);
   transition:.2s ease;
 }
-
 .nav-item:hover{
   background:var(--bg);
   color:var(--ink);
 }
-
 .nav-item.active{
   background:var(--navy);
   color:#fff;
 }
-
 .nav-item .nav-icon{
   width:22px;
   height:22px;
@@ -144,25 +118,20 @@ a{
   align-items:center;
   justify-content:center;
 }
-
 .nav-item .nav-icon svg{
   width:20px;
   height:20px;
 }
-
 .sidebar-logout{
   padding:16px 12px 20px;
   border-top:1px solid var(--line);
 }
-
 .sidebar-logout .nav-item{
   color:var(--red);
 }
-
 .sidebar-logout .nav-item:hover{
   background:var(--red-soft);
 }
-
 .main-area{
   margin-left:var(--sidebar-w);
   flex:1;
@@ -170,7 +139,6 @@ a{
   flex-direction:column;
   min-height:100svh;
 }
-
 .topbar{
   position:sticky;
   top:0;
@@ -183,20 +151,17 @@ a{
   backdrop-filter:blur(8px);
   border-bottom:1px solid var(--line);
 }
-
 .topbar-left h2{
   font-family:'Fraunces',serif;
   font-weight:500;
   font-size:24px;
   color:var(--navy-deep);
 }
-
 .topbar-right{
   display:flex;
   align-items:center;
   gap:18px;
 }
-
 .user-chip{
   display:flex;
   align-items:center;
@@ -206,14 +171,12 @@ a{
   letter-spacing:.05em;
   color:var(--ink-soft);
 }
-
 .user-chip .dot{
   width:8px;
   height:8px;
   border-radius:50%;
   background:var(--gold);
 }
-
 .primary-btn{
   display:inline-flex;
   align-items:center;
@@ -230,18 +193,15 @@ a{
   cursor:pointer;
   transition:.2s ease;
 }
-
 .primary-btn:hover{
   background:var(--navy-deep);
 }
-
 .content{
   flex:1;
   padding:36px 40px 60px;
   max-width:1400px;
   width:100%;
 }
-
 .page-hero{
   position:relative;
   background:var(--surface);
@@ -249,7 +209,6 @@ a{
   padding:30px 36px;
   margin-bottom:30px;
 }
-
 .page-hero::before,
 .page-hero::after{
   content:"";
@@ -259,21 +218,18 @@ a{
   border:1.5px solid var(--navy);
   opacity:.45;
 }
-
 .page-hero::before{
   top:-1px;
   left:-1px;
   border-right:none;
   border-bottom:none;
 }
-
 .page-hero::after{
   bottom:-1px;
   right:-1px;
   border-left:none;
   border-top:none;
 }
-
 .eyebrow{
   font-family:'IBM Plex Mono',monospace;
   font-size:12px;
@@ -285,14 +241,12 @@ a{
   align-items:center;
   gap:8px;
 }
-
 .eyebrow .dot{
   width:7px;
   height:7px;
   border-radius:50%;
   background:var(--gold);
 }
-
 .page-hero h1{
   font-family:'Fraunces',serif;
   font-weight:500;
@@ -300,14 +254,12 @@ a{
   color:var(--navy-deep);
   margin-bottom:6px;
 }
-
 .page-hero p{
   color:var(--ink-soft);
   font-size:16px;
   line-height:1.6;
   max-width:720px;
 }
-
 .report-toolbar{
   display:flex;
   align-items:center;
@@ -316,13 +268,11 @@ a{
   margin-bottom:24px;
   flex-wrap:wrap;
 }
-
 .date-range{
   display:flex;
   align-items:center;
   gap:8px;
 }
-
 .date-range span{
   font-family:'IBM Plex Mono',monospace;
   font-size:12px;
@@ -330,11 +280,9 @@ a{
   text-transform:uppercase;
   color:var(--ink-soft);
 }
-
 .select-wrap{
   position:relative;
 }
-
 .select-wrap select{
   padding:12px 34px 12px 14px;
   border:1px solid var(--line);
@@ -346,7 +294,6 @@ a{
   appearance:none;
   cursor:pointer;
 }
-
 .select-wrap::after{
   content:"";
   position:absolute;
@@ -359,11 +306,9 @@ a{
   border-bottom:1.5px solid var(--navy);
   pointer-events:none;
 }
-
 .analytics-section{
   margin-bottom:34px;
 }
-
 .section-banner{
   display:flex;
   align-items:center;
@@ -373,28 +318,24 @@ a{
   color:#fff;
   margin-bottom:24px;
 }
-
 .section-banner .banner-num{
   font-family:'IBM Plex Mono',monospace;
   font-size:12px;
   letter-spacing:.12em;
   color:var(--gold-soft);
 }
-
 .section-banner h3{
   font-family:'Fraunces',serif;
   font-weight:500;
   font-size:25px;
   letter-spacing:.01em;
 }
-
 .stat-grid{
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:16px;
   margin-bottom:24px;
 }
-
 .stat-card{
   background:var(--surface);
   border:1px solid var(--line);
@@ -403,7 +344,6 @@ a{
   flex-direction:column;
   gap:7px;
 }
-
 .stat-label{
   font-family:'IBM Plex Mono',monospace;
   font-size:11px;
@@ -411,75 +351,62 @@ a{
   text-transform:uppercase;
   color:var(--ink-soft);
 }
-
 .stat-value{
   font-family:'Fraunces',serif;
   font-size:30px;
   font-weight:500;
   color:var(--navy-deep);
 }
-
 .stat-note{
   font-size:12px;
   color:var(--ink-soft);
 }
-
 .section-card{
   background:var(--surface);
   border:1px solid var(--line);
 }
-
 .card-head{
   padding:18px 24px;
   border-bottom:1px solid var(--line);
 }
-
 .card-head h3{
   font-family:'Fraunces',serif;
   font-weight:500;
   font-size:18px;
 }
-
 .card-body{
   padding:22px;
 }
-
 .charts-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:24px;
   margin-bottom:24px;
 }
-
 .chart-box{
   position:relative;
   height:280px;
 }
-
 .chart-box canvas{
   width:100%!important;
   height:100%!important;
 }
-
 .progress-grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:16px;
 }
-
 .progress-card{
   border:1px solid var(--line);
   padding:18px;
   background:var(--surface);
 }
-
 .progress-head{
   display:flex;
   justify-content:space-between;
   gap:10px;
   margin-bottom:10px;
 }
-
 .progress-label{
   font-family:'IBM Plex Mono',monospace;
   font-size:11px;
@@ -487,33 +414,27 @@ a{
   text-transform:uppercase;
   color:var(--ink-soft);
 }
-
 .progress-value{
   font-size:13px;
   font-weight:600;
 }
-
 .progress-track{
   height:8px;
   background:var(--line);
   border-radius:4px;
   overflow:hidden;
 }
-
 .progress-fill{
   height:100%;
   border-radius:4px;
 }
-
 .table-wrap{
   overflow-x:auto;
 }
-
 .report-table{
   width:100%;
   border-collapse:collapse;
 }
-
 .report-table th{
   font-family:'IBM Plex Mono',monospace;
   font-size:11px;
@@ -525,18 +446,15 @@ a{
   background:var(--bg);
   border-bottom:1px solid var(--line);
 }
-
 .report-table td{
   padding:13px 14px;
   font-size:13px;
   border-bottom:1px solid var(--line);
   color:var(--ink);
 }
-
 .report-table tr:last-child td{
   border-bottom:none;
 }
-
 .status-pill{
   display:inline-flex;
   padding:5px 9px;
@@ -546,37 +464,41 @@ a{
   text-transform:uppercase;
   letter-spacing:.05em;
 }
-
 .status-complete{
   background:var(--green-soft);
   color:var(--green);
 }
-
 .status-queue{
   background:var(--amber-soft);
   color:var(--amber);
 }
-
 .status-verification{
   background:var(--gold-soft);
   color:var(--gold);
 }
-
 .status-registration{
   background:#EEF1F5;
   color:var(--navy);
 }
-
 .report-note{
-  padding:14px 18px;
+  padding:18px 22px;
   background:var(--bg);
   border:1px solid var(--line);
   margin-top:18px;
-  font-size:12px;
+  font-size:13px;
   color:var(--ink-soft);
-  line-height:1.6;
+  line-height:1.7;
 }
-
+.report-note strong{
+  color:var(--navy-deep);
+}
+.report-note ul{
+  margin:10px 0 0 18px;
+  padding:0;
+}
+.report-note li{
+  margin-bottom:4px;
+}
 .main-footer{
   border-top:1px solid var(--line);
   padding:20px 40px;
@@ -588,62 +510,49 @@ a{
   color:var(--ink-soft);
   letter-spacing:.04em;
 }
-
 @media(max-width:1100px){
   .stat-grid{
     grid-template-columns:repeat(2,1fr);
   }
-
   .progress-grid{
     grid-template-columns:1fr;
   }
 }
-
 @media(max-width:1024px){
   .charts-grid{
     grid-template-columns:1fr;
   }
 }
-
 @media(max-width:768px){
   .sidebar{
     width:64px;
   }
-
   .sidebar-brand .nav-tag,
   .nav-item .nav-label{
     display:none;
   }
-
   .sidebar-brand .nav-mark{
     font-size:16px;
   }
-
   .nav-item{
     padding:14px;
     justify-content:center;
   }
-
   .main-area{
     margin-left:64px;
   }
-
   .topbar{
     padding:14px 20px;
   }
-
   .topbar-right .user-chip{
     display:none;
   }
-
   .content{
     padding:24px 20px 40px;
   }
-
   .stat-grid{
     grid-template-columns:1fr;
   }
-
   .main-footer{
     flex-direction:column;
     gap:6px;
@@ -651,12 +560,10 @@ a{
     padding:16px 20px;
   }
 }
-
 :focus-visible{
   outline:2px solid var(--gold);
   outline-offset:3px;
 }
-
 @media(prefers-reduced-motion:reduce){
   *{
     animation:none!important;
@@ -665,20 +572,14 @@ a{
 }
 </style>
 </head>
-
 <body>
-
 <div class="app-layout">
-
 <aside class="sidebar">
-
   <div class="sidebar-brand">
     <a href="index.html" class="nav-mark">SmartConvo</a>
     <div class="nav-tag">Admin Dashboard</div>
   </div>
-
   <nav class="sidebar-nav">
-
     <a href="admin-dashboard.html" class="nav-item">
       <span class="nav-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -690,7 +591,6 @@ a{
       </span>
       <span class="nav-label">Dashboard</span>
     </a>
-
     <a href="admin-monitoring.html" class="nav-item">
       <span class="nav-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -699,7 +599,6 @@ a{
       </span>
       <span class="nav-label">Live Monitoring</span>
     </a>
-
     <a href="admin-queue.html" class="nav-item">
       <span class="nav-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -708,7 +607,6 @@ a{
       </span>
       <span class="nav-label">Queue Management</span>
     </a>
-
     <a href="admin-verification.html" class="nav-item">
       <span class="nav-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -718,7 +616,6 @@ a{
       </span>
       <span class="nav-label">Face Verification</span>
     </a>
-
     <a href="admin-approval.html" class="nav-item">
       <span class="nav-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -728,7 +625,6 @@ a{
       </span>
       <span class="nav-label">Approvals</span>
     </a>
-
     <a href="admin-registry.html" class="nav-item">
       <span class="nav-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -740,7 +636,6 @@ a{
       </span>
       <span class="nav-label">Student Registry</span>
     </a>
-
     <a href="admin-analytics.html" class="nav-item active">
       <span class="nav-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -749,7 +644,6 @@ a{
       </span>
       <span class="nav-label">Analytics & Reports</span>
     </a>
-
     <a href="admin-settings.html" class="nav-item">
       <span class="nav-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -759,9 +653,7 @@ a{
       </span>
       <span class="nav-label">Settings</span>
     </a>
-
   </nav>
-
   <div class="sidebar-logout">
     <a href="login-admin.html" class="nav-item">
       <span class="nav-icon">
@@ -774,56 +666,38 @@ a{
       <span class="nav-label">Logout</span>
     </a>
   </div>
-
 </aside>
-
 <div class="main-area">
-
 <header class="topbar">
-
   <div class="topbar-left">
     <h2>Analytics & Reports</h2>
   </div>
-
   <div class="topbar-right">
-
     <button class="primary-btn" id="exportBtn">
       Export Report
     </button>
-
     <span class="user-chip">
       <span class="dot"></span>
       Admin
     </span>
-
   </div>
-
 </header>
-
 <main class="content">
-
 <section class="page-hero">
-
   <div class="eyebrow">
     <span class="dot"></span>
     Insights
   </div>
-
   <h1>Analytics & Reports</h1>
-
-<p>
-  Monitor convocation progress, identity verification,
-  queue performance, and student completion in real time.
-</p>
-
+  <p>
+    Monitor convocation progress, identity verification,
+    queue performance, and student completion in real time.
+  </p>
 </section>
 
 <div class="report-toolbar">
-
   <div class="date-range">
-
     <span>Reporting Period:</span>
-
     <div class="select-wrap">
       <select id="periodSelect">
         <option value="today">Today</option>
@@ -832,305 +706,214 @@ a{
         <option value="session">This Session</option>
       </select>
     </div>
-
   </div>
-
   <div class="date-range">
-
     <span>Filter by:</span>
-
     <div class="select-wrap">
-  <select id="facultySelect">
-    <option value="all">All Faculties</option>
-    <option value="faculty of Electrical & Computing Engineering Technology">
-      Electrical & Computing Engineering Technology
-    </option>
-    <option value="faculty of Mechanical & Manufacturing Engineering Technology">
-      Mechanical & Manufacturing Engineering Technology
-    </option>
-    <option value="faculty of Welding Engineering Technology">
-      Welding Engineering Technology
-    </option>
-    <option value="faculty of Automotive Engineering Technology">
-      Automotive Engineering Technology
-    </option>
-    <option value="faculty of Civil & Services Engineering Technology">
-      Civil & Services Engineering Technology
-    </option>
-  </select>
-</div>
-
+      <select id="facultySelect">
+        <option value="all">All Faculties</option>
+        <option value="faculty of Electrical & Computing Engineering Technology">
+          Electrical & Computing Engineering Technology
+        </option>
+        <option value="faculty of Mechanical & Manufacturing Engineering Technology">
+          Mechanical & Manufacturing Engineering Technology
+        </option>
+        <option value="faculty of Welding Engineering Technology">
+          Welding Engineering Technology
+        </option>
+        <option value="faculty of Automotive Engineering Technology">
+          Automotive Engineering Technology
+        </option>
+        <option value="faculty of Civil & Services Engineering Technology">
+          Civil & Services Engineering Technology
+        </option>
+      </select>
+    </div>
   </div>
-
 </div>
-
 
 <!-- ================= OVERVIEW ================= -->
-
 <section class="analytics-section">
-
   <div class="section-banner">
     <span class="banner-num">01</span>
     <h3>Convocation Overview</h3>
   </div>
-
   <div class="stat-grid">
-
     <div class="stat-card">
       <div class="stat-label">Total Students</div>
       <div class="stat-value" id="totalStudents">0</div>
       <div class="stat-note">Registered students</div>
     </div>
-
     <div class="stat-card">
       <div class="stat-label">Verified</div>
       <div class="stat-value" id="verifiedStudents">0</div>
       <div class="stat-note">Identity verification completed</div>
     </div>
-
     <div class="stat-card">
       <div class="stat-label">In Queue</div>
       <div class="stat-value" id="queueStudents">0</div>
       <div class="stat-note">Students currently in queue</div>
     </div>
-
     <div class="stat-card">
       <div class="stat-label">Completed</div>
       <div class="stat-value" id="completedStudents">0</div>
       <div class="stat-note">Convocation completed</div>
     </div>
-
   </div>
-
   <div class="section-card">
-
     <div class="card-head">
       <h3>Convocation Completion Progress</h3>
     </div>
-
     <div class="card-body">
-
       <div class="progress-grid">
-
         <div class="progress-card">
-
           <div class="progress-head">
             <span class="progress-label">Verification</span>
             <span class="progress-value" id="verificationProgress">0%</span>
           </div>
-
           <div class="progress-track">
-            <div class="progress-fill" id="verificationProgressBar"
-                 style="width:0%;background:var(--green);"></div>
+            <div class="progress-fill" id="verificationProgressBar" style="width:0%;background:var(--green);"></div>
           </div>
-
         </div>
-
         <div class="progress-card">
-
           <div class="progress-head">
             <span class="progress-label">Queue Progress</span>
             <span class="progress-value" id="queueProgress">0%</span>
           </div>
-
           <div class="progress-track">
-            <div class="progress-fill" id="queueProgressBar"
-                 style="width:0%;background:var(--amber);"></div>
+            <div class="progress-fill" id="queueProgressBar" style="width:0%;background:var(--amber);"></div>
           </div>
-
         </div>
-
         <div class="progress-card">
-
           <div class="progress-head">
             <span class="progress-label">Completion</span>
             <span class="progress-value" id="completionProgress">0%</span>
           </div>
-
           <div class="progress-track">
-            <div class="progress-fill" id="completionProgressBar"
-                 style="width:0%;background:var(--navy);"></div>
+            <div class="progress-fill" id="completionProgressBar" style="width:0%;background:var(--navy);"></div>
           </div>
-
         </div>
-
       </div>
-
     </div>
-
   </div>
-
 </section>
 
-
 <!-- ================= VERIFICATION ================= -->
-
 <section class="analytics-section">
-
   <div class="section-banner">
     <span class="banner-num">02</span>
     <h3>Verification Analytics</h3>
   </div>
-
   <div class="stat-grid">
-
     <div class="stat-card">
       <div class="stat-label">Verified</div>
       <div class="stat-value" id="verificationVerified">0</div>
       <div class="stat-note">Successfully verified students</div>
     </div>
-
     <div class="stat-card">
       <div class="stat-label">Failed</div>
-      <div class="stat-value" id="verificationFailed"
-           style="color:var(--red);">0</div>
+      <div class="stat-value" id="verificationFailed" style="color:var(--red);">0</div>
       <div class="stat-note">Failed or rejected verification</div>
     </div>
-
     <div class="stat-card">
       <div class="stat-label">Pending</div>
       <div class="stat-value" id="verificationPending">0</div>
       <div class="stat-note">Awaiting verification</div>
     </div>
-
     <div class="stat-card">
       <div class="stat-label">Success Rate</div>
       <div class="stat-value" id="verificationRate">0%</div>
       <div class="stat-note">Verified / completed verification</div>
     </div>
-
   </div>
-
   <div class="charts-grid">
-
     <div class="section-card">
-
       <div class="card-head">
         <h3>Verification Outcome</h3>
       </div>
-
       <div class="card-body">
         <div class="chart-box">
           <canvas id="chartVerifyOutcome"></canvas>
         </div>
       </div>
-
     </div>
-
     <div class="section-card">
-
       <div class="card-head">
         <h3>Verification Status</h3>
       </div>
-
       <div class="card-body">
         <div class="chart-box">
           <canvas id="chartVerifyStatus"></canvas>
         </div>
       </div>
-
     </div>
-
   </div>
-
 </section>
 
-
 <!-- ================= QUEUE ================= -->
-
 <section class="analytics-section">
-
   <div class="section-banner">
     <span class="banner-num">03</span>
     <h3>Queue Analytics</h3>
   </div>
-
   <div class="stat-grid">
-
     <div class="stat-card">
       <div class="stat-label">Waiting</div>
       <div class="stat-value" id="waitingStudents">0</div>
       <div class="stat-note">Students waiting for their turn</div>
     </div>
-
     <div class="stat-card">
       <div class="stat-label">Called</div>
       <div class="stat-value" id="calledStudents">0</div>
       <div class="stat-note">Students currently called to queue</div>
     </div>
-
     <div class="stat-card">
       <div class="stat-label">On Stage</div>
       <div class="stat-value" id="stageStudents">0</div>
       <div class="stat-note">Students currently on stage</div>
     </div>
-
     <div class="stat-card">
       <div class="stat-label">Completed</div>
       <div class="stat-value" id="queueCompleted">0</div>
       <div class="stat-note">Students completed queue process</div>
     </div>
-
   </div>
-
   <div class="section-card">
-
     <div class="card-head">
       <h3>Queue Status Distribution</h3>
     </div>
-
     <div class="card-body">
-
       <div class="chart-box">
         <canvas id="chartQueueStatus"></canvas>
       </div>
-
     </div>
-
   </div>
-
 </section>
 
-
 <!-- ================= CONVOCATION STATUS ================= -->
-
 <section class="analytics-section">
-
   <div class="section-banner">
     <span class="banner-num">04</span>
     <h3>Convocation Status</h3>
   </div>
-
   <div class="charts-grid">
-
     <div class="section-card">
-
       <div class="card-head">
         <h3>Students by Convocation Status</h3>
       </div>
-
       <div class="card-body">
-
         <div class="chart-box">
           <canvas id="chartConvocationStatus"></canvas>
         </div>
-
       </div>
-
     </div>
-
     <div class="section-card">
-
       <div class="card-head">
         <h3>Status Summary</h3>
       </div>
-
       <div class="card-body">
-
         <div class="table-wrap">
-
           <table class="report-table">
-
             <thead>
               <tr>
                 <th>Status</th>
@@ -1138,140 +921,55 @@ a{
                 <th>Percentage</th>
               </tr>
             </thead>
-
             <tbody id="statusTable"></tbody>
-
           </table>
-
         </div>
-
       </div>
-
     </div>
-
   </div>
-
 </section>
-
-
-<!-- ================= FACULTY ================= -->
-
-<section class="analytics-section">
-
-  <div class="section-banner">
-    <span class="banner-num">05</span>
-    <h3>Faculty Analytics</h3>
-  </div>
-
-  <div class="charts-grid">
-
-    <div class="section-card">
-
-      <div class="card-head">
-        <h3>Students by Faculty</h3>
-      </div>
-
-      <div class="card-body">
-
-        <div class="chart-box">
-          <canvas id="chartFaculty"></canvas>
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="section-card">
-
-      <div class="card-head">
-        <h3>Faculty Summary</h3>
-      </div>
-
-      <div class="card-body">
-
-        <div class="table-wrap">
-
-          <table class="report-table">
-
-            <thead>
-              <tr>
-                <th>Faculty</th>
-                <th>Students</th>
-                <th>Completed</th>
-              </tr>
-            </thead>
-
-            <tbody id="facultyTable"></tbody>
-
-          </table>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
 
 <!-- ================= PROGRAMME ================= -->
-
 <section class="analytics-section">
-
   <div class="section-banner">
-    <span class="banner-num">06</span>
+    <span class="banner-num">05</span>
     <h3>Programme Analytics</h3>
   </div>
-
   <div class="section-card">
-
     <div class="card-head">
       <h3>Students by Programme</h3>
     </div>
-
     <div class="card-body">
-
       <div class="chart-box">
         <canvas id="chartProgramme"></canvas>
       </div>
-
     </div>
-
   </div>
 
-  <div class="report-note">
-Analytics are calculated from student registration, verification,
-and convocation status data. Historical waiting-time and
-processing-time analytics will be available when timestamp
-records are enabled.
+  <div class="report-note" id="summaryNote">
+    <strong>Report Summary</strong>
+    <ul>
+      <li id="noteFacultyCount">Faculties represented: —</li>
+      <li id="noteProgrammeCount">Programmes represented: —</li>
+    </ul>
+    <div style="margin-top:10px;">
+      Analytics are calculated from student registration, verification, and
+      convocation status data. Historical waiting-time and processing-time
+      analytics will be available once timestamp records are enabled.
+    </div>
   </div>
-
 </section>
-
 </main>
 
-
 <footer class="main-footer">
-
   <span>© 2026 SmartConvo</span>
-
-  <span>
-    AI-Assisted Convocation Queue & Identity Verification System
-  </span>
-
+  <span>AI-Assisted Convocation Queue & Identity Verification System</span>
 </footer>
-
 </div>
 </div>
-
 
 <script>
-
-const API_BASE_URL =
-  "https://smartconvo-api.danishshazwan85.workers.dev";
-
+const API_BASE_URL = "https://smartconvo-api.danishshazwan85.workers.dev";
 const navy = "#1E3A5F";
 const navyDeep = "#14283F";
 const gold = "#B08D2B";
@@ -1284,955 +982,242 @@ Chart.defaults.font.family = "'Inter', sans-serif";
 Chart.defaults.color = "#5B6472";
 
 let charts = {};
-
 let students = [];
 
-
-/*
-|--------------------------------------------------------------------------
-| FALLBACK DATA
-|--------------------------------------------------------------------------
-*/
-
+/* -------------------------------------------------------------------- */
+/* FALLBACK DATA                                                        */
+/* -------------------------------------------------------------------- */
 const fallbackStudents = [
-  {
-    student_id:"2402076",
-    name:"Danish Shazwan Bin Suwandi",
-    faculty:"Information Technology & Engineering",
-    course_code:"DFD",
-    convocation_status:"complete",
-    face_verification_status:"verified"
-  },
-  {
-    student_id:"2402077",
-    name:"Iskandar Zulkarnain Bin Muhamad",
-    faculty:"Information Technology & Engineering",
-    course_code:"DFD",
-    convocation_status:"queue",
-    face_verification_status:"verified"
-  },
-  {
-    student_id:"2402078",
-    name:"Mior Muhammad Ikmal Bin Mior Darul Ridzuan",
-    faculty:"Mechanical & Manufacturing",
-    course_code:"DTR",
-    convocation_status:"on_stage",
-    face_verification_status:"verified"
-  },
-  {
-    student_id:"2402079",
-    name:"Mohammad Haziq Afiq Bin Yusli",
-    faculty:"Automotive",
-    course_code:"DTR",
-    convocation_status:"complete",
-    face_verification_status:"verified"
-  },
-  {
-    student_id:"2402080",
-    name:"Muhammad Ammar Bin Mahadir",
-    faculty:"Electrical & Electronics",
-    course_code:"DTE",
-    convocation_status:"face_verification",
-    face_verification_status:"pending"
-  },
-  {
-    student_id:"2402081",
-    name:"Muhammad Hafiz Bin Hassan",
-    faculty:"Welding",
-    course_code:"DTW",
-    convocation_status:"registration",
-    face_verification_status:"pending"
-  },
-  {
-    student_id:"2402082",
-    name:"Nor Adilah Binti Shamsuddin",
-    faculty:"Electrical & Electronics",
-    course_code:"DTE",
-    convocation_status:"complete",
-    face_verification_status:"verified"
-  },
-  {
-    student_id:"2402083",
-    name:"Nur Fadhilatul Akma Binti Roslan",
-    faculty:"Civil & Services",
-    course_code:"DCS",
-    convocation_status:"seat_queue",
-    face_verification_status:"verified"
-  },
-  {
-    student_id:"2402084",
-    name:"Nurfatin Nadiah Binti Mohd Khir",
-    faculty:"Information Technology & Engineering",
-    course_code:"DFD",
-    convocation_status:"complete",
-    face_verification_status:"verified"
-  },
-  {
-    student_id:"2402085",
-    name:"Nursyazwanie Binti Jaimi",
-    faculty:"Civil & Services",
-    course_code:"DCS",
-    convocation_status:"queue",
-    face_verification_status:"verified"
-  },
-  {
-    student_id:"2402086",
-    name:"Nur Ain Solehah Binti Muhamad Fauzi",
-    faculty:"Mechanical & Manufacturing",
-    course_code:"DTR",
-    convocation_status:"queue",
-    face_verification_status:"verified"
-  },
-  {
-    student_id:"2402087",
-    name:"Lily Liyana Lorraine Binti Jale",
-    faculty:"Information Technology & Engineering",
-    course_code:"DFD",
-    convocation_status:"complete",
-    face_verification_status:"verified"
-  },
-  {
-    student_id:"2402088",
-    name:"Muhammad Syamsul Nazir Bin Mohd Samsuri",
-    faculty:"Automotive",
-    course_code:"DTA",
-    convocation_status:"queue",
-    face_verification_status:"verified"
-  },
-  {
-    student_id:"2402089",
-    name:"Najjwa Aqilla Binti Mohd Khairi",
-    faculty:"Electrical & Electronics",
-    course_code:"DTE",
-    convocation_status:"registration",
-    face_verification_status:"pending"
-  }
+  { student_id:"2402076", name:"Danish Shazwan Bin Suwandi", faculty:"Information Technology & Engineering", course_code:"DFD", convocation_status:"complete", face_verification_status:"verified" },
+  { student_id:"2402077", name:"Iskandar Zulkarnain Bin Muhamad", faculty:"Information Technology & Engineering", course_code:"DFD", convocation_status:"queue", face_verification_status:"verified" },
+  { student_id:"2402078", name:"Mior Muhammad Ikmal Bin Mior Darul Ridzuan", faculty:"Mechanical & Manufacturing", course_code:"DTR", convocation_status:"on_stage", face_verification_status:"verified" },
+  { student_id:"2402079", name:"Mohammad Haziq Afiq Bin Yusli", faculty:"Automotive", course_code:"DTR", convocation_status:"complete", face_verification_status:"verified" },
+  { student_id:"2402080", name:"Muhammad Ammar Bin Mahadir", faculty:"Electrical & Electronics", course_code:"DTE", convocation_status:"face_verification", face_verification_status:"pending" },
+  { student_id:"2402081", name:"Muhammad Hafiz Bin Hassan", faculty:"Welding", course_code:"DTW", convocation_status:"registration", face_verification_status:"pending" },
+  { student_id:"2402082", name:"Nor Adilah Binti Shamsuddin", faculty:"Electrical & Electronics", course_code:"DTE", convocation_status:"complete", face_verification_status:"verified" },
+  { student_id:"2402083", name:"Nur Fadhilatul Akma Binti Roslan", faculty:"Civil & Services", course_code:"DCS", convocation_status:"seat_queue", face_verification_status:"verified" },
+  { student_id:"2402084", name:"Nurfatin Nadiah Binti Mohd Khir", faculty:"Information Technology & Engineering", course_code:"DFD", convocation_status:"complete", face_verification_status:"verified" },
+  { student_id:"2402085", name:"Nursyazwanie Binti Jaimi", faculty:"Civil & Services", course_code:"DCS", convocation_status:"queue", face_verification_status:"verified" },
+  { student_id:"2402086", name:"Nur Ain Solehah Binti Muhamad Fauzi", faculty:"Mechanical & Manufacturing", course_code:"DTR", convocation_status:"queue", face_verification_status:"verified" },
+  { student_id:"2402087", name:"Lily Liyana Lorraine Binti Jale", faculty:"Information Technology & Engineering", course_code:"DFD", convocation_status:"complete", face_verification_status:"verified" },
+  { student_id:"2402088", name:"Muhammad Syamsul Nazir Bin Mohd Samsuri", faculty:"Automotive", course_code:"DTA", convocation_status:"queue", face_verification_status:"verified" },
+  { student_id:"2402089", name:"Najjwa Aqilla Binti Mohd Khairi", faculty:"Electrical & Electronics", course_code:"DTE", convocation_status:"registration", face_verification_status:"pending" }
 ];
 
-
-/*
-|--------------------------------------------------------------------------
-| LOAD STUDENTS
-|--------------------------------------------------------------------------
-*/
-
+/* -------------------------------------------------------------------- */
+/* LOAD STUDENTS                                                        */
+/* -------------------------------------------------------------------- */
 async function loadStudents(){
-
   try{
-
-    const token =
-      localStorage.getItem("adminToken");
-
+    const token = localStorage.getItem("adminToken");
     const headers = {};
-
-    if(token){
-      headers.Authorization = `Bearer ${token}`;
-    }
-
-    const response =
-      await fetch(`${API_BASE_URL}/api/students`, {
-        headers
-      });
-
-    if(!response.ok){
-      throw new Error("Unable to load students");
-    }
-
-    const data =
-      await response.json();
-
+    if(token){ headers.Authorization = `Bearer ${token}`; }
+    const response = await fetch(`${API_BASE_URL}/api/students`, { headers });
+    if(!response.ok){ throw new Error("Unable to load students"); }
+    const data = await response.json();
     if(data.success && Array.isArray(data.students)){
-
       students = data.students;
-
     }else{
-
       students = fallbackStudents;
-
     }
-
   }catch(error){
-
-    console.warn(
-      "Analytics API unavailable. Using fallback data.",
-      error
-    );
-
+    console.warn("Analytics API unavailable. Using fallback data.", error);
     students = fallbackStudents;
-
   }
-
   renderAnalytics();
-
 }
 
-
-/*
-|--------------------------------------------------------------------------
-| FILTER
-|--------------------------------------------------------------------------
-*/
-
+/* -------------------------------------------------------------------- */
+/* FILTER                                                                */
+/* -------------------------------------------------------------------- */
 function getFilteredStudents(){
-
-  const faculty =
-    document.getElementById("facultySelect").value;
-
-  if(faculty === "all"){
-    return students;
-  }
-
-  return students.filter(
-    student => student.faculty === faculty
-  );
-
+  const faculty = document.getElementById("facultySelect").value;
+  if(faculty === "all"){ return students; }
+  return students.filter(student => student.faculty === faculty);
 }
 
-
-/*
-|--------------------------------------------------------------------------
-| STATUS HELPERS
-|--------------------------------------------------------------------------
-*/
-
+/* -------------------------------------------------------------------- */
+/* STATUS HELPERS                                                        */
+/* -------------------------------------------------------------------- */
 function normalizeStatus(status){
-
-  if(!status){
-    return "registration";
-  }
-
-  return String(status)
-    .toLowerCase()
-    .trim();
-
+  if(!status){ return "registration"; }
+  return String(status).toLowerCase().trim();
 }
-
 
 function isVerified(student){
-
-  const status =
-    String(
-      student.face_verification_status ||
-      ""
-    ).toLowerCase();
-
-  return [
-    "verified",
-    "success",
-    "completed",
-    "approved"
-  ].includes(status);
-
+  const status = String(student.face_verification_status || "").toLowerCase();
+  return ["verified","success","completed","approved"].includes(status);
 }
 
-
-/*
-|--------------------------------------------------------------------------
-| CHART HELPERS
-|--------------------------------------------------------------------------
-*/
-
+/* -------------------------------------------------------------------- */
+/* CHART HELPERS                                                         */
+/* -------------------------------------------------------------------- */
 function destroyChart(id){
-
-  if(charts[id]){
-    charts[id].destroy();
-  }
-
+  if(charts[id]){ charts[id].destroy(); }
 }
 
-
-function makeBar(
-  id,
-  labels,
-  data,
-  colors
-){
-
+function makeBar(id, labels, data, colors){
   destroyChart(id);
-
-  const el =
-    document.getElementById(id);
-
+  const el = document.getElementById(id);
   if(!el) return;
-
   charts[id] = new Chart(el, {
-
     type:"bar",
-
     data:{
       labels,
-
-      datasets:[{
-        data,
-        backgroundColor:colors,
-        borderRadius:2,
-        barThickness:26
-      }]
+      datasets:[{ data, backgroundColor:colors, borderRadius:2, barThickness:26 }]
     },
-
     options:{
       responsive:true,
       maintainAspectRatio:false,
-
-      plugins:{
-        legend:{
-          display:false
-        }
-      },
-
+      plugins:{ legend:{ display:false } },
       scales:{
-        y:{
-          beginAtZero:true,
-          ticks:{
-            precision:0,
-            font:{
-              size:11
-            }
-          },
-          grid:{
-            color:line
-          }
-        },
-
-        x:{
-          grid:{
-            display:false
-          },
-          ticks:{
-            font:{
-              size:11
-            }
-          }
-        }
+        y:{ beginAtZero:true, ticks:{ precision:0, font:{ size:11 } }, grid:{ color:line } },
+        x:{ grid:{ display:false }, ticks:{ font:{ size:11 } } }
       }
     }
-
   });
-
 }
 
-
-function makePie(
-  id,
-  labels,
-  data,
-  colors
-){
-
+function makePie(id, labels, data, colors){
   destroyChart(id);
-
-  const el =
-    document.getElementById(id);
-
+  const el = document.getElementById(id);
   if(!el) return;
-
   charts[id] = new Chart(el, {
-
     type:"doughnut",
-
-    data:{
-      labels,
-
-      datasets:[{
-        data,
-        backgroundColor:colors,
-        borderWidth:0
-      }]
-    },
-
+    data:{ labels, datasets:[{ data, backgroundColor:colors, borderWidth:0 }] },
     options:{
       responsive:true,
       maintainAspectRatio:false,
       cutout:"58%",
-
-      plugins:{
-        legend:{
-          position:"bottom",
-
-          labels:{
-            boxWidth:12,
-            padding:12,
-            font:{
-              size:11
-            }
-          }
-        }
-      }
+      plugins:{ legend:{ position:"bottom", labels:{ boxWidth:12, padding:12, font:{ size:11 } } } }
     }
-
   });
-
 }
 
-
-/*
-|--------------------------------------------------------------------------
-| RENDER ANALYTICS
-|--------------------------------------------------------------------------
-*/
-
+/* -------------------------------------------------------------------- */
+/* RENDER ANALYTICS                                                       */
+/* -------------------------------------------------------------------- */
 function renderAnalytics(){
+  const data = getFilteredStudents();
+  const total = data.length;
+  const verified = data.filter(isVerified).length;
+  const failed = data.filter(student =>
+    ["failed","rejected"].includes(String(student.face_verification_status || "").toLowerCase())
+  ).length;
+  const pendingVerification = Math.max(total - verified - failed, 0);
+  const complete = data.filter(student => normalizeStatus(student.convocation_status) === "complete").length;
+  const queue = data.filter(student => ["queue","seat_queue"].includes(normalizeStatus(student.convocation_status))).length;
+  const waiting = data.filter(student => normalizeStatus(student.convocation_status) === "queue").length;
+  const onStage = data.filter(student => normalizeStatus(student.convocation_status) === "on_stage").length;
 
-  const data =
-    getFilteredStudents();
+  const verificationRate = verified + failed > 0 ? Math.round((verified / (verified + failed)) * 100) : 0;
+  const verificationProgress = total > 0 ? Math.round((verified / total) * 100) : 0;
+  const queueProgress = total > 0 ? Math.round(((complete + onStage) / total) * 100) : 0;
+  const completionProgress = total > 0 ? Math.round((complete / total) * 100) : 0;
 
-  const total =
-    data.length;
+  /* OVERVIEW */
+  setText("totalStudents", total);
+  setText("verifiedStudents", verified);
+  setText("queueStudents", queue);
+  setText("completedStudents", complete);
 
-  const verified =
-    data.filter(isVerified).length;
+  setText("verificationProgress", `${verificationProgress}%`);
+  setText("queueProgress", `${queueProgress}%`);
+  setText("completionProgress", `${completionProgress}%`);
 
-  const failed =
-    data.filter(student =>
-      ["failed","rejected"].includes(
-        String(
-          student.face_verification_status || ""
-        ).toLowerCase()
-      )
-    ).length;
+  document.getElementById("verificationProgressBar").style.width = `${verificationProgress}%`;
+  document.getElementById("queueProgressBar").style.width = `${queueProgress}%`;
+  document.getElementById("completionProgressBar").style.width = `${completionProgress}%`;
 
-  const pendingVerification =
-    Math.max(
-      total - verified - failed,
-      0
-    );
+  /* VERIFICATION */
+  setText("verificationVerified", verified);
+  setText("verificationFailed", failed);
+  setText("verificationPending", pendingVerification);
+  setText("verificationRate", `${verificationRate}%`);
 
-  const complete =
-    data.filter(student =>
-      normalizeStatus(
-        student.convocation_status
-      ) === "complete"
-    ).length;
+  makePie("chartVerifyOutcome", ["Verified","Failed"], [verified,failed], [green,red]);
+  makePie("chartVerifyStatus", ["Verified","Pending","Failed"], [verified,pendingVerification,failed], [green,gold,red]);
 
-  const queue =
-    data.filter(student =>
-      [
-        "queue",
-        "seat_queue"
-      ].includes(
-        normalizeStatus(
-          student.convocation_status
-        )
-      )
-    ).length;
+  /* QUEUE */
+  const called = data.filter(student => normalizeStatus(student.convocation_status) === "queue").length;
+  setText("waitingStudents", waiting);
+  setText("calledStudents", called);
+  setText("stageStudents", onStage);
+  setText("queueCompleted", complete);
 
-  const waiting =
-    data.filter(student =>
-      normalizeStatus(
-        student.convocation_status
-      ) === "queue"
-    ).length;
-
-  const onStage =
-    data.filter(student =>
-      normalizeStatus(
-        student.convocation_status
-      ) === "on_stage"
-    ).length;
-
-  const verificationRate =
-    verified + failed > 0
-      ? Math.round(
-          (verified / (verified + failed)) * 100
-        )
-      : 0;
-
-  const verificationProgress =
-    total > 0
-      ? Math.round(
-          (verified / total) * 100
-        )
-      : 0;
-
-  const queueProgress =
-    total > 0
-      ? Math.round(
-          ((complete + onStage) / total) * 100
-        )
-      : 0;
-
-  const completionProgress =
-    total > 0
-      ? Math.round(
-          (complete / total) * 100
-        )
-      : 0;
-
-
-  /*
-  |--------------------------------------------------------------------------
-  | OVERVIEW
-  |--------------------------------------------------------------------------
-  */
-
-  setText(
-    "totalStudents",
-    total
+  const queueStatuses = ["registration","face_verification","seat_queue","queue","on_stage","complete"];
+  const queueLabels = ["Registration","Face Verification","Seat Queue","Queue","On Stage","Complete"];
+  const queueValues = queueStatuses.map(status =>
+    data.filter(student => normalizeStatus(student.convocation_status) === status).length
   );
 
-  setText(
-    "verifiedStudents",
-    verified
-  );
+  makeBar("chartQueueStatus", queueLabels, queueValues, [navy,gold,amber,amber,gold,green]);
 
-  setText(
-    "queueStudents",
-    queue
-  );
+  /* CONVOCATION STATUS */
+  makePie("chartConvocationStatus", queueLabels, queueValues, [navy,gold,amber,"#C97B2B","#8A6A1F",green]);
+  renderStatusTable(queueLabels, queueValues, total);
 
-  setText(
-    "completedStudents",
-    complete
-  );
-
-
-  setText(
-    "verificationProgress",
-    `${verificationProgress}%`
-  );
-
-  setText(
-    "queueProgress",
-    `${queueProgress}%`
-  );
-
-  setText(
-    "completionProgress",
-    `${completionProgress}%`
-  );
-
-
-  document
-    .getElementById("verificationProgressBar")
-    .style.width =
-      `${verificationProgress}%`;
-
-  document
-    .getElementById("queueProgressBar")
-    .style.width =
-      `${queueProgress}%`;
-
-  document
-    .getElementById("completionProgressBar")
-    .style.width =
-      `${completionProgress}%`;
-
-
-  /*
-  |--------------------------------------------------------------------------
-  | VERIFICATION
-  |--------------------------------------------------------------------------
-  */
-
-  setText(
-    "verificationVerified",
-    verified
-  );
-
-  setText(
-    "verificationFailed",
-    failed
-  );
-
-  setText(
-    "verificationPending",
-    pendingVerification
-  );
-
-  setText(
-    "verificationRate",
-    `${verificationRate}%`
-  );
-
-
-  makePie(
-    "chartVerifyOutcome",
-    ["Verified","Failed"],
-    [verified,failed],
-    [green,red]
-  );
-
-
-  makePie(
-    "chartVerifyStatus",
-    ["Verified","Pending","Failed"],
-    [
-      verified,
-      pendingVerification,
-      failed
-    ],
-    [
-      green,
-      gold,
-      red
-    ]
-  );
-
-
-  /*
-  |--------------------------------------------------------------------------
-  | QUEUE
-  |--------------------------------------------------------------------------
-  */
-
-  const called =
-    data.filter(student =>
-      normalizeStatus(
-        student.convocation_status
-      ) === "queue"
-    ).length;
-
-  setText(
-    "waitingStudents",
-    waiting
-  );
-
-  setText(
-    "calledStudents",
-    called
-  );
-
-  setText(
-    "stageStudents",
-    onStage
-  );
-
-  setText(
-    "queueCompleted",
-    complete
-  );
-
-
-  const queueStatuses = [
-    "registration",
-    "face_verification",
-    "seat_queue",
-    "queue",
-    "on_stage",
-    "complete"
-  ];
-
-  const queueLabels = [
-    "Registration",
-    "Face Verification",
-    "Seat Queue",
-    "Queue",
-    "On Stage",
-    "Complete"
-  ];
-
-  const queueValues =
-    queueStatuses.map(status =>
-      data.filter(student =>
-        normalizeStatus(
-          student.convocation_status
-        ) === status
-      ).length
-    );
-
-
-  makeBar(
-    "chartQueueStatus",
-    queueLabels,
-    queueValues,
-    [
-      navy,
-      gold,
-      amber,
-      amber,
-      gold,
-      green
-    ]
-  );
-
-
-  /*
-  |--------------------------------------------------------------------------
-  | CONVOCATION STATUS
-  |--------------------------------------------------------------------------
-  */
-
-  makePie(
-    "chartConvocationStatus",
-    queueLabels,
-    queueValues,
-    [
-      navy,
-      gold,
-      amber,
-      "#C97B2B",
-      "#8A6A1F",
-      green
-    ]
-  );
-
-
-  renderStatusTable(
-    queueLabels,
-    queueValues,
-    total
-  );
-
-
-  /*
-  |--------------------------------------------------------------------------
-  | FACULTY
-  |--------------------------------------------------------------------------
-  */
-
-  const facultyMap = {};
-
-  data.forEach(student => {
-
-    const faculty =
-      student.faculty ||
-      "Unassigned";
-
-    if(!facultyMap[faculty]){
-      facultyMap[faculty] = {
-        total:0,
-        completed:0
-      };
-    }
-
-    facultyMap[faculty].total++;
-
-    if(
-      normalizeStatus(
-        student.convocation_status
-      ) === "complete"
-    ){
-      facultyMap[faculty].completed++;
-    }
-
-  });
-
-
-  const facultyLabels =
-    Object.keys(facultyMap);
-
-  const facultyValues =
-    facultyLabels.map(
-      faculty =>
-        facultyMap[faculty].total
-    );
-
-
-  makeBar(
-    "chartFaculty",
-    facultyLabels,
-    facultyValues,
-    facultyLabels.map(
-      () => navy
-    )
-  );
-
-
-  renderFacultyTable(
-    facultyMap
-  );
-
-
-  /*
-  |--------------------------------------------------------------------------
-  | PROGRAMME
-  |--------------------------------------------------------------------------
-  */
-
+  /* PROGRAMME */
   const programmeMap = {};
-
   data.forEach(student => {
-
-    const programme =
-      student.course_code ||
-      "Unknown";
-
-    programmeMap[programme] =
-      (programmeMap[programme] || 0) + 1;
-
+    const programme = student.course_code || "Unknown";
+    programmeMap[programme] = (programmeMap[programme] || 0) + 1;
   });
+  const programmeLabels = Object.keys(programmeMap);
+  const programmeValues = programmeLabels.map(programme => programmeMap[programme]);
 
+  makeBar("chartProgramme", programmeLabels, programmeValues, programmeLabels.map(() => gold));
 
-  const programmeLabels =
-    Object.keys(programmeMap);
-
-  const programmeValues =
-    programmeLabels.map(
-      programme =>
-        programmeMap[programme]
-    );
-
-
-  makeBar(
-    "chartProgramme",
-    programmeLabels,
-    programmeValues,
-    programmeLabels.map(
-      () => gold
-    )
-  );
-
+  /* SUMMARY NOTE — faculty & programme counts */
+  const facultySet = new Set(data.map(student => student.faculty || "Unassigned"));
+  setText("noteFacultyCount", `Faculties represented: ${facultySet.size}`);
+  setText("noteProgrammeCount", `Programmes represented: ${programmeLabels.length}`);
 }
 
-
-/*
-|--------------------------------------------------------------------------
-| STATUS TABLE
-|--------------------------------------------------------------------------
-*/
-
-function renderStatusTable(
-  labels,
-  values,
-  total
-){
-
-  const tbody =
-    document.getElementById(
-      "statusTable"
-    );
-
+/* -------------------------------------------------------------------- */
+/* STATUS TABLE                                                          */
+/* -------------------------------------------------------------------- */
+function renderStatusTable(labels, values, total){
+  const tbody = document.getElementById("statusTable");
   tbody.innerHTML = "";
-
-  labels.forEach(
-    (label,index) => {
-
-      const count =
-        values[index];
-
-      const percentage =
-        total > 0
-          ? Math.round(
-              (count / total) * 100
-            )
-          : 0;
-
-      const tr =
-        document.createElement("tr");
-
-      tr.innerHTML = `
-        <td>${label}</td>
-        <td>${count}</td>
-        <td>${percentage}%</td>
-      `;
-
-      tbody.appendChild(tr);
-
-    }
-  );
-
+  labels.forEach((label, index) => {
+    const count = values[index];
+    const percentage = total > 0 ? Math.round((count / total) * 100) : 0;
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${label}</td>
+      <td>${count}</td>
+      <td>${percentage}%</td>
+    `;
+    tbody.appendChild(tr);
+  });
 }
 
-
-/*
-|--------------------------------------------------------------------------
-| FACULTY TABLE
-|--------------------------------------------------------------------------
-*/
-
-function renderFacultyTable(
-  facultyMap
-){
-
-  const tbody =
-    document.getElementById(
-      "facultyTable"
-    );
-
-  tbody.innerHTML = "";
-
-  Object.entries(
-    facultyMap
-  ).forEach(
-    ([faculty,data]) => {
-
-      const tr =
-        document.createElement("tr");
-
-      tr.innerHTML = `
-        <td>${faculty}</td>
-        <td>${data.total}</td>
-        <td>${data.completed}</td>
-      `;
-
-      tbody.appendChild(tr);
-
-    }
-  );
-
+/* -------------------------------------------------------------------- */
+/* TEXT HELPER                                                           */
+/* -------------------------------------------------------------------- */
+function setText(id, value){
+  const el = document.getElementById(id);
+  if(el){ el.textContent = value; }
 }
 
+/* -------------------------------------------------------------------- */
+/* FILTER EVENTS                                                         */
+/* -------------------------------------------------------------------- */
+document.getElementById("facultySelect").addEventListener("change", renderAnalytics);
+document.getElementById("periodSelect").addEventListener("change", renderAnalytics);
 
-/*
-|--------------------------------------------------------------------------
-| TEXT HELPER
-|--------------------------------------------------------------------------
-*/
+/* -------------------------------------------------------------------- */
+/* EXPORT                                                                 */
+/* -------------------------------------------------------------------- */
+document.getElementById("exportBtn").addEventListener("click", function(){
+  window.print();
+});
 
-function setText(
-  id,
-  value
-){
-
-  const el =
-    document.getElementById(id);
-
-  if(el){
-    el.textContent = value;
-  }
-
-}
-
-
-/*
-|--------------------------------------------------------------------------
-| FILTER EVENTS
-|--------------------------------------------------------------------------
-*/
-
-document
-  .getElementById("facultySelect")
-  .addEventListener(
-    "change",
-    renderAnalytics
-  );
-
-
-document
-  .getElementById("periodSelect")
-  .addEventListener(
-    "change",
-    renderAnalytics
-  );
-
-
-/*
-|--------------------------------------------------------------------------
-| EXPORT
-|--------------------------------------------------------------------------
-*/
-
-document
-  .getElementById("exportBtn")
-  .addEventListener(
-    "click",
-    function(){
-
-      window.print();
-
-    }
-  );
-
-
-/*
-|--------------------------------------------------------------------------
-| INITIAL LOAD
-|--------------------------------------------------------------------------
-*/
-
+/* -------------------------------------------------------------------- */
+/* INITIAL LOAD                                                          */
+/* -------------------------------------------------------------------- */
 loadStudents();
-
 </script>
-
 </body>
 </html>

@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SmartConvo — Announcements</title>
-  <link rel="icon" type="image/svg+xml" href="smc-icon.svg?v=3">
-  <link rel="apple-touch-icon" href="smc-icon.svg?v=3">
+<link rel="icon" type="image/svg+xml" href="smc-icon.svg?v=3">
+<link rel="apple-touch-icon" href="smc-icon.svg?v=3">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -36,7 +36,6 @@
     flex-direction:column;
   }
   a{color:inherit;text-decoration:none;}
-
   /* ---------- LAYOUT & SIDEBAR ---------- */
   .app-layout{display:flex;min-height:100svh;}
   .sidebar{
@@ -114,12 +113,35 @@
     font-family:'Fraunces',serif;font-weight:500;font-size:26px;color:var(--ink);margin-bottom:10px;
   }
   .announcement p{font-size:18px;color:var(--ink-soft);line-height:1.6;}
+  .announcement .tatacara{
+    margin-top:16px;padding:20px 24px;background:var(--bg);border:1px solid var(--line);
+  }
+  .announcement .tatacara .tatacara-label{
+    font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:0.08em;
+    text-transform:uppercase;color:var(--navy);margin-bottom:10px;
+  }
+  .announcement .tatacara ol{
+    padding-left:22px;display:flex;flex-direction:column;gap:8px;
+  }
+  .announcement .tatacara ol li{font-size:17px;color:var(--ink-soft);line-height:1.6;}
+  .announcement .tatacara ol li::marker{color:var(--gold);font-weight:600;}
+  .announcement .info-grid{
+    margin-top:16px;display:flex;flex-wrap:wrap;gap:14px;
+  }
+  .announcement .info-grid .info-item{
+    flex:1 1 220px;padding:16px 20px;background:var(--bg);border:1px solid var(--line);
+  }
+  .announcement .info-grid .info-item .info-label{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.08em;
+    text-transform:uppercase;color:var(--navy);margin-bottom:6px;
+  }
+  .announcement .info-grid .info-item .info-value{font-size:17px;color:var(--ink);line-height:1.5;}
   footer{
     margin-top:auto;border-top:1px solid var(--line);padding:28px 48px;
     display:flex;align-items:center;justify-content:space-between;
     font-family:'IBM Plex Mono',monospace;font-size:15px;color:var(--ink-soft);letter-spacing:0.04em;
   }
-/* ---------- RESPONSIVE (CONTENT) ---------- */
+  /* ---------- RESPONSIVE (CONTENT) ---------- */
   @media (max-width:860px){
     .topbar{padding:14px 20px;}
     .wrap{padding:24px 18px 60px;}
@@ -128,7 +150,6 @@
     .portal-hero p{font-size:18px;}
     footer{flex-direction:column;gap:8px;text-align:center;padding:24px;}
   }
-
   /* ---------- RESPONSIVE (SIDEBAR COLLAPSE — PHONE ONLY) ---------- */
   @media (max-width:640px){
     .sidebar{width:64px;}
@@ -145,9 +166,7 @@
 </style>
 </head>
 <body>
-
 <div class="app-layout">
-
   <!-- ================= SIDEBAR ================= -->
   <aside class="sidebar">
     <div class="sidebar-brand">
@@ -159,7 +178,8 @@
         <span class="nav-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
         </span>
-<span class="nav-label">Dashboard</span>
+        <span class="nav-label">Dashboard</span>
+      </a>
       <a href="guest-graduate-search.html" class="nav-item">
         <span class="nav-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
@@ -182,26 +202,22 @@
       </a>
     </div>
   </aside>
-
   <!-- ================= MAIN ================= -->
   <div class="main-area">
-
     <header class="topbar">
       <div class="topbar-left">
         <span class="topbar-title">Announcements</span>
       </div>
-<div class="topbar-right">
+      <div class="topbar-right">
         <span class="user-chip"><span class="dot"></span>Guest</span>
       </div>
     </header>
-
     <main class="wrap">
       <section class="portal-hero">
         <div class="eyebrow"><span class="dot"></span> Updates</div>
         <h1>Announcements</h1>
         <p>Stay informed with the latest news and updates about the convocation event.</p>
       </section>
-
       <section>
         <div class="section-head">
           <h2>Latest Announcements</h2>
@@ -209,14 +225,101 @@
         </div>
 
         <div class="announcement">
+          <div class="date">22 February 2026</div>
+          <h3>Convocation Photo Booth</h3>
+          <p>Official convocation photography services will be available for graduates and families on ceremony day. Details of the photo booth location and packages are below.</p>
+          <div class="info-grid">
+            <div class="info-item">
+              <div class="info-label">Location</div>
+              <div class="info-value">Photo Booth is located at the Main Hall Foyer, beside the Gown Return Counter.</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Operating Hours</div>
+              <div class="info-value">30 minutes before the ceremony begins until 1 hour after it ends.</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Note</div>
+              <div class="info-value">Walk-in photo sessions are available; queue numbers will be issued on-site.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="announcement">
+          <div class="date">21 February 2026</div>
+          <h3>Convocation Ceremony Procedure (Tatacara Majlis)</h3>
+          <p>Guests and graduates are advised to follow the ceremony procedure below to ensure the event runs smoothly.</p>
+          <div class="tatacara">
+            <div class="tatacara-label">Ceremony Procedure</div>
+            <ol>
+              <li>Arrive at the venue at least 1 hour before the ceremony starts for registration and seating.</li>
+              <li>Graduates proceed to the designated assembly hall to line up according to faculty, while family guests proceed directly to the seating area.</li>
+              <li>Guests are seated according to the section stated on their guest pass; please follow ushers' directions.</li>
+              <li>The ceremony begins with the arrival of the officiating dignitaries, followed by the national anthem and doa recitation.</li>
+              <li>Graduates will be called up by faculty to receive their scroll on stage.</li>
+              <li>Guests are requested to remain seated and refrain from crossing the hall during the procession for safety and decorum.</li>
+              <li>The ceremony ends with the departure of the officiating dignitaries, after which graduates and families may proceed for photography and gown return.</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="announcement">
+          <div class="date">20 February 2026</div>
+          <h3>Family Parking Arrangements</h3>
+          <p>Limited parking bays are reserved for graduates' families at the convocation venue. Please follow the tatacara (procedure) below to park smoothly and avoid congestion.</p>
+          <div class="info-grid">
+            <div class="info-item">
+              <div class="info-label">Parking Area</div>
+              <div class="info-value">Family Parking Zone, Main Hall Ground-Level Car Park (Block A).</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Overflow Parking</div>
+              <div class="info-value">Secondary Field/Lot with shuttle service to the main hall.</div>
+            </div>
+          </div>
+          <div class="tatacara">
+            <div class="tatacara-label">Parking Procedure</div>
+            <ol>
+              <li>Enter through the designated Family Guest Gate and show your guest pass or graduate's name to the marshal on duty.</li>
+              <li>Proceed to the assigned family parking zone as directed by the parking marshal — do not park at staff or VIP bays.</li>
+              <li>Display your parking coupon or e-parking QR code on the dashboard, if issued during registration.</li>
+              <li>Park within marked bays only; overflow parking will be redirected to the secondary field/lot with a shuttle service to the main hall.</li>
+              <li>Keep your parking ticket/coupon safe — it is required for exit validation.</li>
+              <li>Allow extra time on the ceremony day as bays are limited and filled on a first-come-first-served basis.</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="announcement">
+          <div class="date">18 February 2026</div>
+          <h3>Gown Return Procedure</h3>
+          <p>Graduates are required to return their convocation gown after the ceremony. Family members assisting a graduate may also refer to the steps below.</p>
+          <div class="info-grid">
+            <div class="info-item">
+              <div class="info-label">Return Location</div>
+              <div class="info-value">Gown Return Counter, Main Hall Foyer.</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Return Deadline</div>
+              <div class="info-value">Same day as the ceremony, before the counter closes.</div>
+            </div>
+          </div>
+          <div class="tatacara">
+            <div class="tatacara-label">Gown Return Procedure</div>
+            <ol>
+              <li>Proceed to the Gown Return Counter immediately after the ceremony ends and photo sessions are complete.</li>
+              <li>Present your gown collection receipt / matric card for verification at the counter.</li>
+              <li>Ensure the jubah (gown, sash, and cap/mortarboard) is clean and undamaged before returning it.</li>
+              <li>Hand over the complete set to the counter staff for inspection and checklist confirmation.</li>
+              <li>Collect your return acknowledgement slip as proof of return.</li>
+              <li>Gowns must be returned on the same day of the ceremony — late or unreturned gowns may be subject to a replacement fee as per university policy.</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="announcement">
           <div class="date">15 February 2026</div>
           <h3>Convocation Ceremony Schedule Released</h3>
           <p>The official ceremony schedule is now available. Guests are advised to arrive early for registration and seating.</p>
-        </div>
-        <div class="announcement">
-          <div class="date">10 February 2026</div>
-          <h3>Voting is Now Open</h3>
-          <p>Voting for the ten award categories is officially open. Register and cast your vote before the deadline.</p>
         </div>
         <div class="announcement">
           <div class="date">28 January 2026</div>
@@ -230,15 +333,11 @@
         </div>
       </section>
     </main>
-
     <footer>
       <span>© 2026 SmartConvo</span>
       <span>AI-Assisted Convocation Queue &amp; Identity Verification System</span>
     </footer>
-
   </div>
-
 </div>
-
 </body>
 </html>

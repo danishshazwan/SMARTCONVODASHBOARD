@@ -40,3 +40,29 @@ CREATE TABLE IF NOT EXISTS admins (
     role TEXT DEFAULT 'admin',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS correction_requests (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    student_id TEXT NOT NULL,
+
+    field_name TEXT NOT NULL,
+    old_value TEXT,
+    new_value TEXT NOT NULL,
+    reason TEXT,
+
+    status TEXT NOT NULL DEFAULT 'pending',
+
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    reviewed_at DATETIME,
+
+    FOREIGN KEY (student_id)
+        REFERENCES students(student_id)
+        ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_correction_requests_status
+ON correction_requests(status);
+
+CREATE INDEX IF NOT EXISTS idx_correction_requests_student_id
+ON correction_requests(student_id);

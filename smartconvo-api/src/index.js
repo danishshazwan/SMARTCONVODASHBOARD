@@ -78,6 +78,15 @@ if (
 ) {
   return handleAdminQueueNumberUpdate(request, env);
 }
+
+if (
+  request.method === "GET" &&
+  url.pathname === "/api/admin/approvals/face"
+) {
+  return handleFaceApprovalRequests(request, env);
+}
+
+
     if (
       request.method === "GET" &&
       url.pathname === "/api/guest/profile"
@@ -122,6 +131,20 @@ if (
         message: "SMARTCONVO API is running",
       });
     }
+
+    if (
+  request.method === "GET" &&
+  url.pathname === "/api/admin/correction-requests"
+) {
+  return handleGetCorrectionRequests(request, env);
+}
+
+if (
+  request.method === "PUT" &&
+  url.pathname === "/api/admin/correction-requests"
+) {
+  return handleUpdateCorrectionRequest(request, env);
+}
 
     if (
   request.method === "GET" &&
@@ -2178,6 +2201,322 @@ async function handleGetStudents(request, env) {
   }
 }
 
+// ============================================================
+// GET CORRECTION REQUESTS
+// ============================================================
+
+async function handleGetCorrectionRequests(request, env) {
+  try {
+    const payload = await authenticateRequest(
+      request,
+      env,
+      "admin"
+    );
+
+    if (!payload) {
+      return jsonResponse(
+        {
+          success: false,
+          message: "Invalid or expired token."
+        },
+        401
+      );
+    }
+
+    const result = await env.DB
+      .prepare(`
+        SELECT
+          cr.id,
+          cr.student_id,
+          cr.field_name,
+          cr.old_value,
+          cr.new_value,
+          cr.reason,
+          cr.status,
+          cr.created_at,
+          cr.reviewed_at,
+
+          s.name,
+          s.email,
+          s.course_code,
+          s.course_name,
+          s.phone_number,
+          s.faculty
+
+        FROM correction_requests cr
+
+        INNER JOIN students s
+          ON s.student_id = cr.student_id
+
+        WHERE cr.status = 'pending'
+
+        ORDER BY cr.created_at ASC
+      `)
+      .all();
+
+    return jsonResponse({
+      success: true,
+      count: result.results?.length || 0,
+      requests: result.results || []
+    });
+
+  } catch (error) {
+    console.error(
+      "Get correction requests error:",
+      error
+    );
+
+    return jsonResponse(
+      {
+        success: false,
+        message: "Internal server error."
+      },
+      500
+    );
+  }
+}
+
+// ============================================================
+// APPROVE / REJECT CORRECTION REQUEST
+// ============================================================
+
+async function handleUpdateCorrectionRequest(request, env) {
+  try {
+    const payload = await authenticateRequest(
+      request,
+      env,
+      "admin"
+    );
+
+    if (!payload) {
+      return jsonResponse(
+        {
+          success: false,
+          message: "Invalid or expired token."
+        },
+        401
+      );
+    }
+
+    const body = await request.json();
+
+    const requestId = Number(body.id);
+    const action = body.action?.trim().toLowerCase();
+
+    if (!requestId) {
+      return jsonResponse(
+        {
+          success: false,
+          message: "Correction request ID is required."
+        },
+        400
+      );
+    }
+
+    if (!["approved", "rejected"].includes(action)) {
+      return jsonResponse(
+        {
+          success: false,
+          message: "Action must be approved or rejected."
+        },
+        400
+      );
+    }
+
+    const correctionRequest = await env.DB
+      .prepare(`
+        SELECT
+          id,
+          student_id,
+          field_name,
+          old_value,
+          new_value,
+          reason,
+          status
+        FROM correction_requests
+        WHERE id = ?
+        LIMIT 1
+      `)
+      .bind(requestId)
+      .first();
+
+    if (!correctionRequest) {
+      return jsonResponse(
+        {
+          success: false,
+          message: "Correction request not found."
+        },
+        404
+      );
+    }
+
+    if (correctionRequest.status !== "pending") {
+      return jsonResponse(
+        {
+          success: false,
+          message: "This correction request has already been processed."
+        },
+        409
+      );
+    }
+
+    if (action === "approved") {
+      const allowedFields = [
+        "name",
+        "phone_number",
+        "faculty",
+        "course_code",
+        "course_name"
+      ];
+
+      if (!allowedFields.includes(correctionRequest.field_name)) {
+        return jsonResponse(
+          {
+            success: false,
+            message: "This correction field is not allowed."
+          },
+          400
+        );
+      }
+
+      const updateQuery = `
+        UPDATE students
+        SET ${correctionRequest.field_name} = ?
+        WHERE student_id = ?
+      `;
+
+      const studentUpdate = await env.DB
+        .prepare(updateQuery)
+        .bind(
+          correctionRequest.new_value,
+          correctionRequest.student_id
+        )
+        .run();
+
+      if (!studentUpdate.success) {
+        return jsonResponse(
+          {
+            success: false,
+            message: "Failed to update student information."
+          },
+          500
+        );
+      }
+    }
+
+    const result = await env.DB
+      .prepare(`
+        UPDATE correction_requests
+        SET
+          status = ?,
+          reviewed_at = CURRENT_TIMESTAMP,
+          reviewed_by = ?
+        WHERE id = ?
+      `)
+      .bind(
+        action,
+        payload.id,
+        requestId
+      )
+      .run();
+
+    if (!result.success) {
+      return jsonResponse(
+        {
+          success: false,
+          message: "Failed to update correction request."
+        },
+        500
+      );
+    }
+
+    return jsonResponse({
+      success: true,
+      message:
+        action === "approved"
+          ? "Correction request approved successfully."
+          : "Correction request rejected successfully.",
+      request: {
+        id: requestId,
+        status: action
+      }
+    });
+
+  } catch (error) {
+    console.error(
+      "Update correction request error:",
+      error
+    );
+
+    return jsonResponse(
+      {
+        success: false,
+        message: "Internal server error."
+      },
+      500
+    );
+  }
+}
+
+async function handleFaceApprovalRequests(request, env) {
+  try {
+    const payload = await authenticateRequest(
+      request,
+      env,
+      "admin"
+    );
+
+    if (!payload) {
+      return jsonResponse(
+        {
+          success: false,
+          message: "Invalid or expired token."
+        },
+        401
+      );
+    }
+
+    const result = await env.DB
+      .prepare(`
+        SELECT
+          id,
+          student_id,
+          name,
+          email,
+          course_code,
+          course_name,
+          session,
+          face_registration_status,
+          face_verification_status,
+          convocation_status,
+          created_at
+        FROM students
+        WHERE face_verification_status = 'pending'
+        ORDER BY created_at ASC
+      `)
+      .all();
+
+    return jsonResponse({
+      success: true,
+      count: result.results?.length || 0,
+      approvals: result.results || []
+    });
+
+  } catch (error) {
+    console.error(
+      "Face approval requests error:",
+      error
+    );
+
+    return jsonResponse(
+      {
+        success: false,
+        message: "Internal server error."
+      },
+      500
+    );
+  }
+}
 
 
 // ============================================================

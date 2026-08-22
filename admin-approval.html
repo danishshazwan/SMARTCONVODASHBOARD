@@ -1,429 +1,1863 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SmartConvo — Approvals</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartConvo — Approvals</title>
+
   <link rel="icon" type="image/svg+xml" href="smc-icon.svg?v=3">
   <link rel="apple-touch-icon" href="smc-icon.svg?v=3">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --bg: #FAFAF7; --surface: #FFFFFF; --ink: #1A2332; --ink-soft: #5B6472; --line: #E4E1D8;
-    --navy: #1E3A5F; --navy-deep: #14283F; --gold: #B08D2B; --gold-soft: #EFE6C8;
-    --green: #2E7D5E; --green-soft: #E2F0EA; --amber: #C97B2B; --amber-soft: #F5EDE0;
-    --red: #B34A4A; --red-soft: #F5E6E6; --radius: 3px; --sidebar-w: 260px;
-  }
-  *{margin:0;padding:0;box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;min-height:100svh;display:flex;flex-direction:column;}
-  a{color:inherit;text-decoration:none;}
 
-  .app-layout{display:flex;min-height:100svh;}
-  .sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-w);background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;z-index:40;overflow-y:auto;}
-  .sidebar-brand{padding:28px 24px 24px;border-bottom:1px solid var(--line);}
-  .sidebar-brand .nav-mark{font-family:'Fraunces',serif;font-size:22px;font-weight:600;color:var(--navy-deep);}
-  .sidebar-brand .nav-tag{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-soft);margin-top:4px;}
-  .sidebar-nav{flex:1;padding:16px 12px;display:flex;flex-direction:column;gap:2px;}
-  .nav-item{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:var(--radius);font-size:14px;font-weight:500;color:var(--ink-soft);transition:background 0.2s ease,color 0.2s ease;}
-  .nav-item:hover{background:var(--bg);color:var(--ink);}
-  .nav-item.active{background:var(--navy);color:#fff;}
-  .nav-item .nav-icon{width:22px;height:22px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
-  .nav-item .nav-icon svg{width:20px;height:20px;}
-  .sidebar-logout{padding:16px 12px 20px;border-top:1px solid var(--line);}
-  .sidebar-logout .nav-item{color:var(--red);}
-  .sidebar-logout .nav-item:hover{background:var(--red-soft);}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-  .main-area{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100svh;}
-  .topbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:18px 40px;background:rgba(250,250,247,0.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
-  .topbar-left h2{font-family:'Fraunces',serif;font-weight:500;font-size:24px;color:var(--navy-deep);}
-  .topbar-right{display:flex;align-items:center;gap:18px;}
-  .topbar-right .user-chip{display:flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:0.05em;color:var(--ink-soft);}
-  .topbar-right .user-chip .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);}
-  .notif-bell{position:relative;width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);cursor:pointer;transition:border-color 0.2s ease;}
-  .notif-bell:hover{border-color:var(--gold);}
-  .notif-badge{position:absolute;top:-4px;right:-4px;width:18px;height:18px;background:var(--red);color:#fff;font-size:10px;font-weight:600;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+  <style>
+    :root{
+      --bg:#FAFAF7;
+      --surface:#FFFFFF;
+      --ink:#1A2332;
+      --ink-soft:#5B6472;
+      --line:#E4E1D8;
+      --navy:#1E3A5F;
+      --navy-deep:#14283F;
+      --gold:#B08D2B;
+      --gold-soft:#EFE6C8;
+      --green:#2E7D5E;
+      --green-soft:#E2F0EA;
+      --amber:#C97B2B;
+      --amber-soft:#F5EDE0;
+      --red:#B34A4A;
+      --red-soft:#F5E6E6;
+      --radius:3px;
+      --sidebar-w:260px;
+    }
 
-  .content{flex:1;padding:36px 40px 60px;max-width:1200px;width:100%;}
-  .page-hero{position:relative;background:var(--surface);border:1px solid var(--line);padding:30px 36px;margin-bottom:30px;}
-  .page-hero::before,.page-hero::after{content:"";position:absolute;width:22px;height:22px;border:1.5px solid var(--navy);opacity:0.45;}
-  .page-hero::before{top:-1px;left:-1px;border-right:none;border-bottom:none;}
-  .page-hero::after{bottom:-1px;right:-1px;border-left:none;border-top:none;}
-  .page-hero .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:var(--navy);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
-  .page-hero .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);}
-  .page-hero h1{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(28px,3.5vw,38px);color:var(--navy-deep);margin-bottom:6px;}
-  .page-hero p{color:var(--ink-soft);font-size:16px;line-height:1.6;max-width:680px;}
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
 
-  .reg-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;}
-  .stat-card{background:var(--surface);border:1px solid var(--line);padding:20px;display:flex;flex-direction:column;gap:6px;}
-  .stat-card .stat-label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-soft);}
-  .stat-card .stat-value{font-family:'Fraunces',serif;font-weight:500;font-size:28px;color:var(--navy-deep);}
+    html{
+      scroll-behavior:smooth;
+    }
 
-  .approval-layout{display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:start;}
+    body{
+      background:var(--bg);
+      color:var(--ink);
+      font-family:'Inter',sans-serif;
+      -webkit-font-smoothing:antialiased;
+      min-height:100svh;
+      display:flex;
+      flex-direction:column;
+    }
 
-  .section-card{background:var(--surface);border:1px solid var(--line);}
-  .section-card .card-head{padding:20px 24px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;}
-  .section-card .card-head h3{font-family:'Fraunces',serif;font-weight:500;font-size:20px;color:var(--ink);}
-  .section-card .card-body{padding:8px 0;}
+    a{
+      color:inherit;
+      text-decoration:none;
+    }
 
-  /* Face verification approval items */
-  .face-list{display:flex;flex-direction:column;}
-  .face-item{padding:20px 24px;border-bottom:1px solid var(--line);display:flex;gap:18px;align-items:center;}
-  .face-item:last-child{border-bottom:none;}
-  .face-photo{width:64px;height:80px;flex-shrink:0;border:1px solid var(--navy);border-radius:var(--radius);background:var(--navy-deep) center/cover no-repeat;position:relative;}
-  .face-photo .noimg{width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.6);}
-  .face-photo .noimg svg{width:26px;height:26px;}
-  .face-info{flex:1;min-width:0;}
-  .fi-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
-  .fi-name{font-weight:600;color:var(--ink);font-size:15px;}
-  .fi-meta{font-size:12px;color:var(--ink-soft);font-family:'IBM Plex Mono',monospace;margin-top:3px;}
-  .fi-ai{display:inline-flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.04em;color:var(--green);background:var(--green-soft);padding:3px 10px;border-radius:2px;margin-top:8px;}
-  .fi-ai.fail{color:var(--red);background:var(--red-soft);}
-  .fi-actions{display:flex;gap:10px;flex-shrink:0;}
+    button{
+      font-family:inherit;
+    }
 
-  .approve-btn,.reject-btn{flex:0 0 auto;padding:12px 20px;border:none;border-radius:var(--radius);font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:background 0.2s ease,opacity 0.2s ease;display:inline-flex;align-items:center;gap:7px;}
-  .approve-btn{background:var(--green);color:#fff;}
-  .approve-btn:hover{background:#25684D;}
-  .reject-btn{background:var(--surface);color:var(--red);border:1px solid var(--red);}
-  .reject-btn:hover{background:var(--red-soft);}
-  .face-item.resolved{opacity:0.5;}
-  .face-item.resolved .fi-actions{display:none;}
-  .resolve-result{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;padding:6px 12px;border-radius:2px;display:inline-flex;align-items:center;gap:7px;}
-  .resolve-result.approved{background:var(--green-soft);color:var(--green);}
-  .resolve-result.rejected{background:var(--red-soft);color:var(--red);}
-  .empty-note{padding:48px 24px;text-align:center;color:var(--ink-soft);font-size:14px;line-height:1.6;}
+    .app-layout{
+      display:flex;
+      min-height:100svh;
+    }
 
-  /* Correction panel (right column) */
-  .corr-panel{background:var(--surface);border:1px solid var(--line);position:sticky;top:90px;}
-  .corr-panel .corr-head{padding:20px 24px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;}
-  .corr-panel .corr-head h3{font-family:'Fraunces',serif;font-weight:500;font-size:20px;color:var(--ink);}
-  .corr-panel .corr-count{width:26px;height:26px;background:var(--gold);color:#1A2332;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;}
-  .corr-list{max-height:640px;overflow-y:auto;}
-  .corr-item{padding:20px 24px;border-bottom:1px solid var(--line);}
-  .corr-item:last-child{border-bottom:none;}
-  .corr-student{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
-  .corr-student .s-avatar{width:38px;height:38px;flex-shrink:0;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:14px;font-weight:500;}
-  .corr-student .cs-name{font-weight:600;font-size:14px;color:var(--ink);}
-  .corr-student .cs-id{font-size:12px;color:var(--ink-soft);font-family:'IBM Plex Mono',monospace;}
-  .corr-field-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px;}
-  .corr-change{background:var(--bg);border:1px solid var(--line);border-left:3px solid var(--gold);padding:12px 14px;margin-bottom:10px;}
-  .corr-change .cc-old{font-size:13px;color:var(--red);text-decoration:line-through;margin-bottom:6px;}
-  .corr-change .cc-new{font-size:14px;color:var(--green);font-weight:600;}
-  .corr-reason{font-size:13px;color:var(--ink-soft);line-height:1.5;margin-bottom:14px;}
-  .corr-reason .cr-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-soft);display:block;margin-bottom:4px;}
-  .corr-actions{display:flex;gap:10px;}
-  .corr-actions .approve-btn,.corr-actions .reject-btn{flex:1;padding:11px 0;justify-content:center;}
-  .corr-item.resolved{opacity:0.55;pointer-events:none;}
-  .corr-item.resolved .corr-actions{display:none;}
+    .sidebar{
+      position:fixed;
+      top:0;
+      left:0;
+      bottom:0;
+      width:var(--sidebar-w);
+      background:var(--surface);
+      border-right:1px solid var(--line);
+      display:flex;
+      flex-direction:column;
+      z-index:40;
+      overflow-y:auto;
+    }
 
-  .main-footer{border-top:1px solid var(--line);padding:20px 40px;display:flex;align-items:center;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);letter-spacing:0.04em;}
+    .sidebar-brand{
+      padding:28px 24px 24px;
+      border-bottom:1px solid var(--line);
+    }
 
-  @media (max-width:1024px){.reg-stats{grid-template-columns:repeat(2,1fr);}.approval-layout{grid-template-columns:1fr;}.corr-panel{position:static;}}
-  @media (max-width:768px){
-    .sidebar{width:64px;}.sidebar-brand .nav-tag,.nav-item .nav-label{display:none;}
-    .sidebar-brand .nav-mark{font-size:16px;}.nav-item{padding:14px;justify-content:center;}
-    .main-area{margin-left:64px;}.topbar{padding:14px 20px;}.content{padding:24px 20px 40px;}
-    .reg-stats{grid-template-columns:1fr;}.face-item{flex-wrap:wrap;}
-    .main-footer{flex-direction:column;gap:6px;text-align:center;padding:16px 20px;}
-  }
-  :focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
-  @media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important;}}
-</style>
+    .sidebar-brand .nav-mark{
+      font-family:'Fraunces',serif;
+      font-size:22px;
+      font-weight:600;
+      color:var(--navy-deep);
+    }
+
+    .sidebar-brand .nav-tag{
+      font-family:'IBM Plex Mono',monospace;
+      font-size:11px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--ink-soft);
+      margin-top:4px;
+    }
+
+    .sidebar-nav{
+      flex:1;
+      padding:16px 12px;
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+
+    .nav-item{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      padding:14px 16px;
+      border-radius:var(--radius);
+      font-size:14px;
+      font-weight:500;
+      color:var(--ink-soft);
+      transition:background .2s ease,color .2s ease;
+    }
+
+    .nav-item:hover{
+      background:var(--bg);
+      color:var(--ink);
+    }
+
+    .nav-item.active{
+      background:var(--navy);
+      color:#fff;
+    }
+
+    .nav-item .nav-icon{
+      width:22px;
+      height:22px;
+      flex-shrink:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .nav-item .nav-icon svg{
+      width:20px;
+      height:20px;
+    }
+
+    .sidebar-logout{
+      padding:16px 12px 20px;
+      border-top:1px solid var(--line);
+    }
+
+    .sidebar-logout .nav-item{
+      color:var(--red);
+    }
+
+    .sidebar-logout .nav-item:hover{
+      background:var(--red-soft);
+    }
+
+    .main-area{
+      margin-left:var(--sidebar-w);
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      min-height:100svh;
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:30;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:18px 40px;
+      background:rgba(250,250,247,.92);
+      backdrop-filter:blur(8px);
+      border-bottom:1px solid var(--line);
+    }
+
+    .topbar-left h2{
+      font-family:'Fraunces',serif;
+      font-weight:500;
+      font-size:24px;
+      color:var(--navy-deep);
+    }
+
+    .topbar-right{
+      display:flex;
+      align-items:center;
+      gap:18px;
+    }
+
+    .topbar-right .user-chip{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-family:'IBM Plex Mono',monospace;
+      font-size:13px;
+      letter-spacing:.05em;
+      color:var(--ink-soft);
+    }
+
+    .topbar-right .user-chip .dot{
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:var(--gold);
+    }
+
+    .notif-bell{
+      position:relative;
+      width:40px;
+      height:40px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:var(--surface);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      cursor:pointer;
+      transition:border-color .2s ease;
+    }
+
+    .notif-bell:hover{
+      border-color:var(--gold);
+    }
+
+    .notif-badge{
+      position:absolute;
+      top:-4px;
+      right:-4px;
+      min-width:18px;
+      height:18px;
+      padding:0 4px;
+      background:var(--red);
+      color:#fff;
+      font-size:10px;
+      font-weight:600;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .content{
+      flex:1;
+      padding:36px 40px 60px;
+      max-width:1200px;
+      width:100%;
+    }
+
+    .page-hero{
+      position:relative;
+      background:var(--surface);
+      border:1px solid var(--line);
+      padding:30px 36px;
+      margin-bottom:30px;
+    }
+
+    .page-hero::before,
+    .page-hero::after{
+      content:"";
+      position:absolute;
+      width:22px;
+      height:22px;
+      border:1.5px solid var(--navy);
+      opacity:.45;
+    }
+
+    .page-hero::before{
+      top:-1px;
+      left:-1px;
+      border-right:none;
+      border-bottom:none;
+    }
+
+    .page-hero::after{
+      bottom:-1px;
+      right:-1px;
+      border-left:none;
+      border-top:none;
+    }
+
+    .page-hero .eyebrow{
+      font-family:'IBM Plex Mono',monospace;
+      font-size:12px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:var(--navy);
+      margin-bottom:10px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .page-hero .eyebrow .dot{
+      width:7px;
+      height:7px;
+      border-radius:50%;
+      background:var(--gold);
+    }
+
+    .page-hero h1{
+      font-family:'Fraunces',serif;
+      font-weight:500;
+      font-size:clamp(28px,3.5vw,38px);
+      color:var(--navy-deep);
+      margin-bottom:6px;
+    }
+
+    .page-hero p{
+      color:var(--ink-soft);
+      font-size:16px;
+      line-height:1.6;
+      max-width:680px;
+    }
+
+    .reg-stats{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:16px;
+      margin-bottom:24px;
+    }
+
+    .stat-card{
+      background:var(--surface);
+      border:1px solid var(--line);
+      padding:20px;
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+
+    .stat-card .stat-label{
+      font-family:'IBM Plex Mono',monospace;
+      font-size:11px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--ink-soft);
+    }
+
+    .stat-card .stat-value{
+      font-family:'Fraunces',serif;
+      font-weight:500;
+      font-size:28px;
+      color:var(--navy-deep);
+    }
+
+    .approval-layout{
+      display:grid;
+      grid-template-columns:1fr 360px;
+      gap:24px;
+      align-items:start;
+    }
+
+    .section-card{
+      background:var(--surface);
+      border:1px solid var(--line);
+    }
+
+    .section-card .card-head{
+      padding:20px 24px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+
+    .section-card .card-head h3{
+      font-family:'Fraunces',serif;
+      font-weight:500;
+      font-size:20px;
+      color:var(--ink);
+    }
+
+    .section-card .card-body{
+      padding:8px 0;
+    }
+
+    .face-list{
+      display:flex;
+      flex-direction:column;
+    }
+
+    .face-item{
+      padding:20px 24px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      gap:18px;
+      align-items:center;
+    }
+
+    .face-item:last-child{
+      border-bottom:none;
+    }
+
+    .face-photo{
+      width:64px;
+      height:80px;
+      flex-shrink:0;
+      border:1px solid var(--navy);
+      border-radius:var(--radius);
+      background:var(--navy-deep) center/cover no-repeat;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .face-photo img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .face-photo .noimg{
+      width:100%;
+      height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:rgba(255,255,255,.6);
+    }
+
+    .face-photo .noimg svg{
+      width:26px;
+      height:26px;
+    }
+
+    .face-info{
+      flex:1;
+      min-width:0;
+    }
+
+    .fi-top{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .fi-name{
+      font-weight:600;
+      color:var(--ink);
+      font-size:15px;
+    }
+
+    .fi-meta{
+      font-size:12px;
+      color:var(--ink-soft);
+      font-family:'IBM Plex Mono',monospace;
+      margin-top:3px;
+      word-break:break-word;
+    }
+
+    .fi-ai{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      font-family:'IBM Plex Mono',monospace;
+      font-size:11px;
+      letter-spacing:.04em;
+      color:var(--green);
+      background:var(--green-soft);
+      padding:3px 10px;
+      border-radius:2px;
+      margin-top:8px;
+    }
+
+    .fi-ai.fail{
+      color:var(--red);
+      background:var(--red-soft);
+    }
+
+    .fi-actions{
+      display:flex;
+      gap:10px;
+      flex-shrink:0;
+    }
+
+    .approve-btn,
+    .reject-btn{
+      flex:0 0 auto;
+      padding:12px 20px;
+      border:none;
+      border-radius:var(--radius);
+      font-family:'IBM Plex Mono',monospace;
+      font-size:12px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      cursor:pointer;
+      transition:background .2s ease,opacity .2s ease;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:7px;
+    }
+
+    .approve-btn{
+      background:var(--green);
+      color:#fff;
+    }
+
+    .approve-btn:hover{
+      background:#25684D;
+    }
+
+    .reject-btn{
+      background:var(--surface);
+      color:var(--red);
+      border:1px solid var(--red);
+    }
+
+    .reject-btn:hover{
+      background:var(--red-soft);
+    }
+
+    .approve-btn:disabled,
+    .reject-btn:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+    }
+
+    .face-item.resolved{
+      opacity:.5;
+    }
+
+    .face-item.resolved .fi-actions{
+      display:none;
+    }
+
+    .resolve-result{
+      font-family:'IBM Plex Mono',monospace;
+      font-size:11px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      padding:6px 12px;
+      border-radius:2px;
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+    }
+
+    .resolve-result.approved{
+      background:var(--green-soft);
+      color:var(--green);
+    }
+
+    .resolve-result.rejected{
+      background:var(--red-soft);
+      color:var(--red);
+    }
+
+    .empty-note{
+      padding:48px 24px;
+      text-align:center;
+      color:var(--ink-soft);
+      font-size:14px;
+      line-height:1.6;
+    }
+
+    .corr-panel{
+      background:var(--surface);
+      border:1px solid var(--line);
+      position:sticky;
+      top:90px;
+    }
+
+    .corr-panel .corr-head{
+      padding:20px 24px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+
+    .corr-panel .corr-head h3{
+      font-family:'Fraunces',serif;
+      font-weight:500;
+      font-size:20px;
+      color:var(--ink);
+    }
+
+    .corr-panel .corr-count{
+      min-width:26px;
+      height:26px;
+      padding:0 7px;
+      background:var(--gold);
+      color:#1A2332;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-family:'IBM Plex Mono',monospace;
+      font-size:13px;
+      font-weight:600;
+    }
+
+    .corr-list{
+      max-height:640px;
+      overflow-y:auto;
+    }
+
+    .corr-item{
+      padding:20px 24px;
+      border-bottom:1px solid var(--line);
+    }
+
+    .corr-item:last-child{
+      border-bottom:none;
+    }
+
+    .corr-student{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-bottom:12px;
+    }
+
+    .corr-student .s-avatar{
+      width:38px;
+      height:38px;
+      flex-shrink:0;
+      border-radius:50%;
+      background:var(--navy);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-family:'Fraunces',serif;
+      font-size:14px;
+      font-weight:500;
+    }
+
+    .corr-student .cs-name{
+      font-weight:600;
+      font-size:14px;
+      color:var(--ink);
+    }
+
+    .corr-student .cs-id{
+      font-size:12px;
+      color:var(--ink-soft);
+      font-family:'IBM Plex Mono',monospace;
+      word-break:break-word;
+    }
+
+    .corr-field-label{
+      font-family:'IBM Plex Mono',monospace;
+      font-size:10px;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+      color:var(--ink-soft);
+      margin-bottom:6px;
+    }
+
+    .corr-change{
+      background:var(--bg);
+      border:1px solid var(--line);
+      border-left:3px solid var(--gold);
+      padding:12px 14px;
+      margin-bottom:10px;
+    }
+
+    .corr-change .cc-old{
+      font-size:13px;
+      color:var(--red);
+      text-decoration:line-through;
+      margin-bottom:6px;
+    }
+
+    .corr-change .cc-new{
+      font-size:14px;
+      color:var(--green);
+      font-weight:600;
+    }
+
+    .corr-reason{
+      font-size:13px;
+      color:var(--ink-soft);
+      line-height:1.5;
+      margin-bottom:14px;
+    }
+
+    .corr-reason .cr-label{
+      font-family:'IBM Plex Mono',monospace;
+      font-size:10px;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+      color:var(--ink-soft);
+      display:block;
+      margin-bottom:4px;
+    }
+
+    .corr-actions{
+      display:flex;
+      gap:10px;
+    }
+
+    .corr-actions .approve-btn,
+    .corr-actions .reject-btn{
+      flex:1;
+      padding:11px 0;
+      justify-content:center;
+    }
+
+    .corr-item.resolved{
+      opacity:.55;
+      pointer-events:none;
+    }
+
+    .corr-item.resolved .corr-actions{
+      display:none;
+    }
+
+    .main-footer{
+      border-top:1px solid var(--line);
+      padding:20px 40px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      font-family:'IBM Plex Mono',monospace;
+      font-size:12px;
+      color:var(--ink-soft);
+      letter-spacing:.04em;
+    }
+
+    .loading-note{
+      padding:48px 24px;
+      text-align:center;
+      color:var(--ink-soft);
+      font-family:'IBM Plex Mono',monospace;
+      font-size:12px;
+      letter-spacing:.06em;
+    }
+
+    .error-note{
+      padding:40px 24px;
+      text-align:center;
+      color:var(--red);
+      font-size:14px;
+      line-height:1.6;
+    }
+
+    @media (max-width:1024px){
+      .reg-stats{
+        grid-template-columns:repeat(2,1fr);
+      }
+
+      .approval-layout{
+        grid-template-columns:1fr;
+      }
+
+      .corr-panel{
+        position:static;
+      }
+    }
+
+    @media (max-width:768px){
+      .sidebar{
+        width:64px;
+      }
+
+      .sidebar-brand .nav-tag,
+      .nav-item .nav-label{
+        display:none;
+      }
+
+      .sidebar-brand .nav-mark{
+        font-size:16px;
+      }
+
+      .nav-item{
+        padding:14px;
+        justify-content:center;
+      }
+
+      .main-area{
+        margin-left:64px;
+      }
+
+      .topbar{
+        padding:14px 20px;
+      }
+
+      .content{
+        padding:24px 20px 40px;
+      }
+
+      .reg-stats{
+        grid-template-columns:1fr;
+      }
+
+      .face-item{
+        flex-wrap:wrap;
+      }
+
+      .fi-actions{
+        width:100%;
+      }
+
+      .fi-actions button{
+        flex:1;
+      }
+
+      .main-footer{
+        flex-direction:column;
+        gap:6px;
+        text-align:center;
+        padding:16px 20px;
+      }
+    }
+
+    :focus-visible{
+      outline:2px solid var(--gold);
+      outline-offset:3px;
+    }
+
+    @media (prefers-reduced-motion:reduce){
+      *{
+        animation:none !important;
+        transition:none !important;
+      }
+    }
+  </style>
 </head>
+
 <body>
+  <div class="app-layout">
 
-<div class="app-layout">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <a href="index.html" class="nav-mark">SmartConvo</a>
+        <div class="nav-tag">Admin Dashboard</div>
+      </div>
 
-  <aside class="sidebar">
-    <div class="sidebar-brand">
-      <a href="index.html" class="nav-mark">SmartConvo</a>
-      <div class="nav-tag">Admin Dashboard</div>
-    </div>
-    <nav class="sidebar-nav">
-      <a href="admin-dashboard.html" class="nav-item">
-        <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
-        <span class="nav-label">Dashboard</span>
-      </a>
-      <a href="admin-monitoring.html" class="nav-item">
-        <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7l-7 5-5-5-5 5V5H1v14h22V7z"/></svg></span>
-        <span class="nav-label">Live Monitoring</span>
-      </a>
-      <a href="admin-queue.html" class="nav-item">
-        <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v4H4zM8 10h12v4H8zM4 16h16v4H4z"/></svg></span>
-        <span class="nav-label">Queue Management</span>
-      </a>
-      <a href="admin-verification.html" class="nav-item">
-        <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8V6a2 2 0 012-2h2M2 16v2a2 2 0 002 2h2M16 4h2a2 2 0 012 2v2M16 20h2a2 2 0 002-2v-2"/><circle cx="12" cy="12" r="3"/></svg></span>
-        <span class="nav-label">Face Verification</span>
-      </a>
-      <a href="admin-approval.html" class="nav-item active">
-        <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg></span>
-        <span class="nav-label">Approvals</span>
-      </a>
-      <a href="admin-registry.html" class="nav-item">
-        <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span>
-        <span class="nav-label">Student Registry</span>
-      </a>
-      <a href="admin-analytics.html" class="nav-item">
-        <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></span>
-        <span class="nav-label">Analytics &amp; Reports</span>
-      </a>
-      <a href="admin-settings.html" class="nav-item">
-        <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span>
-        <span class="nav-label">Settings</span>
-      </a>
-    </nav>
-    <div class="sidebar-logout">
-      <a href="login-admin.html" class="nav-item">
-        <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg></span>
-        <span class="nav-label">Logout</span>
-      </a>
-    </div>
-  </aside>
+      <nav class="sidebar-nav">
 
-  <div class="main-area">
+        <a href="admin-dashboard.html" class="nav-item">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7" rx="1"/>
+              <rect x="14" y="3" width="7" height="7" rx="1"/>
+              <rect x="3" y="14" width="7" height="7" rx="1"/>
+              <rect x="14" y="14" width="7" height="7" rx="1"/>
+            </svg>
+          </span>
+          <span class="nav-label">Dashboard</span>
+        </a>
 
-    <header class="topbar">
-      <div class="topbar-left"><h2>Approvals</h2></div>
-      <div class="topbar-right">
-        <span class="user-chip"><span class="dot"></span>Admin</span>
-        <a href="admin-approval.html" class="notif-bell">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-          <span class="notif-badge" id="totalBadge">4</span>
+        <a href="admin-monitoring.html" class="nav-item">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 7l-7 5-5-5-5 5V5H1v14h22V7z"/>
+            </svg>
+          </span>
+          <span class="nav-label">Live Monitoring</span>
+        </a>
+
+        <a href="admin-queue.html" class="nav-item">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16v4H4zM8 10h12v4H8zM4 16h16v4H4z"/>
+            </svg>
+          </span>
+          <span class="nav-label">Queue Management</span>
+        </a>
+
+        <a href="admin-verification.html" class="nav-item">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 8V6a2 2 0 012-2h2M2 16v2a2 2 0 002 2h2M16 4h2a2 2 0 012 2v2M16 20h2a2 2 0 002-2v-2"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </span>
+          <span class="nav-label">Face Verification</span>
+        </a>
+
+        <a href="admin-approval.html" class="nav-item active">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+              <path d="M22 4L12 14.01l-3-3"/>
+            </svg>
+          </span>
+          <span class="nav-label">Approvals</span>
+        </a>
+
+        <a href="admin-registry.html" class="nav-item">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 00-3-3.87"/>
+              <path d="M16 3.13a4 4 0 010 7.75"/>
+            </svg>
+          </span>
+          <span class="nav-label">Student Registry</span>
+        </a>
+
+        <a href="admin-analytics.html" class="nav-item">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 20V10M12 20V4M6 20v-6"/>
+            </svg>
+          </span>
+          <span class="nav-label">Analytics &amp; Reports</span>
+        </a>
+
+        <a href="admin-settings.html" class="nav-item">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+            </svg>
+          </span>
+          <span class="nav-label">Settings</span>
+        </a>
+
+      </nav>
+
+      <div class="sidebar-logout">
+        <a href="login-admin.html" class="nav-item" id="logoutLink">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+              <path d="M16 17l5-5-5-5"/>
+              <path d="M21 12H9"/>
+            </svg>
+          </span>
+          <span class="nav-label">Logout</span>
         </a>
       </div>
-    </header>
+    </aside>
 
-    <main class="content">
+    <div class="main-area">
 
-      <section class="page-hero">
-        <div class="eyebrow"><span class="dot"></span> Review Queue</div>
-        <h1>Approvals &amp; Reviews</h1>
-      </section>
+      <header class="topbar">
+        <div class="topbar-left">
+          <h2>Approvals</h2>
+        </div>
 
-      <section class="reg-stats">
-        <div class="stat-card"><div class="stat-label">Pending Face Photos</div><div class="stat-value" id="statFace">1</div></div>
-        <div class="stat-card"><div class="stat-label">Pending Corrections</div><div class="stat-value" id="statCorr">3</div></div>
-        <div class="stat-card"><div class="stat-label">Approved Today</div><div class="stat-value">26</div></div>
-        <div class="stat-card"><div class="stat-label">Rejected Today</div><div class="stat-value">2</div></div>
-      </section>
+        <div class="topbar-right">
+          <span class="user-chip">
+            <span class="dot"></span>
+            Admin
+          </span>
 
-      <div class="approval-layout">
+          <a href="admin-approval.html" class="notif-bell" aria-label="Approval notifications">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+              <path d="M13.73 21a2 2 0 01-3.46 0"/>
+            </svg>
+            <span class="notif-badge" id="totalBadge">0</span>
+          </a>
+        </div>
+      </header>
 
-        <!-- ============ FACE PHOTO APPROVALS ============ -->
-        <section class="section-card">
-          <div class="card-head">
-            <h3>Pending Face Photo Verifications</h3>
-            <span style="font-size:13px;color:var(--ink-soft);" id="faceCount"></span>
+      <main class="content">
+
+        <section class="page-hero">
+          <div class="eyebrow">
+            <span class="dot"></span>
+            Review Queue
           </div>
-          <div class="card-body">
-            <div class="face-list" id="faceList">
-
-              <!-- Sample pending item -->
-              <div class="face-item">
-                <div class="face-photo"><div class="noimg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.6 3.1-6.4 7-6.4s7 2.8 7 6.4"/></svg></div></div>
-                <div class="face-info">
-                  <div class="fi-top">
-                    <span class="fi-name">Nurul Izzah binti Fauzi</span>
-                  </div>
-                  <div class="fi-meta">241035 · nurulizzah@tvetmara.edu.my</div>
-                  <span class="fi-ai">AI spec check passed · 99.1%</span>
-                </div>
-                <div class="fi-actions">
-                  <button class="approve-btn" onclick="resolveFace(this,'approved')">✓ Approve</button>
-                  <button class="reject-btn" onclick="resolveFace(this,'rejected')">✕ Reject</button>
-                </div>
-              </div>
-
-              <div class="face-item">
-                <div class="face-photo"><div class="noimg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.6 3.1-6.4 7-6.4s7 2.8 7 6.4"/></svg></div></div>
-                <div class="face-info">
-                  <div class="fi-top"><span class="fi-name">Raesh a/l Kumar</span></div>
-                  <div class="fi-meta">241039 · rajeshk@tvetmara.edu.my</div>
-                  <span class="fi-ai fail">AI spec check warning · 88.4%</span>
-                </div>
-                <div class="fi-actions">
-                  <button class="approve-btn" onclick="resolveFace(this,'approved')">✓ Approve</button>
-                  <button class="reject-btn" onclick="resolveFace(this,'rejected')">✕ Reject</button>
-                </div>
-              </div>
-
-            </div>
-            <div class="empty-note" id="faceEmpty" style="display:none;">No pending face-photo verifications. Newly captured photos from the student will appear here.</div>
-          </div>
+          <h1>Approvals &amp; Reviews</h1>
+          <p>Review pending face verification submissions and student correction requests.</p>
         </section>
 
-        <!-- ============ CORRECTION REQUESTS PANEL ============ -->
-        <aside class="corr-panel">
-          <div class="corr-head">
-            <h3>Correction Requests</h3>
-            <span class="corr-count" id="corrCount">3</span>
+        <section class="reg-stats">
+
+          <div class="stat-card">
+            <div class="stat-label">Pending Face Photos</div>
+            <div class="stat-value" id="statFace">0</div>
           </div>
-          <div class="corr-list">
 
-            <div class="corr-item" id="corr1">
-              <div class="corr-student">
-                <span class="s-avatar">AH</span>
-                <div>
-                  <div class="cs-name">Aiman Hakimi bin Roslan</div>
-                  <div class="cs-id">241200 · aimanhakimi@tvetmara.edu.my</div>
-                </div>
-              </div>
-              <div class="corr-field-label">Field to Correct — Programme</div>
-              <div class="corr-change">
-                <div class="cc-old">Diploma in Water Services Technology</div>
-                <div class="cc-new">Diploma in Computer Technology (Big Data Analytics)</div>
-              </div>
-              <div class="corr-reason"><span class="cr-label">Reason</span>My programme was recorded incorrectly during registration.</div>
-              <div class="corr-actions">
-                <button class="approve-btn" onclick="resolveCorr(this,'approved')">✓ Approve</button>
-                <button class="reject-btn" onclick="resolveCorr(this,'rejected')">✕ Reject</button>
-              </div>
-            </div>
-
-            <div class="corr-item" id="corr2">
-              <div class="corr-student">
-                <span class="s-avatar">NI</span>
-                <div>
-                  <div class="cs-name">Nurul Izzah binti Fauzi</div>
-                  <div class="cs-id">241035 · nurulizzah@tvetmara.edu.my</div>
-                </div>
-              </div>
-              <div class="corr-field-label">Field to Correct — Full Name</div>
-              <div class="corr-change">
-                <div class="cc-old">Nurul Izzah Fauzi</div>
-                <div class="cc-new">Nurul Izzah binti Fauzi</div>
-              </div>
-              <div class="corr-reason"><span class="cr-label">Reason</span>My full name is missing the patronymic 'binti'.</div>
-              <div class="corr-actions">
-                <button class="approve-btn" onclick="resolveCorr(this,'approved')">✓ Approve</button>
-                <button class="reject-btn" onclick="resolveCorr(this,'rejected')">✕ Reject</button>
-              </div>
-            </div>
-
-            <div class="corr-item" id="corr3">
-              <div class="corr-student">
-                <span class="s-avatar">MS</span>
-                <div>
-                  <div class="cs-name">Muhammad Syafiq bin Azman</div>
-                  <div class="cs-id">241036 · syafiqazman@tvetmara.edu.my</div>
-                </div>
-              </div>
-              <div class="corr-field-label">Field to Correct — Phone Number</div>
-              <div class="corr-change">
-                <div class="cc-old">+60 12-987 6543</div>
-                <div class="cc-new">+60 13-456 7890</div>
-              </div>
-              <div class="corr-reason"><span class="cr-label">Reason</span>I changed my phone number recently and need to update it.</div>
-              <div class="corr-actions">
-                <button class="approve-btn" onclick="resolveCorr(this,'approved')">✓ Approve</button>
-                <button class="reject-btn" onclick="resolveCorr(this,'rejected')">✕ Reject</button>
-              </div>
-            </div>
-
+          <div class="stat-card">
+            <div class="stat-label">Pending Corrections</div>
+            <div class="stat-value" id="statCorr">0</div>
           </div>
-        </aside>
 
-      </div><!-- /.approval-layout -->
+          <div class="stat-card">
+            <div class="stat-label">Approved Today</div>
+            <div class="stat-value" id="statApproved">0</div>
+          </div>
 
-    </main>
+          <div class="stat-card">
+            <div class="stat-label">Rejected Today</div>
+            <div class="stat-value" id="statRejected">0</div>
+          </div>
 
-    <footer class="main-footer">
-      <span>© 2026 SmartConvo</span>
-      <span>AI-Assisted Convocation Queue &amp; Identity Verification System</span>
-    </footer>
+        </section>
 
+        <div class="approval-layout">
+
+          <section class="section-card">
+
+            <div class="card-head">
+              <h3>Pending Face Photo Verifications</h3>
+              <span style="font-size:13px;color:var(--ink-soft);" id="faceCount">0 pending</span>
+            </div>
+
+            <div class="card-body">
+
+              <div class="face-list" id="faceList">
+                <div class="loading-note">Loading face verification requests...</div>
+              </div>
+
+              <div class="empty-note" id="faceEmpty" style="display:none;">
+                No pending face-photo verifications. Newly captured photos from the student will appear here.
+              </div>
+
+            </div>
+          </section>
+
+          <aside class="corr-panel">
+
+            <div class="corr-head">
+              <h3>Correction Requests</h3>
+              <span class="corr-count" id="corrCount">0</span>
+            </div>
+
+            <div class="corr-list" id="corrList">
+              <div class="loading-note">Loading correction requests...</div>
+            </div>
+
+          </aside>
+
+        </div>
+
+      </main>
+
+      <footer class="main-footer">
+        <span>© 2026 SmartConvo</span>
+        <span>AI-Assisted Convocation Queue &amp; Identity Verification System</span>
+      </footer>
+
+    </div>
   </div>
 
-</div>
+  <script>
+    const API_BASE_URL = "https://smartconvo-api.danishshazwan85.workers.dev";
 
-<script>
-  // ---- Load any pending captured face photo from student-face.html (localStorage) ----
-  (function(){
-    var list = document.getElementById('faceList');
-    var empty = document.getElementById('faceEmpty');
-    var count = 0;
-    try{
-      var stored = localStorage.getItem('smartconvo_face_photo');
-      if(stored){
-        var photo = JSON.parse(stored);
-        if(photo && photo.dataUrl && photo.spec && photo.spec.verified){
-          // Add the captured photo as a pending approval item at the top
-          var item = document.createElement('div');
-          item.className = 'face-item';
-          item.innerHTML =
-            '<div class="face-photo" style="background-image:url(\'' + photo.dataUrl + '\');"></div>' +
-            '<div class="face-info">' +
-              '<div class="fi-top"><span class="fi-name">Aiman Hakimi bin Roslan</span></div>' +
-              '<div class="fi-meta">241200 · aimanhakimi@tvetmara.edu.my</div>' +
-              '<span class="fi-ai">AI spec check passed · ' + (photo.spec.luma ? (97 + photo.spec.luma/100).toFixed(1) : '99.0') + '%</span>' +
-            '</div>' +
-            '<div class="fi-actions">' +
-              '<button class="approve-btn" onclick="resolveFace(this,\'approved\')">✓ Approve</button>' +
-              '<button class="reject-btn" onclick="resolveFace(this,\'rejected\')">✕ Reject</button>' +
-            '</div>';
-          list.insertBefore(item, list.firstChild);
-          count++;
-        }
-      }
-    }catch(e){}
+    let students = [];
+    let correctionRequests = [];
 
-    // Count remaining visible (non-resolved) face items
-    count += document.querySelectorAll('.face-item:not(.resolved)').length;
-    document.getElementById('faceCount').textContent = count + ' pending';
-    document.getElementById('statFace').textContent = count;
-    if(count === 0){
-      empty.style.display = 'block';
+    function getAdminToken() {
+      return localStorage.getItem("adminToken");
     }
-  })();
 
-  // ---- Resolve a face-photo verification ----
-  function resolveFace(btn, action){
-    var item = btn.closest('.face-item');
-    if(item.classList.contains('resolved')) return;
-    item.classList.add('resolved');
-    var result = document.createElement('span');
-    result.className = 'resolve-result ' + action;
-    result.textContent = action === 'approved' ? '✓ Approved' : '✕ Rejected';
-    item.appendChild(result);
-    updateFaceCounts();
-    alert(action === 'approved'
-      ? 'Face photo approved. Identity verified for the graduate.'
-      : 'Face photo rejected. The student will be asked to re-capture.');
-  }
+    function getAuthHeaders() {
+      const token = getAdminToken();
 
-  // ---- Resolve a correction request ----
-  function resolveCorr(btn, action){
-    var item = btn.closest('.corr-item');
-    if(item.classList.contains('resolved')) return;
-    item.classList.add('resolved');
-    var result = document.createElement('span');
-    result.className = 'resolve-result ' + action;
-    result.textContent = action === 'approved' ? '✓ Approved' : '✕ Rejected';
-    item.querySelector('.corr-actions').parentNode.appendChild(result);
-    updateCorrCount();
-    alert(action === 'approved'
-      ? 'Correction request approved. The student record has been updated.'
-      : 'Correction request rejected.');
-  }
+      return {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      };
+    }
 
-  // ---- Update counters ----
-  function updateFaceCounts(){
-    var pending = document.querySelectorAll('.face-item:not(.resolved)').length;
-    document.getElementById('faceCount').textContent = pending + ' pending';
-    document.getElementById('statFace').textContent = pending;
-    var empty = document.getElementById('faceEmpty');
-    if(pending === 0){ empty.style.display = 'block'; }
-  }
-  function updateCorrCount(){
-    var pending = document.querySelectorAll('.corr-item:not(.resolved)').length;
-    document.getElementById('corrCount').textContent = pending;
-    document.getElementById('statCorr').textContent = pending;
-  }
-</script>
+    function escapeHTML(value) {
+      if (value === null || value === undefined) return "";
+
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function getInitials(name) {
+      if (!name) return "?";
+
+      const parts = String(name)
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean);
+
+      if (parts.length === 1) {
+        return parts[0].substring(0, 2).toUpperCase();
+      }
+
+      return (
+        parts[0].charAt(0) +
+        parts[parts.length - 1].charAt(0)
+      ).toUpperCase();
+    }
+
+    function formatFieldName(field) {
+      if (!field) return "Field";
+
+      const labels = {
+        name: "Full Name",
+        email: "Email",
+        phone_number: "Phone Number",
+        faculty: "Faculty",
+        course_code: "Programme",
+        course_name: "Programme",
+        session: "Session",
+        student_id: "Student ID"
+      };
+
+      if (labels[field]) {
+        return labels[field];
+      }
+
+      return String(field)
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, char => char.toUpperCase());
+    }
+
+    function setText(id, value) {
+      const element = document.getElementById(id);
+
+      if (element) {
+        element.textContent = value;
+      }
+    }
+
+    function redirectToLogin() {
+      localStorage.removeItem("adminToken");
+      window.location.href = "login-admin.html";
+    }
+
+    async function apiFetch(url, options = {}) {
+      const response = await fetch(url, {
+        ...options,
+        headers: {
+          ...getAuthHeaders(),
+          ...(options.headers || {})
+        }
+      });
+
+      let data = {};
+
+      try {
+        data = await response.json();
+      } catch {
+        data = {};
+      }
+
+      if (response.status === 401 || response.status === 403) {
+        redirectToLogin();
+        throw new Error("Admin authentication expired.");
+      }
+
+      if (!response.ok) {
+        throw new Error(
+          data.message ||
+          data.error ||
+          `Request failed with status ${response.status}.`
+        );
+      }
+
+      return data;
+    }
+
+    async function loadStudents() {
+      const data = await apiFetch(
+        `${API_BASE_URL}/api/students`,
+        {
+          method: "GET"
+        }
+      );
+
+      students = Array.isArray(data.students)
+        ? data.students
+        : [];
+
+      renderFaceApprovals();
+    }
+
+    async function loadCorrectionRequests() {
+      try {
+        const data = await apiFetch(
+          `${API_BASE_URL}/api/admin/correction-requests`,
+          {
+            method: "GET"
+          }
+        );
+
+        correctionRequests =
+          Array.isArray(data.requests)
+            ? data.requests
+            : Array.isArray(data.correctionRequests)
+              ? data.correctionRequests
+              : [];
+
+      } catch (error) {
+        console.warn(
+          "Correction request API unavailable:",
+          error
+        );
+
+        correctionRequests = [];
+      }
+
+      renderCorrectionRequests();
+    }
+
+    function getPendingFaceStudents() {
+      return students.filter(student => {
+        const verificationStatus =
+          String(student.verification_status || "")
+            .toLowerCase();
+
+        const convocationStatus =
+          String(student.convocation_status || "")
+            .toLowerCase();
+
+        return (
+          verificationStatus === "verified" &&
+          convocationStatus === "face_verification"
+        );
+      });
+    }
+
+    function renderFaceApprovals() {
+      const list = document.getElementById("faceList");
+      const empty = document.getElementById("faceEmpty");
+
+      if (!list) return;
+
+      const pendingStudents = getPendingFaceStudents();
+
+      setText(
+        "statFace",
+        pendingStudents.length
+      );
+
+      setText(
+        "faceCount",
+        `${pendingStudents.length} pending`
+      );
+
+      updateTotalBadge();
+
+      if (!pendingStudents.length) {
+        list.innerHTML = "";
+        if (empty) {
+          empty.style.display = "block";
+        }
+        return;
+      }
+
+      if (empty) {
+        empty.style.display = "none";
+      }
+
+      list.innerHTML = pendingStudents.map(student => {
+
+        const name =
+          student.name ||
+          "Unknown Student";
+
+        const studentId =
+          student.student_id ||
+          "-";
+
+        const email =
+          student.email ||
+          "-";
+
+        const facePhoto =
+          student.face_photo ||
+          student.face_image ||
+          student.photo_url ||
+          "";
+
+        const aiScore =
+          student.face_match_score ??
+          student.ai_score ??
+          student.face_score ??
+          null;
+
+        const aiText =
+          aiScore !== null
+            ? `AI face check · ${Number(aiScore).toFixed(1)}%`
+            : "AI face verification pending";
+
+        const photoHTML = facePhoto
+          ? `
+            <img
+              src="${escapeHTML(facePhoto)}"
+              alt="${escapeHTML(name)}"
+              loading="lazy"
+              onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+            >
+            <div class="noimg" style="display:none;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="8" r="3.4"/>
+                <path d="M5 20c0-3.6 3.1-6.4 7-6.4s7 2.8 7 6.4"/>
+              </svg>
+            </div>
+          `
+          : `
+            <div class="noimg">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="8" r="3.4"/>
+                <path d="M5 20c0-3.6 3.1-6.4 7-6.4s7 2.8 7 6.4"/>
+              </svg>
+            </div>
+          `;
+
+        return `
+          <div
+            class="face-item"
+            id="face-${escapeHTML(studentId)}"
+          >
+
+            <div class="face-photo">
+              ${photoHTML}
+            </div>
+
+            <div class="face-info">
+
+              <div class="fi-top">
+                <span class="fi-name">
+                  ${escapeHTML(name)}
+                </span>
+              </div>
+
+              <div class="fi-meta">
+                ${escapeHTML(studentId)}
+                ·
+                ${escapeHTML(email)}
+              </div>
+
+              <span class="fi-ai">
+                ${escapeHTML(aiText)}
+              </span>
+
+            </div>
+
+            <div class="fi-actions">
+
+              <button
+                class="approve-btn"
+                type="button"
+                onclick="resolveFace('${escapeHTML(studentId)}','approved',this)"
+              >
+                ✓ Approve
+              </button>
+
+              <button
+                class="reject-btn"
+                type="button"
+                onclick="resolveFace('${escapeHTML(studentId)}','rejected',this)"
+              >
+                ✕ Reject
+              </button>
+
+            </div>
+
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderCorrectionRequests() {
+      const list = document.getElementById("corrList");
+
+      if (!list) return;
+
+      const pending = correctionRequests.filter(
+        request =>
+          String(request.status || "pending")
+            .toLowerCase() === "pending"
+      );
+
+      setText(
+        "statCorr",
+        pending.length
+      );
+
+      setText(
+        "corrCount",
+        pending.length
+      );
+
+      updateTotalBadge();
+
+      if (!pending.length) {
+        list.innerHTML = `
+          <div class="empty-note">
+            No pending correction requests.
+            Student correction requests will appear here.
+          </div>
+        `;
+        return;
+      }
+
+      list.innerHTML = pending.map(request => {
+
+        const student =
+          students.find(
+            item =>
+              String(item.student_id) ===
+              String(request.student_id)
+          );
+
+        const studentName =
+          student?.name ||
+          request.student_name ||
+          "Unknown Student";
+
+        const studentEmail =
+          student?.email ||
+          request.email ||
+          "-";
+
+        const fieldName =
+          formatFieldName(request.field_name);
+
+        const oldValue =
+          request.old_value ||
+          "-";
+
+        const newValue =
+          request.new_value ||
+          "-";
+
+        const reason =
+          request.reason ||
+          "No reason provided.";
+
+        const requestId =
+          request.id;
+
+        return `
+          <div
+            class="corr-item"
+            id="corr-${escapeHTML(requestId)}"
+          >
+
+            <div class="corr-student">
+
+              <span class="s-avatar">
+                ${escapeHTML(getInitials(studentName))}
+              </span>
+
+              <div>
+                <div class="cs-name">
+                  ${escapeHTML(studentName)}
+                </div>
+
+                <div class="cs-id">
+                  ${escapeHTML(request.student_id || "-")}
+                  ·
+                  ${escapeHTML(studentEmail)}
+                </div>
+              </div>
+
+            </div>
+
+            <div class="corr-field-label">
+              Field to Correct — ${escapeHTML(fieldName)}
+            </div>
+
+            <div class="corr-change">
+
+              <div class="cc-old">
+                ${escapeHTML(oldValue)}
+              </div>
+
+              <div class="cc-new">
+                ${escapeHTML(newValue)}
+              </div>
+
+            </div>
+
+            <div class="corr-reason">
+              <span class="cr-label">Reason</span>
+              ${escapeHTML(reason)}
+            </div>
+
+            <div class="corr-actions">
+
+              <button
+                class="approve-btn"
+                type="button"
+                onclick="resolveCorrection(${Number(requestId)},'approved',this)"
+              >
+                ✓ Approve
+              </button>
+
+              <button
+                class="reject-btn"
+                type="button"
+                onclick="resolveCorrection(${Number(requestId)},'rejected',this)"
+              >
+                ✕ Reject
+              </button>
+
+            </div>
+
+          </div>
+        `;
+      }).join("");
+    }
+
+    function updateTotalBadge() {
+      const faceCount =
+        getPendingFaceStudents().length;
+
+      const correctionCount =
+        correctionRequests.filter(
+          request =>
+            String(request.status || "pending")
+              .toLowerCase() === "pending"
+        ).length;
+
+      const total =
+        faceCount + correctionCount;
+
+      setText("totalBadge", total);
+    }
+
+    async function resolveFace(studentId, action, button) {
+      const student = students.find(
+        item =>
+          String(item.student_id) ===
+          String(studentId)
+      );
+
+      if (!student) {
+        alert("Student not found.");
+        return;
+      }
+
+      const actionText =
+        action === "approved"
+          ? "approve"
+          : "reject";
+
+      const confirmed = confirm(
+        `${actionText.charAt(0).toUpperCase() + actionText.slice(1)} ${student.name} (${student.student_id})?`
+      );
+
+      if (!confirmed) return;
+
+      const item =
+        document.getElementById(
+          `face-${studentId}`
+        );
+
+      const buttons =
+        item
+          ? item.querySelectorAll("button")
+          : [];
+
+      buttons.forEach(
+        btn => btn.disabled = true
+      );
+
+      try {
+
+        const data = await apiFetch(
+          `${API_BASE_URL}/api/admin/approvals/face`,
+          {
+            method: "PUT",
+            body: JSON.stringify({
+              student_id: studentId,
+              action: action
+            })
+          }
+        );
+
+        if (!data.success) {
+          throw new Error(
+            data.message ||
+            "Failed to update face verification."
+          );
+        }
+
+        if (action === "approved") {
+          alert("Face verification approved.");
+        } else {
+          alert("Face verification rejected.");
+        }
+
+        await refreshApprovalData();
+
+      } catch (error) {
+
+        console.error(
+          "Face approval error:",
+          error
+        );
+
+        buttons.forEach(
+          btn => btn.disabled = false
+        );
+
+        alert(
+          error.message ||
+          "Failed to update face verification."
+        );
+      }
+    }
+
+    async function resolveCorrection(
+      requestId,
+      action,
+      button
+    ) {
+
+      if (!requestId) {
+        alert("Invalid correction request.");
+        return;
+      }
+
+      const request =
+        correctionRequests.find(
+          item =>
+            Number(item.id) ===
+            Number(requestId)
+        );
+
+      const actionText =
+        action === "approved"
+          ? "approve"
+          : "reject";
+
+      const studentName =
+        request?.student_name ||
+        request?.student_id ||
+        "this correction request";
+
+      const confirmed = confirm(
+        `${actionText.charAt(0).toUpperCase() + actionText.slice(1)} correction request for ${studentName}?`
+      );
+
+      if (!confirmed) return;
+
+      const item =
+        document.getElementById(
+          `corr-${requestId}`
+        );
+
+      const buttons =
+        item
+          ? item.querySelectorAll("button")
+          : [];
+
+      buttons.forEach(
+        btn => btn.disabled = true
+      );
+
+      try {
+
+        const data = await apiFetch(
+          `${API_BASE_URL}/api/admin/correction-requests/${requestId}`,
+          {
+            method: "PUT",
+            body: JSON.stringify({
+              status: action
+            })
+          }
+        );
+
+        if (!data.success) {
+          throw new Error(
+            data.message ||
+            "Failed to update correction request."
+          );
+        }
+
+        if (action === "approved") {
+          alert("Correction request approved.");
+        } else {
+          alert("Correction request rejected.");
+        }
+
+        await refreshApprovalData();
+
+      } catch (error) {
+
+        console.error(
+          "Correction approval error:",
+          error
+        );
+
+        buttons.forEach(
+          btn => btn.disabled = false
+        );
+
+        alert(
+          error.message ||
+          "Failed to update correction request."
+        );
+      }
+    }
+
+    
+
+    function calculateTodayStats() {
+      const today =
+        new Date().toISOString().slice(0, 10);
+
+      const approved =
+        correctionRequests.filter(request => {
+
+          const status =
+            String(request.status || "")
+              .toLowerCase();
+
+          const reviewedAt =
+            request.reviewed_at;
+
+          if (
+            status !== "approved" ||
+            !reviewedAt
+          ) {
+            return false;
+          }
+
+          return String(reviewedAt).slice(0, 10) === today;
+
+        }).length;
+
+      const rejected =
+        correctionRequests.filter(request => {
+
+          const status =
+            String(request.status || "")
+              .toLowerCase();
+
+          const reviewedAt =
+            request.reviewed_at;
+
+          if (
+            status !== "rejected" ||
+            !reviewedAt
+          ) {
+            return false;
+          }
+
+          return String(reviewedAt).slice(0, 10) === today;
+
+        }).length;
+
+      setText(
+        "statApproved",
+        approved
+      );
+
+      setText(
+        "statRejected",
+        rejected
+      );
+    }
+
+    async function refreshApprovalData() {
+
+      setText(
+        "faceCount",
+        "Refreshing..."
+      );
+
+      try {
+
+        await Promise.all([
+          loadStudents(),
+          loadCorrectionRequests()
+        ]);
+
+        calculateTodayStats();
+
+      } catch (error) {
+
+        console.error(
+          "Approval refresh error:",
+          error
+        );
+
+        showGlobalError(
+          error.message ||
+          "Unable to load approval data."
+        );
+      }
+    }
+
+    function showGlobalError(message) {
+
+      const faceList =
+        document.getElementById("faceList");
+
+      const corrList =
+        document.getElementById("corrList");
+
+      if (faceList) {
+        faceList.innerHTML = `
+          <div class="error-note">
+            ${escapeHTML(message)}
+          </div>
+        `;
+      }
+
+      if (corrList) {
+        corrList.innerHTML = `
+          <div class="error-note">
+            ${escapeHTML(message)}
+          </div>
+        `;
+      }
+    }
+
+    function setupLogout() {
+
+      const logout =
+        document.getElementById("logoutLink");
+
+      if (!logout) return;
+
+      logout.addEventListener(
+        "click",
+        function() {
+          localStorage.removeItem("adminToken");
+          localStorage.removeItem("adminUser");
+        }
+      );
+    }
+
+    function verifyAdminSession() {
+
+      const token =
+        getAdminToken();
+
+      if (!token) {
+        window.location.href =
+          "login-admin.html";
+
+        return false;
+      }
+
+      return true;
+    }
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      async function() {
+
+        if (!verifyAdminSession()) {
+          return;
+        }
+
+        setupLogout();
+
+        await refreshApprovalData();
+
+        setInterval(
+          refreshApprovalData,
+          30000
+        );
+      }
+    );
+  </script>
 
 </body>
 </html>
-

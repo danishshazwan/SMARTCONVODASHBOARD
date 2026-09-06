@@ -1,4 +1,4 @@
-:::writing{variant="document" id="58321"}
+﻿:::writing{variant="document" id="58321"}
 # SmartConvo — Updated `student-face.html`
 
 ```html
@@ -1865,6 +1865,63 @@ async function uploadPhoto(){
   }
 
 
+  const studentDataRaw =
+    localStorage.getItem(
+      'studentData'
+    );
+
+
+  if(!studentDataRaw){
+
+    alert(
+      'Student information not found. Please login again.'
+    );
+
+    return;
+
+  }
+
+
+  let student;
+
+  try{
+
+    student =
+      JSON.parse(
+        studentDataRaw
+      );
+
+  }catch(error){
+
+    console.error(
+      'Student data parse error:',
+      error
+    );
+
+    alert(
+      'Invalid student information. Please login again.'
+    );
+
+    return;
+
+  }
+
+
+  const studentId =
+    student.student_id;
+
+
+  if(!studentId){
+
+    alert(
+      'Student ID not found. Please login again.'
+    );
+
+    return;
+
+  }
+
+
   uploadBtn.disabled =
     true;
 
@@ -1872,39 +1929,308 @@ async function uploadPhoto(){
     true;
 
   uploadBtn.textContent =
-    'Uploading...';
-
-
-  /*
-   * DATABASE/R2 API belum dibuat.
-   *
-   * Buat masa ini kita hanya simulate
-   * proses upload supaya UI flow boleh
-   * diuji terlebih dahulu.
-   *
-   * Nanti function ini akan POST:
-   *
-   * POST /api/student/face
-   *
-   * menggunakan FormData:
-   *
-   * formData.append('face', capturedBlob, 'face.jpg')
-   */
+    'Processing Face...';
 
 
   try{
 
-    await new Promise(function(resolve){
+    /*
+     * ========================================================
+     * STEP 1
+     * Send captured image to Python Face API
+     *
+     * YuNet → Face Detection
+     * SFace → Alignment + Feature Extraction
+     *
+     * Expected result:
+     * 128-dimensional SFace feature
+     * ========================================================
+     */
 
-      setTimeout(
-        resolve,
-        1200
+
+    const formData =
+      new FormData();
+
+
+    formData.append(
+      'image',
+      capturedBlob,
+      'face.jpg'
+    );
+
+
+    const processResponse =
+      await fetch(
+        'http://192.168.0.30:5000/api/face/process',
+        {
+          method: 'POST',
+          body: formData
+        }
       );
 
-    });
+
+    const result =
+      await processResponse.json();
 
 
-    /* Simulated successful upload */
+    console.log(
+      'Face API result:',
+      result
+    );
+
+
+    if(
+      !processResponse.ok ||
+      !result.success
+    ){
+
+      throw new Error(
+        result.message ||
+        'Face processing failed.'
+      );
+
+    }
+
+
+    /*
+     * Make sure SFace returned
+     * exactly 128 values.
+     */
+
+
+    if(
+      !result.face_encoding ||
+      result.face_encoding.length !== 128
+    ){
+
+      throw new Error(
+        'Invalid face encoding received.'
+      );
+
+    }
+
+
+    console.log(
+      'SFace feature length:',
+      result.face_encoding.length
+    );
+
+
+    /*
+     * Temporarily store encoding.
+     */
+
+
+    window.processedFaceEncoding =
+      result.face_encoding;
+
+
+    /*
+     * ========================================================
+     * STEP 2
+     * Get existing registered samples
+     * from Cloudflare D1 through Worker
+     * ========================================================
+     */
+
+
+    uploadBtn.textContent =
+      'Checking Samples...';
+
+
+    const samplesResponse =
+      await fetch(
+        `${API_BASE_URL}/api/face/samples/${encodeURIComponent(studentId)}`,
+        {
+          method: 'GET'
+        }
+      );
+
+
+    const samplesResult =
+      await samplesResponse.json();
+
+
+    console.log(
+      'Existing face samples:',
+      samplesResult
+    );
+
+
+    if(!samplesResponse.ok){
+
+      throw new Error(
+        samplesResult.message ||
+        'Unable to check existing face samples.'
+      );
+
+    }
+
+
+    /*
+     * Worker should return total_samples.
+     */
+
+
+    const totalSamples =
+      Number(
+        samplesResult.total_samples || 0
+      );
+
+
+    console.log(
+      'Current sample count:',
+      totalSamples
+    );
+
+
+    /*
+     * Already completed.
+     */
+
+
+    if(totalSamples >= 20){
+
+      faceStatus.classList.remove(
+        'not-verified'
+      );
+
+      faceStatus.classList.add(
+        'verified'
+      );
+
+      faceStatus.textContent =
+        '✓ Registered';
+
+
+      uploadBtn.textContent =
+        '✓ Face Registration Complete';
+
+
+      captureHint.textContent =
+        'Your face registration is already complete.';
+
+
+      alert(
+        'Face registration is already complete (20/20 samples).'
+      );
+
+
+      return;
+
+    }
+
+
+    /*
+     * ========================================================
+     * STEP 3
+     * Determine next sample number
+     *
+     * Example:
+     * Existing = 1
+     * Next = 2
+     * ========================================================
+     */
+
+
+    const nextSampleNumber =
+      totalSamples + 1;
+
+
+    console.log(
+      'Registering sample:',
+      nextSampleNumber
+    );
+
+
+    uploadBtn.textContent =
+      `Registering ${nextSampleNumber}/20...`;
+
+
+    /*
+     * ========================================================
+     * STEP 4
+     * Register SFace feature into Cloudflare D1
+     * ========================================================
+     */
+
+
+    const registerResponse =
+      await fetch(
+        `${API_BASE_URL}/api/face/register`,
+        {
+          method: 'POST',
+
+          headers: {
+            'Content-Type':
+              'application/json'
+          },
+
+          body: JSON.stringify({
+
+            student_id:
+              studentId,
+
+            sample_number:
+              nextSampleNumber,
+
+            face_encoding:
+              result.face_encoding
+
+          })
+
+        }
+      );
+
+
+    const registerResult =
+      await registerResponse.json();
+
+
+    console.log(
+      'FACE REGISTER RESULT:',
+      registerResult
+    );
+
+
+    if(
+      !registerResponse.ok ||
+      !registerResult.success
+    ){
+
+      throw new Error(
+        registerResult.message ||
+        'Face registration failed.'
+      );
+
+    }
+
+
+    /*
+     * Worker returns the updated
+     * total sample count.
+     */
+
+
+    const registeredTotal =
+      Number(
+        registerResult.total_samples ||
+        nextSampleNumber
+      );
+
+
+    console.log(
+      `Face sample registered: ${registeredTotal}/20`
+    );
+
+
+    /*
+     * ========================================================
+     * STEP 5
+     * Update UI
+     * ========================================================
+     */
+
 
     faceStatus.classList.remove(
       'not-verified'
@@ -1914,69 +2240,126 @@ async function uploadPhoto(){
       'verified'
     );
 
+
+    if(registeredTotal >= 20){
+
+      faceStatus.textContent =
+        '✓ Registered';
+
+
+      uploadBtn.textContent =
+        '✓ Registration Complete';
+
+
+      captureHint.textContent =
+        'All 20 face samples have been registered successfully.';
+
+
+      matchResult.style.display =
+        'flex';
+
+
+      matchResult.classList.remove(
+        'fail'
+      );
+
+
+      matchIcon.innerHTML = `
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+          <path d="M22 4L12 14.01l-3-3"/>
+        </svg>
+      `;
+
+
+      confScore.textContent =
+        '✓';
+
+
+      matchText.textContent =
+        ' — Face registration completed (20/20)';
+
+
+      alert(
+        'Face registration completed successfully! 20/20 samples registered.'
+      );
+
+
+      return;
+
+    }
+
+
+    /*
+     * ========================================================
+     * More samples are still required.
+     * Automatically prepare next capture.
+     * ========================================================
+     */
+
+
     faceStatus.textContent =
-      '✓ Registered';
+      `✓ Registered ${registeredTotal}/20`;
 
 
     uploadBtn.textContent =
-      '✓ Uploaded';
-
-    uploadBtn.classList.add(
-      'success'
-    );
+      `✓ Sample ${registeredTotal}/20`;
 
 
     captureHint.textContent =
-      'Your face photo has been uploaded successfully and is ready for verification.';
+      `Sample ${registeredTotal}/20 registered. Please capture the next face sample.`;
 
 
     matchResult.style.display =
       'flex';
+
 
     matchResult.classList.remove(
       'fail'
     );
 
 
-    matchIcon.innerHTML = `
-      <svg
-        width="22"
-        height="22"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="1.8"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
-        <path d="M22 4L12 14.01l-3-3"/>
-      </svg>
-    `;
-
-
     confScore.textContent =
       '✓';
 
+
     matchText.textContent =
-      ' — Face registered successfully';
+      ` — Sample ${registeredTotal}/20 registered`;
 
 
-    alert(
-      'Your face photo has been uploaded successfully.'
-    );
+    /*
+     * Prepare camera for next sample.
+     */
+
+
+    retakePhoto();
+
+
+    await startCamera();
 
 
   }catch(error){
 
     console.error(
-      'Face upload error:',
+      'Face registration error:',
       error
     );
 
+
     alert(
-      'Unable to upload face photo. Please try again.'
+      error.message ||
+      'Unable to register face sample. Please try again.'
     );
+
 
     uploadBtn.disabled =
       false;
@@ -1990,8 +2373,6 @@ async function uploadPhoto(){
   }
 
 }
-
-
 /* ============================================================
    RESET CAPTURE BUTTON
    ============================================================ */

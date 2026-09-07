@@ -66,3 +66,24 @@ ON correction_requests(status);
 
 CREATE INDEX IF NOT EXISTS idx_correction_requests_student_id
 ON correction_requests(student_id);
+
+CREATE TABLE IF NOT EXISTS face_samples (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    student_id TEXT NOT NULL,
+    sample_number INTEGER NOT NULL,
+
+    face_encoding TEXT NOT NULL,
+
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (student_id)
+        REFERENCES students(student_id)
+        ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_face_samples_student_id
+ON face_samples(student_id);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_face_samples_unique
+ON face_samples(student_id, sample_number);

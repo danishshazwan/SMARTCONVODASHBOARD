@@ -66,6 +66,13 @@ if (
 }
 
 if (
+  request.method === "POST" &&
+  url.pathname === "/api/recognition"
+) {
+  return handleRecognition(request, env);
+}
+
+if (
   request.method === "PUT" &&
   url.pathname === "/api/admin/queue/status"
 ) {
@@ -170,6 +177,15 @@ if (
     );
   }
 }
+
+if (request.method === "POST" && url.pathname === "/api/face/register")
+  return handleFaceRegister(request, env);
+
+if (request.method === "GET" && url.pathname.startsWith("/api/face/samples/"))
+  return handleGetFaceSamples(request, env);
+
+if (request.method === "POST" && url.pathname === "/api/face/verify")
+  return handleFaceVerify(request, env);
 
     return jsonResponse(
       {
@@ -1032,6 +1048,7 @@ async function handleStudentSimulation(
   env
 ) {
   try {
+
     const payload =
       await authenticateRequest(
         request,
@@ -1044,7 +1061,7 @@ async function handleStudentSimulation(
         {
           success: false,
           message:
-            "Invalid or expired token.",
+            "Invalid or expired token."
         },
         401
       );
@@ -1059,23 +1076,35 @@ async function handleStudentSimulation(
           course_code,
           course_name,
           verification_status,
+          face_registration_status,
+          face_verification_status,
           convocation_status,
           queue_number
         FROM students
-        ORDER BY student_id ASC
+        WHERE student_id = ?
+        LIMIT 1
         `
       )
-      .all();
+      .bind(payload.student_id)
+      .first();
 
-    const students =
-      result.results || [];
+    if (!result) {
+      return jsonResponse(
+        {
+          success: false,
+          message: "Student not found."
+        },
+        404
+      );
+    }
 
     return jsonResponse({
       success: true,
-      simulation: students,
+      simulation: result
     });
 
   } catch (error) {
+
     console.error(
       "Student simulation error:",
       error
@@ -1084,7 +1113,7 @@ async function handleStudentSimulation(
     return jsonResponse(
       {
         success: false,
-        message: "Internal server error.",
+        message: "Internal server error."
       },
       500
     );
@@ -2518,6 +2547,306 @@ async function handleFaceApprovalRequests(request, env) {
   }
 }
 
+async function handleRecognition(request, env) {
+  try {
+    const body = await request.json();
+
+    const studentId = body.student_id;
+
+    if (!studentId) {
+      return jsonResponse(
+        {
+          success: false,
+          message: "Student ID is required."
+        },
+        400
+      );
+    }
+
+    const result = await env.DB
+      .prepare(`
+        SELECT
+          student_id,
+          name,
+          course_code
+        FROM students
+        WHERE student_id = ?
+        LIMIT 1
+      `)
+      .bind(studentId)
+      .first();
+
+    if (!result) {
+      return jsonResponse(
+        {
+          success: false,
+          message: "Student not found."
+        },
+        404
+      );
+    }
+
+    return jsonResponse({
+      success: true,
+      verified: true,
+      student_id: result.student_id,
+      name: result.name,
+      programme: result.course_code
+    });
+
+  } catch (error) {
+    console.error("Recognition error:", error);
+
+    return jsonResponse(
+      {
+        success: false,
+        message: "Internal server error."
+      },
+      500
+    );
+  }
+}
+
+async function handleFaceRegister(request, env) {
+  try {
+    const body = await request.json();
+
+    const {
+      student_id,
+      sample_number,
+      face_encoding
+    } = body;
+
+    if (!student_id || !sample_number || !face_encoding) {
+      return jsonResponse({
+        success: false,
+        message: "student_id, sample_number and face_encoding are required"
+      }, 400);
+    }
+
+    const student = await env.DB
+      .prepare(`
+        SELECT student_id, name
+        FROM students
+        WHERE student_id = ?
+      `)
+      .bind(student_id)
+      .first();
+
+    if (!student) {
+      return jsonResponse({
+        success: false,
+        message: "Student not found"
+      }, 404);
+    }
+
+    const encodingString =
+      typeof face_encoding === "string"
+        ? face_encoding
+        : JSON.stringify(face_encoding);
+
+    await env.DB
+      .prepare(`
+        INSERT INTO face_samples
+        (
+          student_id,
+          sample_number,
+          face_encoding
+        )
+        VALUES (?, ?, ?)
+        ON CONFLICT(student_id, sample_number)
+        DO UPDATE SET
+          face_encoding = excluded.face_encoding
+      `)
+      .bind(
+        student_id,
+        Number(sample_number),
+        encodingString
+      )
+      .run();
+
+    const countResult = await env.DB
+      .prepare(`
+        SELECT COUNT(*) AS total
+        FROM face_samples
+        WHERE student_id = ?
+      `)
+      .bind(student_id)
+      .first();
+
+    const totalSamples = Number(countResult?.total || 0);
+
+    let registrationStatus = "pending";
+
+    if (totalSamples >= 20) {
+      registrationStatus = "registered";
+
+      await env.DB
+        .prepare(`
+          UPDATE students
+          SET face_registration_status = 'registered'
+          WHERE student_id = ?
+        `)
+        .bind(student_id)
+        .run();
+    }
+
+    return jsonResponse({
+      success: true,
+      student_id,
+      name: student.name,
+      sample_number: Number(sample_number),
+      total_samples: totalSamples,
+      required_samples: 20,
+      face_registration_status: registrationStatus
+    });
+
+  } catch (error) {
+    return jsonResponse({
+      success: false,
+      message: error.message
+    }, 500);
+  }
+}
+
+async function handleGetFaceSamples(request, env) {
+  try {
+    const url = new URL(request.url);
+
+    const studentId =
+      decodeURIComponent(
+        url.pathname.replace("/api/face/samples/", "")
+      );
+
+    if (!studentId) {
+      return jsonResponse({
+        success: false,
+        message: "Student ID is required"
+      }, 400);
+    }
+
+    const student = await env.DB
+      .prepare(`
+        SELECT student_id, name
+        FROM students
+        WHERE student_id = ?
+      `)
+      .bind(studentId)
+      .first();
+
+    if (!student) {
+      return jsonResponse({
+        success: false,
+        message: "Student not found"
+      }, 404);
+    }
+
+    const result = await env.DB
+      .prepare(`
+        SELECT
+          sample_number,
+          face_encoding
+        FROM face_samples
+        WHERE student_id = ?
+        ORDER BY sample_number ASC
+      `)
+      .bind(studentId)
+      .all();
+
+    const samples = (result.results || []).map(sample => ({
+      sample_number: sample.sample_number,
+      face_encoding: JSON.parse(sample.face_encoding)
+    }));
+
+    return jsonResponse({
+      success: true,
+      student_id: student.student_id,
+      name: student.name,
+      total_samples: samples.length,
+      samples
+    });
+
+  } catch (error) {
+    return jsonResponse({
+      success: false,
+      message: error.message
+    }, 500);
+  }
+}
+
+async function handleFaceVerify(request, env) {
+  try {
+    const body = await request.json();
+
+    const {
+      student_id,
+      distance
+    } = body;
+
+    if (!student_id) {
+      return jsonResponse({
+        success: false,
+        message: "student_id is required"
+      }, 400);
+    }
+
+    const student = await env.DB
+      .prepare(`
+        SELECT
+          student_id,
+          name,
+          course_code,
+          course_name,
+          face_registration_status
+        FROM students
+        WHERE student_id = ?
+      `)
+      .bind(student_id)
+      .first();
+
+    if (!student) {
+      return jsonResponse({
+        success: false,
+        verified: false,
+        message: "Student not found"
+      }, 404);
+    }
+
+    if (student.face_registration_status !== "registered") {
+      return jsonResponse({
+        success: false,
+        verified: false,
+        message: "Face is not registered"
+      }, 400);
+    }
+
+    await env.DB
+      .prepare(`
+        UPDATE students
+        SET face_verification_status = 'verified'
+        WHERE student_id = ?
+      `)
+      .bind(student_id)
+      .run();
+
+    return jsonResponse({
+      success: true,
+      verified: true,
+      student_id: student.student_id,
+      name: student.name,
+      programme: student.course_code,
+      course_name: student.course_name,
+      distance: distance ?? null,
+      face_verification_status: "verified"
+    });
+
+  } catch (error) {
+    return jsonResponse({
+      success: false,
+      message: error.message
+    }, 500);
+  }
+}
 
 // ============================================================
 // AUTHENTICATE REQUEST

@@ -1282,6 +1282,67 @@ async function loadLiveSimulation() {
   }
 }
 
+function updateSimulationFlow(status, faceVerificationStatus = "pending") {
+  const stepIds = [
+    "simStep-registration",
+    "simStep-seated",
+    "simStep-called",
+    "simStep-verification",
+    "simStep-verified",
+    "simStep-on_stage",
+    "simStep-complete"
+  ];
+
+  const cleanStatus = String(status || "registration")
+    .trim()
+    .toLowerCase();
+
+  const cleanFaceStatus = String(faceVerificationStatus || "pending")
+    .trim()
+    .toLowerCase();
+
+  const currentIndexMap = {
+    registration: 0,
+    seat_queue: 1,
+    queue: 2,
+    on_stage: 5,
+    complete: 6
+  };
+
+  let currentIndex = currentIndexMap[cleanStatus];
+
+  if (cleanStatus === "face_verification") {
+    currentIndex = cleanFaceStatus === "verified" ? 4 : 3;
+  }
+
+  if (currentIndex === undefined) {
+    currentIndex = 0;
+  }
+
+  console.log("SIMULATION STATUS:", cleanStatus);
+  console.log("SIMULATION INDEX:", currentIndex);
+
+  stepIds.forEach((id, index) => {
+    const step = document.getElementById(id);
+
+    if (!step) {
+      console.error("Simulation element NOT FOUND:", id);
+      return;
+    }
+
+    step.classList.remove("active", "done");
+
+    if (index < currentIndex) {
+      step.classList.add("done");
+    }
+
+    if (index === currentIndex) {
+      step.classList.add("active");
+    }
+  });
+
+  console.log("ACTIVE STEP:", stepIds[currentIndex]);
+}
 
 function updateSimulationUI(simulation) {
 
@@ -1294,6 +1355,12 @@ function updateSimulationUI(simulation) {
       simulation.convocation_status ||
       "registration"
     ).toLowerCase();
+
+    const faceVerificationStatus = String(
+  simulation.face_verification_status || "pending"
+).toLowerCase();
+
+updateSimulationFlow(status, faceVerificationStatus);
 
   const queueNumber =
     simulation.queue_number;
@@ -1804,6 +1871,8 @@ async function initializeStudentDashboard() {
   runEntryAnimation();
 
   loadLiveSimulation();
+
+  setInterval(loadLiveSimulation, 3000);
 }
 
 

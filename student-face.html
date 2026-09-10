@@ -1,15 +1,11 @@
-<<<<<<< HEAD
 ﻿<!DOCTYPE html>
-=======
-<!DOCTYPE html>
->>>>>>> 9b6ae97 (update i)
 <html lang="en">
 
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>SmartConvo — Face Registration</title>
+<title>SmartConvo — Face Recognition</title>
 
 <link rel="icon" type="image/svg+xml" href="smc-icon.svg?v=3">
 <link rel="apple-touch-icon" href="smc-icon.svg?v=3">
@@ -484,10 +480,42 @@ a{
 }
 
 .capture-hint{
-  font-size:14px;
+  font-size:13px;
   color:var(--ink-soft);
   text-align:center;
-  margin-bottom:18px;
+  margin-bottom:14px;
+  line-height:1.5;
+}
+
+#facePositionGuide{
+  text-align:center;
+  margin:8px 0 20px;
+  padding:4px 0;
+}
+
+#sampleProgress{
+  display:block;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;
+  letter-spacing:.12em;
+  color:var(--ink-soft);
+  margin-bottom:8px;
+  text-transform:uppercase;
+}
+
+#facePositionTitle{
+  margin:0 0 6px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:15px;
+  letter-spacing:.1em;
+  color:var(--navy);
+  text-transform:uppercase;
+}
+
+#facePositionInstruction{
+  margin:0;
+  font-size:13px;
+  color:var(--ink-soft);
   line-height:1.5;
 }
 
@@ -1022,6 +1050,12 @@ a{
               Position your face within the frame following the guidelines, then click Start Camera.
             </p>
 
+            <div id="facePositionGuide">
+              <b id="sampleProgress">Sample 1 / 20</b>
+              <h4 id="facePositionTitle">FRONT VIEW</h4>
+              <p id="facePositionInstruction">Face the camera directly.</p>
+            </div>
+
             <div class="match-result" id="matchResult" style="display:none;">
 
               <span class="match-icon" id="matchIcon">
@@ -1043,8 +1077,8 @@ a{
                 </div>
 
                 <div class="m-value">
-                  <span class="m-score" id="confScore">—</span>
-                  <span id="matchText">—</span>
+                  <span class="m-score" id="confScore">✓ </span>
+                  <span id="matchText">✓ </span>
                 </div>
 
               </div>
@@ -1262,6 +1296,48 @@ const capturedPreview =
 
 const captureHint =
   document.getElementById('captureHint');
+
+const sampleProgress =
+  document.getElementById('sampleProgress');
+
+const facePositionTitle =
+  document.getElementById('facePositionTitle');
+
+const facePositionInstruction =
+  document.getElementById('facePositionInstruction');
+
+function updateFaceGuide(sample){
+
+  sampleProgress.textContent =
+    `Sample ${sample} / 20`;
+
+  if(sample <= 8){
+
+    facePositionTitle.textContent =
+      'FRONT VIEW';
+
+    facePositionInstruction.textContent =
+      'Face the camera directly.';
+
+  }else if(sample <= 14){
+
+    facePositionTitle.textContent =
+      'LEFT SIDE';
+
+    facePositionInstruction.textContent =
+      'Turn your face fully to the left.';
+
+  }else{
+
+    facePositionTitle.textContent =
+      'RIGHT SIDE';
+
+    facePositionInstruction.textContent =
+      'Turn your face fully to the right.';
+
+  }
+
+}
 
 const matchResult =
   document.getElementById('matchResult');
@@ -1662,7 +1738,7 @@ function capturePhoto(){
           ).toFixed(1) + '%';
 
         matchText.textContent =
-          ' — Meets all requirements';
+          '✓ Meets all requirements';
 
         captureHint.textContent =
           'Photo captured successfully. Review the photo before uploading.';
@@ -1728,10 +1804,10 @@ function handleFailedCapture(){
 
 
   confScore.textContent =
-    '—';
+    '✓ ';
 
   matchText.textContent =
-    ' — Lighting check failed';
+    ' Lighting check failed';
 
 
   captureHint.textContent =
@@ -1939,8 +2015,8 @@ async function uploadPhoto(){
      * STEP 1
      * Send captured image to Python Face API
      *
-     * YuNet → Face Detection
-     * SFace → Alignment + Feature Extraction
+     * YuNet ? Face Detection
+     * SFace ? Alignment + Feature Extraction
      *
      * Expected result:
      * 128-dimensional SFace feature
@@ -1961,7 +2037,7 @@ async function uploadPhoto(){
 
     const processResponse =
       await fetch(
-        'https://channels-peers-beast-personality.trycloudflare.com/api/face/process',
+        'https://pakciksayur-laptop-iskandar.taild259e8.ts.net/api/face/process',
         {
           method: 'POST',
           body: formData
@@ -2100,7 +2176,7 @@ async function uploadPhoto(){
       );
 
       faceStatus.textContent =
-        '✓ Registered';
+        '✓Registered';
 
 
       uploadBtn.textContent =
@@ -2135,6 +2211,8 @@ async function uploadPhoto(){
 
     const nextSampleNumber =
       totalSamples + 1;
+
+    updateFaceGuide(nextSampleNumber);
 
 
     console.log(
@@ -2243,6 +2321,8 @@ async function uploadPhoto(){
 
     if(registeredTotal >= 20){
 
+      updateFaceGuide(20);
+
       faceStatus.textContent =
         '✓ Registered';
 
@@ -2282,11 +2362,11 @@ async function uploadPhoto(){
 
 
       confScore.textContent =
-        '✓';
+        '—';
 
 
       matchText.textContent =
-        ' — Face registration completed (20/20)';
+        ' Face registration completed (20/20)';
 
 
       alert(
@@ -2310,6 +2390,8 @@ async function uploadPhoto(){
     faceStatus.textContent =
       `✓ Registered ${registeredTotal}/20`;
 
+    updateFaceGuide(registeredTotal + 1);
+
 
     uploadBtn.textContent =
       `✓ Sample ${registeredTotal}/20`;
@@ -2329,11 +2411,11 @@ async function uploadPhoto(){
 
 
     confScore.textContent =
-      '✓';
+      '—';
 
 
     matchText.textContent =
-      ` — Sample ${registeredTotal}/20 registered`;
+      ` Sample ${registeredTotal}/20 registered`;
 
 
     /*
@@ -2453,6 +2535,8 @@ uploadBtn.addEventListener(
    ============================================================ */
 
 async function initializeFacePage(){
+
+  updateFaceGuide(1);
 
   const student =
     await loadStudentProfile();

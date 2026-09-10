@@ -8,7 +8,7 @@
   <link rel="apple-touch-icon" href="smc-icon.svg?v=3">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg: #FAFAF7;
@@ -27,7 +27,9 @@
   *{margin:0;padding:0;box-sizing:border-box;}
   html,body{height:100%;}
   body{
-    background:var(--bg);
+    background:
+      radial-gradient(ellipse 900px 500px at 50% -8%, rgba(176,141,43,0.07), transparent 60%),
+      var(--bg);
     color:var(--ink);
     font-family:'Inter',sans-serif;
     -webkit-font-smoothing:antialiased;
@@ -41,45 +43,44 @@
     display:flex;
     align-items:center;
     justify-content:space-between;
-    padding:24px 48px;
+    padding:22px 48px;
     border-bottom:1px solid var(--line);
     background:var(--surface);
     flex-shrink:0;
   }
-  .dt-left{display:flex;align-items:center;gap:20px;}
+  .dt-left{display:flex;align-items:center;gap:18px;}
   .dt-logo{
-  font-family:'Fraunces',serif;
-  font-size:28px;
-  font-weight:600;
-  color:var(--navy-deep);
-  text-decoration:none;
-  cursor:pointer;
-  transition:opacity 0.2s ease;
-}
-
-.dt-logo:hover{
-  opacity:0.7;
-}
-  .dt-divider{width:1px;height:26px;background:var(--line);}
+    display:flex;align-items:center;gap:10px;
+    font-family:'Fraunces',serif;
+    font-size:26px;
+    font-weight:600;
+    color:var(--navy-deep);
+    text-decoration:none;
+    cursor:pointer;
+    transition:opacity 0.2s ease;
+  }
+  .dt-logo svg{width:22px;height:22px;color:var(--gold);flex-shrink:0;}
+  .dt-logo:hover{opacity:0.7;}
+  .dt-divider{width:1px;height:24px;background:var(--line);}
   .dt-event{
-    font-family:'IBM Plex Mono',monospace;font-size:14px;
-    letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-soft);
+    font-family:'IBM Plex Mono',monospace;font-size:13px;
+    letter-spacing:0.1em;color:var(--ink-soft);
   }
-  .dt-right{display:flex;align-items:center;gap:22px;}
+  .dt-right{display:flex;align-items:center;gap:24px;}
   .live-chip{
-    display:inline-flex;align-items:center;gap:10px;
-    font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:0.12em;text-transform:uppercase;
-    background:var(--green-soft);color:var(--green);padding:8px 16px;border-radius:3px;
+    display:inline-flex;align-items:center;gap:9px;
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.08em;
+    background:var(--green-soft);color:var(--green);padding:8px 15px;border-radius:20px;
   }
-  .live-chip .live-dot{width:9px;height:9px;border-radius:50%;background:var(--green);animation:pulse 1.4s ease-in-out infinite;}
+  .live-chip .live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 1.4s ease-in-out infinite;}
   @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.25;}}
   .dt-clock{
-    font-family:'IBM Plex Mono',monospace;font-size:28px;font-weight:500;color:var(--navy);
-    letter-spacing:0.06em;min-width:150px;text-align:right;
+    font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:500;color:var(--navy);
+    letter-spacing:0.03em;min-width:135px;text-align:right;
   }
   .dt-date{
-    font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:0.1em;
-    text-transform:uppercase;color:var(--ink-soft);
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.06em;
+    color:var(--ink-soft);padding-left:20px;border-left:1px solid var(--line);
   }
 
   /* ---------- MAIN CENTER ---------- */
@@ -88,142 +89,93 @@
     display:flex;
     align-items:center;
     justify-content:center;
-    gap:60px;
-    padding:40px 48px;
+    padding:56px 32px;
     position:relative;
   }
 
-  /* Photo box */
-  .photo-box{
-    position:relative;
-    width:340px;
-    height:420px;
-    background:var(--surface);
-    border:1px solid var(--line);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-shrink:0;
-    overflow:hidden;
-  }
-  .photo-box::before,.photo-box::after,.photo-box .pb-tl,.photo-box .pb-br{
-    content:"";position:absolute;width:26px;height:26px;border:2px solid var(--gold);opacity:0.6;
-  }
-  .photo-box::before{top:8px;left:8px;border-right:none;border-bottom:none;}
-  .photo-box::after{bottom:8px;right:8px;border-left:none;border-top:none;}
-  .photo-box .pb-tl{top:8px;right:8px;border-left:none;border-bottom:none;}
-  .photo-box .pb-br{bottom:8px;left:8px;border-right:none;border-top:none;}
-  .photo-box .photo-empty{
-    display:flex;flex-direction:column;align-items:center;gap:12px;
-    color:var(--ink-soft);text-align:center;padding:20px;
-  }
-  .photo-box .photo-empty svg{width:64px;height:64px;opacity:0.4;}
-  .photo-box .photo-empty span{
-    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;
-  }
-  .photo-box .photo-img{
-    width:100%;height:100%;object-fit:cover;display:none;
-  }
-  .photo-cap{
-    position:absolute;bottom:0;left:0;right:0;
-    background:rgba(20,40,63,0.85);color:#fff;text-align:center;
-    padding:10px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;
-  }
-
-  /* Info side */
   .now-info{
     display:flex;flex-direction:column;align-items:center;text-align:center;
     max-width:760px;
+    width:100%;
   }
 
-  /* ---- Congratulations seal (redesigned) ---- */
-  .congrats-seal{
-    display:flex;align-items:center;justify-content:center;gap:14px;
-    margin-bottom:14px;
+  /* ---- Laurel mark, replaces the old photo box as the visual anchor ---- */
+  .laurel-mark{
+    width:104px;height:104px;
+    margin-bottom:28px;
+    color:var(--gold);
   }
-  .congrats-seal svg{width:30px;height:30px;flex-shrink:0;color:var(--gold);}
+  .laurel-mark svg{width:100%;height:100%;}
+
   .congrats{
     font-family:'Fraunces',serif;font-weight:500;font-style:italic;
-    font-size:clamp(22px, 2vw, 27px);
+    font-size:clamp(20px, 2vw, 25px);
     color:var(--navy-deep);letter-spacing:0.01em;
-  }
-  .congrats-rule{
-    width:64px;height:1px;background:var(--gold);opacity:0.5;
-    margin:0 auto 22px;
+    margin-bottom:20px;
   }
 
   .now-label{
-    display:inline-flex;align-items:center;gap:10px;
-    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.22em;
-    text-transform:uppercase;color:var(--green);margin-bottom:16px;
-    background:var(--green-soft);padding:7px 16px;border-radius:20px;
+    display:inline-flex;align-items:center;gap:9px;
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.14em;
+    color:var(--green);margin-bottom:22px;
+    background:var(--green-soft);padding:7px 18px;border-radius:20px;
   }
   .now-label .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 1.6s ease-in-out infinite;}
-.now-faculty{
-    font-family:'IBM Plex Mono',monospace;font-size:14px;letter-spacing:0.18em;
-    text-transform:uppercase;color:var(--gold);margin-bottom:16px;
+
+  .now-faculty{
+    font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:0.14em;
+    color:var(--gold);margin-bottom:14px;
   }
   .now-name{
-    font-family:'Fraunces',serif;font-weight:500;
-    font-size:clamp(36px, 4.5vw, 58px);
-    color:var(--navy-deep);margin-bottom:10px;line-height:1.1;
+    font-family:'Fraunces',serif;font-weight:600;
+    font-size:clamp(38px, 5vw, 64px);
+    color:var(--navy-deep);margin-bottom:14px;line-height:1.08;
+    max-width:820px;
   }
   .now-programme{
-    font-size:clamp(17px, 2vw, 22px);
-    color:var(--ink-soft);line-height:1.5;margin-bottom:22px;
+    font-size:clamp(16px, 1.6vw, 20px);
+    color:var(--ink-soft);line-height:1.5;margin-bottom:36px;
+    max-width:520px;
   }
-  .now-meta{
-    display:flex;align-items:center;justify-content:center;gap:30px;
-    background:var(--surface);border:1px solid var(--line);
-    border-radius:var(--radius);padding:16px 34px;margin-bottom:26px;
-    box-shadow:0 10px 26px rgba(30,58,95,0.06);
-  }
-  .now-meta .meta-item{
-    display:flex;flex-direction:column;align-items:center;gap:4px;min-width:110px;
-    font-family:'IBM Plex Mono',monospace;
-  }
-  .now-meta .meta-item .meta-label{
-    color:var(--ink-soft);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;
-  }
-  .now-meta .meta-item .meta-val{
-    font-weight:600;color:var(--navy);font-size:22px;letter-spacing:0.04em;
-  }
-  .now-meta .meta-sep{width:1px;height:34px;background:var(--line);}
 
   /* Professional status strip */
   .status-strip{
-    display:flex;align-items:center;gap:24px;
+    display:flex;align-items:center;gap:26px;
     background:var(--surface);border:1px solid var(--line);
     border-left:4px solid var(--green);
-    padding:18px 28px;border-radius:var(--radius);
-    box-shadow:0 12px 30px rgba(30,58,95,0.08);
+    padding:20px 32px;border-radius:var(--radius);
+    box-shadow:0 16px 34px rgba(30,58,95,0.08);
+    width:100%;
+    max-width:560px;
   }
   .status-strip .ss-dot{
-    width:12px;height:12px;border-radius:50%;background:var(--green);flex-shrink:0;
+    width:11px;height:11px;border-radius:50%;background:var(--green);flex-shrink:0;
     animation:pulse 1.6s ease-in-out infinite;
   }
+  .status-strip .ss-text{text-align:left;}
   .status-strip .ss-main{
-    font-size:15px;font-weight:600;color:var(--green);letter-spacing:0.02em;
+    font-size:15px;font-weight:600;color:var(--green);letter-spacing:0.01em;
   }
   .status-strip .ss-sub{
     font-size:13px;color:var(--ink-soft);margin-top:2px;
   }
   .status-strip .ss-queue{
     margin-left:auto;text-align:right;flex-shrink:0;
+    padding-left:24px;border-left:1px solid var(--line);
   }
   .status-strip .ss-queue .sq-num{
-    font-family:'Fraunces',serif;font-weight:600;font-size:34px;color:var(--navy);line-height:1;
+    font-family:'Fraunces',serif;font-weight:600;font-size:32px;color:var(--navy);line-height:1;
   }
   .status-strip .ss-queue .sq-label{
-    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;
-    text-transform:uppercase;color:var(--ink-soft);margin-top:4px;
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.1em;
+    color:var(--ink-soft);margin-top:5px;
   }
 
-  .now-frame{position:absolute;width:44px;height:44px;opacity:0.4;pointer-events:none;}
-  .nf-tl{top:30px;left:30px;border-top:2px solid var(--gold);border-left:2px solid var(--gold);}
-  .nf-tr{top:30px;right:30px;border-top:2px solid var(--gold);border-right:2px solid var(--gold);}
-  .nf-bl{bottom:30px;left:30px;border-bottom:2px solid var(--gold);border-left:2px solid var(--gold);}
-  .nf-br{bottom:30px;right:30px;border-bottom:2px solid var(--gold);border-right:2px solid var(--gold);}
+  .now-frame{position:absolute;width:40px;height:40px;opacity:0.35;pointer-events:none;}
+  .nf-tl{top:28px;left:28px;border-top:2px solid var(--gold);border-left:2px solid var(--gold);}
+  .nf-tr{top:28px;right:28px;border-top:2px solid var(--gold);border-right:2px solid var(--gold);}
+  .nf-bl{bottom:28px;left:28px;border-bottom:2px solid var(--gold);border-left:2px solid var(--gold);}
+  .nf-br{bottom:28px;right:28px;border-bottom:2px solid var(--gold);border-right:2px solid var(--gold);}
 
   /* ---------- BOTTOM BAR ---------- */
   .display-bottom{
@@ -233,62 +185,56 @@
   }
   .recents-head{
     display:flex;align-items:center;justify-content:space-between;
-    padding:18px 48px;border-bottom:1px solid var(--line);
+    padding:16px 48px;border-bottom:1px solid var(--line);
   }
   .recents-head .rh-title{
-    font-family:'Fraunces',serif;font-weight:500;font-size:20px;color:var(--ink);
+    font-family:'Fraunces',serif;font-weight:500;font-size:19px;color:var(--ink);
   }
   .recents-head .rh-sub{
-    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.1em;
-    text-transform:uppercase;color:var(--ink-soft);
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:0.08em;
+    color:var(--ink-soft);
   }
   .recent-list{
-    display:flex;align-items:center;gap:16px;
-    padding:18px 48px;overflow-x:auto;
+    display:flex;align-items:center;gap:14px;
+    padding:16px 48px;overflow-x:auto;
   }
   .recent-chip{
     display:flex;align-items:center;gap:12px;
     background:var(--bg);border:1px solid var(--line);
     border-radius:var(--radius);padding:10px 18px;flex-shrink:0;
   }
-  .recent-chip .rc-thumb{
-    width:40px;height:40px;border-radius:50%;
-    background:var(--gold-soft);color:var(--navy);
-    display:flex;align-items:center;justify-content:center;flex-shrink:0;
-    overflow:hidden;
+  .recent-chip .rc-num{
+    display:flex;align-items:center;justify-content:center;
+    width:32px;height:32px;border-radius:50%;flex-shrink:0;
+    background:var(--gold-soft);color:var(--navy-deep);
+    font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:500;
   }
-  .recent-chip .rc-thumb img{width:100%;height:100%;object-fit:cover;}
   .recent-chip .rc-name{
     font-size:14px;font-weight:500;color:var(--ink);white-space:nowrap;
-  }
-  .recent-chip .rc-num{
-    font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--gold);
   }
   .recent-chip.now{
     border-color:var(--green);background:var(--green-soft);
   }
-  .recent-chip.now .rc-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 1.4s ease-in-out infinite;}
+  .recent-chip.now .rc-num{background:var(--green);color:#fff;}
 
   .footer-note{
     padding:12px 48px;border-top:1px solid var(--line);
     text-align:center;
-    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.16em;
-    text-transform:uppercase;color:var(--ink-soft);
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.1em;
+    color:var(--ink-soft);
   }
 
-  @media (max-width:1024px){
-    .display-main{flex-direction:column;gap:30px;}
-    .photo-box{width:260px;height:320px;}
-    .dt-date{display:none;}
-  }
   @media (max-width:768px){
-    .display-top{padding:18px 24px;}
-    .dt-logo{font-size:22px;}
+    .display-top{padding:16px 22px;flex-wrap:wrap;gap:12px;}
+    .dt-logo{font-size:21px;}
     .dt-event{display:none;}
-    .display-main{padding:24px;}
-    .photo-box{width:220px;height:280px;}
-    .now-name{font-size:28px;}
-    .recents-head,.recent-list,.footer-note{padding-left:24px;padding-right:24px;}
+    .dt-date{display:none;}
+    .display-main{padding:32px 20px;}
+    .now-name{font-size:30px;}
+    .laurel-mark{width:76px;height:76px;margin-bottom:20px;}
+    .status-strip{flex-wrap:wrap;padding:18px 20px;}
+    .status-strip .ss-queue{border-left:none;padding-left:0;margin-left:0;width:100%;text-align:left;padding-top:12px;border-top:1px solid var(--line);}
+    .recents-head,.recent-list,.footer-note{padding-left:22px;padding-right:22px;}
   }
 </style>
 </head>
@@ -297,10 +243,16 @@
   <!-- ================= TOP BAR ================= -->
   <header class="display-top">
     <div class="dt-left">
-  <a href="admin-dashboard.html" class="dt-logo">SmartConvo</a>
-  <span class="dt-divider"></span>
-  <span class="dt-event">Convocation 2026 · Session 2</span>
-</div>
+      <a href="admin-dashboard.html" class="dt-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M12 3l9 4.5-9 4.5-9-4.5z"/>
+          <path d="M6.5 9.7v4.3c0 1.8 2.5 3.3 5.5 3.3s5.5-1.5 5.5-3.3V9.7"/>
+        </svg>
+        SmartConvo
+      </a>
+      <span class="dt-divider"></span>
+      <span class="dt-event">Convocation 2026 · Session 2</span>
+    </div>
     <div class="dt-right">
       <span class="live-chip"><span class="live-dot"></span> Live</span>
       <span class="dt-clock" id="clock">10:24:30</span>
@@ -315,48 +267,42 @@
     <span class="now-frame nf-bl"></span>
     <span class="now-frame nf-br"></span>
 
-    <!-- Photo box -->
-    <div class="photo-box">
-      <span class="pb-tl"></span>
-      <span class="pb-br"></span>
-      <!-- Placeholder: replace with student photo from database -->
-      <img id="studentPhoto" class="photo-img" src="" alt="Student photo">
-      <div id="photoEmpty" class="photo-empty">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
-          <circle cx="12" cy="8" r="3.4"/>
-          <path d="M5 20c0-3.6 3.1-6.4 7-6.4s7 2.8 7 6.4"/>
-        </svg>
-        <span>Student Photo</span>
-      </div>
-    </div>
-
-    <!-- Info -->
     <div class="now-info">
 
-      <!-- Redesigned: Congratulations as a quiet, formal seal rather than a loud headline -->
-      <div class="congrats-seal">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3">
-          <path d="M12 2l1.6 3.6 3.9.4-2.9 2.7.8 3.9L12 10.7 8.6 12.6l.8-3.9-2.9-2.7 3.9-.4z"/>
-          <path d="M9 13.5L7 21l5-2.4 5 2.4-2-7.5"/>
+      <div class="laurel-mark">
+        <svg viewBox="0 0 100 100" fill="none" stroke="currentColor">
+          <path d="M50 12v76" stroke-width="1.4" opacity="0.5"/>
+          <g stroke-width="1.6">
+            <path d="M50 22c-9 3-16 10-19 20 6 1 12-1 16-6"/>
+            <path d="M50 34c-7 2-12 8-14 15 5 1 9-1 12-5"/>
+            <path d="M50 46c-6 2-10 7-11 12 4 1 8-1 10-4"/>
+            <path d="M50 58c-5 2-8 6-9 10 3 1 6-1 8-3"/>
+            <path d="M50 22c9 3 16 10 19 20-6 1-12-1-16-6"/>
+            <path d="M50 34c7 2 12 8 14 15-5 1-9-1-12-5"/>
+            <path d="M50 46c6 2 10 7 11 12-4 1-8-1-10-4"/>
+            <path d="M50 58c5 2 8 6 9 10-3 1-6-1-8-3"/>
+          </g>
+          <circle cx="50" cy="14" r="4.5" stroke-width="1.6"/>
         </svg>
-        <span class="congrats">Congratulations</span>
       </div>
-      <div class="congrats-rule"></div>
+
+      <div class="congrats">Congratulations on your graduation</div>
 
       <div class="now-label"><span class="dot"></span>Face Verified</div>
-      <div class="now-faculty">Faculty of Electrical &amp; Computing Engineering Technology</div>
-      <div class="now-name">Danish Shazwan Bin Suwandi</div>
-      <div class="now-programme">Diploma in Computer Technology (Big Data Analysis)</div>
+
+      <div class="now-faculty" id="nowFaculty">—</div>
+      <div class="now-name" id="nowName">Waiting for verification...</div>
+      <div class="now-programme" id="nowProgramme">—</div>
 
       <div class="status-strip">
         <span class="ss-dot"></span>
-        <div>
-          <div class="ss-main">Verification Successful</div>
+        <div class="ss-text">
+          <div class="ss-main">Verification successful</div>
           <div class="ss-sub">Identity match confirmed for convocation</div>
         </div>
         <div class="ss-queue">
-          <div class="sq-num">#001</div>
-          <div class="sq-label">Queue No.</div>
+          <div class="sq-num" id="queueNumber">—</div>
+          <div class="sq-label">Queue no.</div>
         </div>
       </div>
     </div>
@@ -367,56 +313,30 @@
   <footer class="display-bottom">
 
     <div class="recents-head">
-      <span class="rh-title">Queue Status</span>
-      <span class="rh-sub">Next In Line</span>
+      <span class="rh-title">Queue status</span>
+      <span class="rh-sub">Next in line</span>
     </div>
 
     <div class="recent-list">
       <div class="recent-chip now">
-        <span class="rc-dot"></span>
-        <span class="rc-thumb">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.6 3.1-6.4 7-6.4s7 2.8 7 6.4"/>
-          </svg>
-        </span>
+        <span class="rc-num">01</span>
         <span class="rc-name">Danish Shazwan Bin Suwandi</span>
-        <span class="rc-num">#001</span>
       </div>
       <div class="recent-chip">
-        <span class="rc-thumb">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.6 3.1-6.4 7-6.4s7 2.8 7 6.4"/>
-          </svg>
-        </span>
+        <span class="rc-num">02</span>
         <span class="rc-name">Iskandar Zulkarnain Bin Muhamad</span>
-        <span class="rc-num">#002</span>
       </div>
       <div class="recent-chip">
-        <span class="rc-thumb">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.6 3.1-6.4 7-6.4s7 2.8 7 6.4"/>
-          </svg>
-        </span>
+        <span class="rc-num">03</span>
         <span class="rc-name">Mior Muhammad Ikmal Bin Mior Darul Ridzuan</span>
-        <span class="rc-num">#003</span>
       </div>
       <div class="recent-chip">
-        <span class="rc-thumb">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.6 3.1-6.4 7-6.4s7 2.8 7 6.4"/>
-          </svg>
-        </span>
+        <span class="rc-num">04</span>
         <span class="rc-name">Mohammad Haziq Afiq Bin Yusli@Yazid</span>
-        <span class="rc-num">#004</span>
       </div>
       <div class="recent-chip">
-        <span class="rc-thumb">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.6 3.1-6.4 7-6.4s7 2.8 7 6.4"/>
-          </svg>
-        </span>
+        <span class="rc-num">05</span>
         <span class="rc-name">Muhammad Ammar Bin Mahadir</span>
-        <span class="rc-num">#005</span>
       </div>
     </div>
 
@@ -427,32 +347,97 @@
   </footer>
 
 <script>
-  // Live clock
-  function updateClock(){
-    const now = new Date();
-    const hh = String(now.getHours()).padStart(2,'0');
-    const mm = String(now.getMinutes()).padStart(2,'0');
-    const ss = String(now.getSeconds()).padStart(2,'0');
-    document.getElementById('clock').textContent = hh + ':' + mm + ':' + ss;
-  }
-  updateClock();
-  setInterval(updateClock, 1000);
 
-  // Real-time day & date
-  function updateDate(){
-    const now = new Date();
-    const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    const day = days[now.getDay()];
-    const date = now.getDate();
-    const month = months[now.getMonth()];
-    const year = now.getFullYear();
-    document.getElementById('date').textContent = day + ', ' + date + ' ' + month + ' ' + year;
-  }
-  updateDate();
+const API_BASE =
+  "https://smartconvo-api.danishshazwan85.workers.dev/api/admin";
 
-  // Example: set student photo from database (replace src with real DB path)
-  // document.getElementById('studentPhoto').src = 'images/student/nurul.jpg';
+function updateClock() {
+  const now = new Date();
+  document.getElementById("clock").textContent =
+    now.toLocaleTimeString("en-GB", { hour12: false });
+  document.getElementById("date").textContent =
+    now.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+async function loadCurrentVerifiedStudent() {
+
+  try {
+
+    const response = await fetch(
+      `${API_BASE}/monitoring/current`
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch current student");
+    }
+
+    const data = await response.json();
+
+    console.log(
+      "Front Display Student:",
+      data
+    );
+
+    if (!data.success || !data.student) {
+      showWaiting();
+      return;
+    }
+
+    const student = data.student;
+
+    document.getElementById("nowName").textContent =
+      student.name || "—";
+
+    document.getElementById("nowProgramme").textContent =
+      student.course_name || "—";
+
+    document.getElementById("nowFaculty").textContent =
+      student.faculty || "—";
+
+    document.getElementById("queueNumber").textContent =
+      student.queue_number
+        ? "#" + String(student.queue_number).padStart(3, "0")
+        : "—";
+
+  } catch (error) {
+
+    console.error(
+      "Front Display Error:",
+      error
+    );
+
+  }
+}
+
+
+function showWaiting() {
+
+  document.getElementById("nowName").textContent =
+    "Waiting for verification...";
+
+  document.getElementById("nowProgramme").textContent =
+    "—";
+
+  document.getElementById("nowFaculty").textContent =
+    "—";
+
+  document.getElementById("queueNumber").textContent =
+    "—";
+}
+
+
+// Initial load
+loadCurrentVerifiedStudent();
+
+
+// Refresh every 2 seconds
+setInterval(
+  loadCurrentVerifiedStudent,
+  2000
+);
+
 </script>
 
 </body>

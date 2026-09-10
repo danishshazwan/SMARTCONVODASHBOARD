@@ -175,6 +175,19 @@
 
   .main-footer{border-top:1px solid var(--line);padding:20px 40px;display:flex;align-items:center;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-soft);letter-spacing:0.04em;}
 
+  /* Current / Next subject */
+  .next-subject{margin-top:22px;border:1px solid var(--line);background:var(--bg);}
+  .next-subject-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--line);}
+  .next-subject-head h4{font-family:'Fraunces',serif;font-size:18px;font-weight:500;color:var(--ink);margin-top:2px;}
+  .next-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);}
+  .next-subject-body{display:flex;align-items:center;gap:14px;padding:16px;}
+  .next-avatar{width:52px;height:52px;flex-shrink:0;border-radius:var(--radius);background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:20px;font-weight:500;}
+  .next-details{min-width:0;flex:1;}
+  .next-name{font-family:'Fraunces',serif;font-size:18px;font-weight:500;color:var(--ink);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .next-id{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gold);margin-bottom:9px;}
+  .next-meta{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--ink-soft);}
+  .next-meta strong{font-family:'IBM Plex Mono',monospace;color:var(--navy);}
+
   @media (max-width:1024px){.verify-grid{grid-template-columns:1fr;}}
   @media (max-width:768px){
     .sidebar{width:64px;}
@@ -336,74 +349,94 @@
           </div>
         </div>
 
-        <div class="section-card">
-          <div class="card-head">
-            <h3>Current Subject</h3>
-            <span class="status-pill verified">✓ Verified</span>
+<div class="section-card">
+  <div class="card-head">
+    <h3>Current Subject</h3>
+    <span class="status-pill waiting" id="currentStatus">Waiting</span>
+  </div>
+
+  <div class="card-body">
+
+    <!-- CURRENT STUDENT: ONLY SHOWN AFTER VERIFICATION -->
+    <div class="student-info" id="currentStudentInfo">
+      <div class="s-photo" id="studentInitials">--</div>
+
+      <div class="s-details">
+        <div class="s-name" id="studentName">Waiting for verification...</div>
+
+        <div class="s-id" id="studentId">Student ID · —</div>
+
+        <div class="s-meta">
+          <div class="s-meta-row">
+            <span class="sm-label">Programme</span>
+            <span class="sm-value" id="studentProgramme">—</span>
           </div>
-          <div class="card-body">
-            <div class="student-info">
-              <div class="s-photo">DS</div>
-              <div class="s-details">
-                <div class="s-name">Danish Shazwan Bin Suwandi</div>
-                <div class="s-id">Student ID · 2402076</div>
-                <div class="s-meta">
-                  <div class="s-meta-row"><span class="sm-label">Programme</span><span class="sm-value">Diploma in Computer Technology</span></div>
-                  <div class="s-meta-row"><span class="sm-label">Faculty</span><span class="sm-value">Information Technology &amp; Engineering</span></div>
-                  <div class="s-meta-row"><span class="sm-label">CGPA</span><span class="sm-value">3.78</span></div>
-                  <div class="s-meta-row"><span class="sm-label">Queue No.</span><span class="sm-value">001</span></div>
-                </div>
-              </div>
-            </div>
-            <div class="verify-table-wrap" style="overflow-x:auto;">
-              <table class="verify-table">
-                <thead>
-                  <tr>
-                    <th>Queue</th>
-                    <th>Student</th>
-                    <th>Score</th>
-                    <th>Result</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="row-num">035</td>
-                    <td>Nurul Izzah binti Fauzi</td>
-                    <td class="score" style="color:var(--green);">98.8%</td>
-                    <td><span class="status-pill verified">Verified</span></td>
-                  </tr>
-                  <tr>
-                    <td class="row-num">036</td>
-                    <td>Muhammad Syafiq bin Azman</td>
-                    <td class="score" style="color:var(--green);">97.4%</td>
-                    <td><span class="status-pill verified">Verified</span></td>
-                  </tr>
-                  <tr>
-                    <td class="row-num">037</td>
-                    <td>Farah Adibah binti Saleh</td>
-                    <td class="score" style="color:var(--green);">98.6%</td>
-                    <td><span class="status-pill verified">Verified</span></td>
-                  </tr>
-                  <tr>
-                    <td class="row-num">038</td>
-                    <td>Lim Wei Jian</td>
-                    <td class="score" style="color:var(--green);">96.9%</td>
-                    <td><span class="status-pill verified">Verified</span></td>
-                  </tr>
-                  <tr>
-                    <td class="row-num">039</td>
-                    <td>Anis Sofea binti Kamarudin</td>
-                    <td class="score" style="color:var(--green);">99.2%</td>
-                    <td><span class="status-pill verified">Verified</span></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+
+          <div class="s-meta-row">
+            <span class="sm-label">Faculty</span>
+            <span class="sm-value" id="studentFaculty">—</span>
+          </div>
+
+          <div class="s-meta-row">
+            <span class="sm-label">CGPA</span>
+            <span class="sm-value" id="studentCgpa">—</span>
+          </div>
+
+          <div class="s-meta-row">
+            <span class="sm-label">Queue No.</span>
+            <span class="sm-value" id="studentQueue">—</span>
           </div>
         </div>
+      </div>
+    </div>
 
-      </section>
+    <!-- NEXT SUBJECT -->
+    <div class="next-subject" id="nextSubjectCard">
+      <div class="next-subject-head">
+        <div>
+          <div class="next-eyebrow">Next in Queue</div>
+          <h4>Next Subject</h4>
+        </div>
+        <span class="status-pill waiting" id="nextStatus">Waiting</span>
+      </div>
 
+      <div class="next-subject-body">
+        <div class="next-avatar" id="nextStudentInitials">--</div>
+        <div class="next-details">
+          <div class="next-name" id="nextStudentName">No next subject</div>
+          <div class="next-id" id="nextStudentId">Student ID · —</div>
+          <div class="next-meta">
+            <span>Queue <strong id="nextStudentQueue">—</strong></span>
+            <span id="nextStudentProgramme">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VERIFICATION HISTORY -->
+    <div class="verify-table-wrap" style="overflow-x:auto;">
+      <table class="verify-table">
+        <thead>
+          <tr>
+            <th>Queue</th>
+            <th>Student</th>
+            <th>Score</th>
+            <th>Result</th>
+          </tr>
+        </thead>
+
+        <tbody id="verificationTableBody">
+          <tr>
+            <td colspan="4" style="text-align:center;">
+              Loading verification data...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
     </main>
 
     <footer class="main-footer">
@@ -416,84 +449,1254 @@
 </div>
 
 <script>
-  // The AI auto-verifies the identity when a confident match is detected.
-  // If the AI cannot reach a confident match, it flags the case for manual review
-  // and the admin performs the manual accept as a fallback.
 
-  function simulateFailure(){
-    const result = document.getElementById('matchResult');
-    const matchValue = document.getElementById('matchValue');
-    const note = document.getElementById('verifyNote');
-    const manualReview = document.getElementById('manualReview');
-    const confVal = document.getElementById('confVal');
-    const confFill = document.getElementById('confFill');
-    const aiStatusText = document.getElementById('aiStatusText');
-    const checkRows = document.querySelectorAll('.check-row');
+/* =========================================================
+   SMARTCONVO - FACE VERIFICATION
+   Frontend ↔ Cloudflare Worker ↔ Cloudflare D1
+========================================================= */
 
-    // AI could not detect a confident match
-    result.classList.add('fail');
-    result.querySelector('.match-icon').innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4M12 16h.01"/><circle cx="12" cy="12" r="9"/></svg>';
-    matchValue.innerHTML = '<span class="m-score">Unable to verify</span> — Low confidence match';
-    note.textContent = 'The AI could not reach a confident face match. Manual verification is required before the student can proceed.';
-    confVal.textContent = 'Low';
-    confVal.style.color = 'var(--red)';
-    confFill.style.width = '24%';
-    confFill.style.background = 'var(--red)';
-    checkRows.forEach(function(r){ r.classList.remove('done'); });
-    aiStatusText.textContent = 'AI detection failed · Flagged for manual review';
-    manualReview.style.display = 'block';
+
+/* =========================================================
+   API CONFIGURATION
+========================================================= */
+
+const API_BASE = "https://smartconvo-api.danishshazwan85.workers.dev/api/admin";
+
+
+/* Current student being verified */
+let currentStudentId = null;
+
+
+/* =========================================================
+   LOAD CURRENT SUBJECT
+========================================================= */
+
+async function loadCurrentSubject() {
+  try {
+    const response = await fetch(`${API_BASE}/verification/current`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to load current subject: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log("Current Subject:", data);
+
+    const student = data.student || data.current_student || null;
+
+    // Current Subject stays empty until the database confirms verification.
+    if (!student || !isVerifiedStatus(student.face_verification_status)) {
+      currentStudentId = null;
+      resetCurrentSubject();
+      return;
+    }
+
+    currentStudentId = student.student_id;
+    updateCurrentSubject(student);
+
+  } catch (error) {
+    console.error("Current Subject Error:", error);
+    resetCurrentSubject();
+  }
+}
+
+
+/* =========================================================
+   VERIFICATION STATUS HELPER
+========================================================= */
+
+function isVerifiedStatus(status) {
+  return ["verified", "manual_verified"]
+    .includes(String(status || "").toLowerCase());
+}
+
+
+/* =========================================================
+   LOAD NEXT SUBJECT
+   Source: SmartConvo Cloudflare Worker / D1
+========================================================= */
+
+async function loadNextSubject() {
+  try {
+    const response = await fetch(`${API_BASE}/verification/next`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to load next subject: ${response.status}`
+      );
+    }
+
+    const data = await response.json();
+
+    console.log("Next Subject:", data);
+
+    const student =
+      data.student ||
+      data.next_student ||
+      data.next ||
+      null;
+
+    if (!student) {
+      resetNextSubject();
+      return;
+    }
+
+    // Prevent current verified student from appearing as Next Subject
+    if (
+      currentStudentId &&
+      String(student.student_id) === String(currentStudentId)
+    ) {
+      resetNextSubject();
+      return;
+    }
+
+    updateNextSubject(student);
+
+  } catch (error) {
+
+    console.error(
+      "Next Subject Error:",
+      error
+    );
+
+    resetNextSubject();
+  }
+}
+
+
+/* =========================================================
+   UPDATE NEXT SUBJECT UI
+========================================================= */
+
+function updateNextSubject(student) {
+  const name = student.name || "Unknown Student";
+  const studentId = student.student_id || "—";
+  const queue = student.queue_number || "—";
+  const programme = student.course_name || student.programme || "—";
+
+  const nameElement = document.getElementById("nextStudentName");
+  const idElement = document.getElementById("nextStudentId");
+  const queueElement = document.getElementById("nextStudentQueue");
+  const programmeElement = document.getElementById("nextStudentProgramme");
+  const avatarElement = document.getElementById("nextStudentInitials");
+  const statusElement = document.getElementById("nextStatus");
+
+  if (nameElement) nameElement.textContent = name;
+  if (idElement) idElement.textContent = `Student ID · ${studentId}`;
+  if (queueElement) queueElement.textContent = queue;
+  if (programmeElement) programmeElement.textContent = programme;
+  if (avatarElement) avatarElement.textContent = getInitials(name);
+
+  if (statusElement) {
+    statusElement.className = "status-pill waiting";
+    statusElement.textContent = "Next";
+  }
+}
+
+
+/* =========================================================
+   RESET NEXT SUBJECT
+========================================================= */
+
+function resetNextSubject() {
+  const nameElement = document.getElementById("nextStudentName");
+  const idElement = document.getElementById("nextStudentId");
+  const queueElement = document.getElementById("nextStudentQueue");
+  const programmeElement = document.getElementById("nextStudentProgramme");
+  const avatarElement = document.getElementById("nextStudentInitials");
+  const statusElement = document.getElementById("nextStatus");
+
+  if (nameElement) nameElement.textContent = "No next subject";
+  if (idElement) idElement.textContent = "Student ID · —";
+  if (queueElement) queueElement.textContent = "—";
+  if (programmeElement) programmeElement.textContent = "Queue is empty";
+  if (avatarElement) avatarElement.textContent = "--";
+
+  if (statusElement) {
+    statusElement.className = "status-pill waiting";
+    statusElement.textContent = "Waiting";
+  }
+}
+
+
+/* =========================================================
+   UPDATE CURRENT SUBJECT UI
+========================================================= */
+
+function updateCurrentSubject(student) {
+
+  const name =
+    student.name || "Unknown Student";
+
+  const studentId =
+    student.student_id || "—";
+
+  const programme =
+    student.course_name ||
+    student.programme ||
+    "—";
+
+  const faculty =
+    student.faculty || "—";
+
+  const cgpa =
+    student.cgpa !== null &&
+    student.cgpa !== undefined
+      ? student.cgpa
+      : "—";
+
+  const queue =
+    student.queue_number || "—";
+
+
+  /*
+   * Student name
+   */
+
+  const nameElement =
+    document.querySelector(".s-name");
+
+  if (nameElement) {
+    nameElement.textContent = name;
   }
 
-  function manualApprove(){
-    const result = document.getElementById('matchResult');
-    const matchValue = document.getElementById('matchValue');
-    const note = document.getElementById('verifyNote');
-    const manualReview = document.getElementById('manualReview');
-    const confVal = document.getElementById('confVal');
-    const confFill = document.getElementById('confFill');
-    const aiStatusText = document.getElementById('aiStatusText');
-    const checkRows = document.querySelectorAll('.check-row');
-    const manualBtn = manualReview.querySelector('.verify-btn');
 
-    // Admin manually accepts after the AI could not verify
-    result.classList.remove('fail');
-    result.querySelector('.match-icon').innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>';
-    matchValue.innerHTML = '<span class="m-score">Manually Verified</span> — Approved by admin';
-    note.textContent = 'Identity manually verified by the admin. Student moved to the verified queue for stage presentation.';
-    confVal.textContent = 'Manual';
-    confVal.style.color = 'var(--green)';
-    confFill.style.width = '100%';
-    confFill.style.background = 'var(--green)';
-checkRows.forEach(function(r){ r.classList.add('done'); });
-    aiStatusText.textContent = 'Manually verified by admin · Student routed to verified queue';
-    manualBtn.disabled = true;
-    manualBtn.textContent = '✓ Accepted';
+  /*
+   * Student ID
+   */
+
+  const idElement =
+    document.querySelector(".s-id");
+
+  if (idElement) {
+
+    idElement.textContent =
+      `Student ID · ${studentId}`;
+
   }
 
-  function manualReject(){
-    const result = document.getElementById('matchResult');
-    const matchValue = document.getElementById('matchValue');
-    const note = document.getElementById('verifyNote');
-    const manualReview = document.getElementById('manualReview');
-    const confVal = document.getElementById('confVal');
-    const confFill = document.getElementById('confFill');
-    const aiStatusText = document.getElementById('aiStatusText');
-    const checkRows = document.querySelectorAll('.check-row');
-    const buttons = manualReview.querySelectorAll('.verify-btn');
 
-    // Admin manually rejects the identity
-    result.classList.add('fail');
-    result.querySelector('.match-icon').innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>';
-    matchValue.innerHTML = '<span class="m-score">Rejected</span> — Escort to manual desk';
-    note.textContent = 'Identity rejected by the admin. Escort the student to the manual verification desk for further checks.';
-    confVal.textContent = 'Rejected';
-    confVal.style.color = 'var(--red)';
-    confFill.style.width = '12%';
-    confFill.style.background = 'var(--red)';
-    checkRows.forEach(function(r){ r.classList.remove('done'); });
-    aiStatusText.textContent = 'Identity rejected by admin · Flagged for manual review';
-    buttons.forEach(function(b){ b.disabled = true; });
+  /*
+   * Programme
+   */
+
+  const metaValues =
+    document.querySelectorAll(".s-meta-row .sm-value");
+
+
+  if (metaValues.length >= 4) {
+
+    metaValues[0].textContent =
+      programme;
+
+    metaValues[1].textContent =
+      faculty;
+
+    metaValues[2].textContent =
+      cgpa;
+
+    metaValues[3].textContent =
+      queue;
+
   }
+
+
+  /*
+   * Student initials
+   */
+
+  const photo =
+    document.querySelector(".s-photo");
+
+  if (photo) {
+
+    photo.textContent =
+      getInitials(name);
+
+  }
+
+
+  /*
+   * Verification status
+   */
+
+  updateCurrentStatus(
+    student.face_verification_status ||
+    "pending"
+  );
+
+}
+
+
+/* =========================================================
+   GET STUDENT INITIALS
+========================================================= */
+
+function getInitials(name) {
+
+  if (!name) {
+    return "--";
+  }
+
+
+  const parts =
+    name.trim().split(/\s+/);
+
+
+  if (parts.length === 1) {
+
+    return parts[0]
+      .substring(0, 2)
+      .toUpperCase();
+
+  }
+
+
+  return (
+    parts[0][0] +
+    parts[parts.length - 1][0]
+  ).toUpperCase();
+
+}
+
+
+/* =========================================================
+   UPDATE CURRENT SUBJECT STATUS
+========================================================= */
+
+function updateCurrentStatus(status) {
+
+  const statusElement =
+    document.querySelector(
+      ".card-head .status-pill"
+    );
+
+
+  if (!statusElement) {
+    return;
+  }
+
+
+  statusElement.className =
+    "status-pill";
+
+
+  switch (status) {
+
+    case "verified":
+
+      statusElement.classList.add(
+        "verified"
+      );
+
+      statusElement.textContent =
+        "✓ Verified";
+
+      break;
+
+
+    case "manual_verified":
+
+      statusElement.classList.add(
+        "verified"
+      );
+
+      statusElement.textContent =
+        "✓ Manual Verified";
+
+      break;
+
+
+    case "rejected":
+
+      statusElement.classList.add(
+        "failed"
+      );
+
+      statusElement.textContent =
+        "✕ Rejected";
+
+      break;
+
+
+    case "face_verification":
+
+    case "pending":
+
+    default:
+
+      statusElement.classList.add(
+        "waiting"
+      );
+
+      statusElement.textContent =
+        "Waiting";
+
+      break;
+
+  }
+
+}
+
+
+/* =========================================================
+   RESET CURRENT SUBJECT
+========================================================= */
+
+function resetCurrentSubject() {
+
+  currentStudentId = null;
+
+
+  const nameElement =
+    document.querySelector(".s-name");
+
+  const idElement =
+    document.querySelector(".s-id");
+
+  const metaValues =
+    document.querySelectorAll(
+      ".s-meta-row .sm-value"
+    );
+
+  const photo =
+    document.querySelector(".s-photo");
+
+
+  if (nameElement) {
+
+    nameElement.textContent =
+      "Waiting for verification...";
+
+  }
+
+
+  if (idElement) {
+
+    idElement.textContent =
+      "Student ID · —";
+
+  }
+
+
+  if (photo) {
+
+    photo.textContent =
+      "--";
+
+  }
+
+
+  if (metaValues.length >= 4) {
+
+    metaValues[0].textContent = "—";
+    metaValues[1].textContent = "—";
+    metaValues[2].textContent = "—";
+    metaValues[3].textContent = "—";
+
+  }
+
+
+  updateCurrentStatus(
+    "pending"
+  );
+
+}
+
+
+/* =========================================================
+   LOAD VERIFICATION HISTORY
+========================================================= */
+
+async function loadVerificationHistory() {
+
+  try {
+
+    const response = await fetch(
+      `${API_BASE}/verification/history`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }
+    );
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        `History API error: ${response.status}`
+      );
+
+    }
+
+
+    const data =
+      await response.json();
+
+
+    console.log(
+      "Verification History:",
+      data
+    );
+
+
+    renderVerificationHistory(
+      data.history || []
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "Verification History Error:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   RENDER VERIFICATION HISTORY
+========================================================= */
+
+function renderVerificationHistory(
+  history
+) {
+
+  const tbody =
+    document.querySelector(
+      ".verify-table tbody"
+    );
+
+
+  if (!tbody) {
+    return;
+  }
+
+
+  if (!history.length) {
+
+    tbody.innerHTML = `
+      <tr>
+        <td
+          colspan="4"
+          style="text-align:center;color:var(--ink-soft);"
+        >
+          No verification records
+        </td>
+      </tr>
+    `;
+
+    return;
+
+  }
+
+
+  tbody.innerHTML =
+    history.map(student => {
+
+      const queue =
+        student.queue_number || "—";
+
+      const name =
+        student.name || "Unknown";
+
+      const score =
+        student.confidence_score !== null &&
+        student.confidence_score !== undefined
+          ? `${student.confidence_score}%`
+          : "—";
+
+
+      let resultHTML = "";
+
+
+      if (
+        student.face_verification_status ===
+        "verified"
+      ) {
+
+        resultHTML = `
+          <span class="status-pill verified">
+            Verified
+          </span>
+        `;
+
+      }
+
+      else if (
+        student.face_verification_status ===
+        "manual_verified"
+      ) {
+
+        resultHTML = `
+          <span class="status-pill verified">
+            Manual Verified
+          </span>
+        `;
+
+      }
+
+      else if (
+        student.face_verification_status ===
+        "rejected"
+      ) {
+
+        resultHTML = `
+          <span class="status-pill failed">
+            Rejected
+          </span>
+        `;
+
+      }
+
+      else {
+
+        resultHTML = `
+          <span class="status-pill waiting">
+            Pending
+          </span>
+        `;
+
+      }
+
+
+      return `
+        <tr>
+
+          <td class="row-num">
+            ${escapeHTML(String(queue))}
+          </td>
+
+          <td>
+            ${escapeHTML(name)}
+          </td>
+
+          <td class="score">
+            ${escapeHTML(String(score))}
+          </td>
+
+          <td>
+            ${resultHTML}
+          </td>
+
+        </tr>
+      `;
+
+    }).join("");
+
+}
+
+
+/* =========================================================
+   SIMULATE AI FAILURE
+========================================================= */
+
+function simulateFailure() {
+
+  const result =
+    document.getElementById(
+      "matchResult"
+    );
+
+  const matchValue =
+    document.getElementById(
+      "matchValue"
+    );
+
+  const note =
+    document.getElementById(
+      "verifyNote"
+    );
+
+  const manualReview =
+    document.getElementById(
+      "manualReview"
+    );
+
+  const confVal =
+    document.getElementById(
+      "confVal"
+    );
+
+  const confFill =
+    document.getElementById(
+      "confFill"
+    );
+
+  const aiStatusText =
+    document.getElementById(
+      "aiStatusText"
+    );
+
+  const checkRows =
+    document.querySelectorAll(
+      ".check-row"
+    );
+
+
+  result.classList.add(
+    "fail"
+  );
+
+
+  result.querySelector(
+    ".match-icon"
+  ).innerHTML = `
+    <svg
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="M12 8v4M12 16h.01"/>
+      <circle cx="12" cy="12" r="9"/>
+    </svg>
+  `;
+
+
+  matchValue.innerHTML =
+    '<span class="m-score">Unable to verify</span> — Low confidence match';
+
+
+  note.textContent =
+    "The AI could not reach a confident face match. Manual verification is required before the student can proceed.";
+
+
+  confVal.textContent =
+    "Low";
+
+  confVal.style.color =
+    "var(--red)";
+
+
+  confFill.style.width =
+    "24%";
+
+  confFill.style.background =
+    "var(--red)";
+
+
+  checkRows.forEach(
+    function(row) {
+
+      row.classList.remove(
+        "done"
+      );
+
+    }
+  );
+
+
+  aiStatusText.textContent =
+    "AI detection failed · Flagged for manual review";
+
+
+  manualReview.style.display =
+    "block";
+
+}
+
+
+/* =========================================================
+   MANUAL APPROVE
+========================================================= */
+
+async function manualApprove() {
+
+  if (!currentStudentId) {
+
+    alert(
+      "No current student is available."
+    );
+
+    return;
+
+  }
+
+
+  try {
+
+    const response =
+      await fetch(
+        `${API_BASE}/verification/manual`,
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body: JSON.stringify({
+
+            student_id:
+              currentStudentId,
+
+            action:
+              "approve"
+
+          })
+
+        }
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        data.message ||
+        "Manual approval failed"
+      );
+
+    }
+
+
+    /*
+     * Update UI only after
+     * database update succeeds.
+     */
+
+    showManualApproved();
+
+
+    /*
+     * Refresh database data
+     */
+
+loadCurrentSubject();
+loadNextSubject();
+loadVerificationHistory();
+
+
+  } catch (error) {
+
+    console.error(
+      "Manual approve error:",
+      error
+    );
+
+    alert(
+      "Failed to approve student."
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   MANUAL APPROVE UI
+========================================================= */
+
+function showManualApproved() {
+
+  const result =
+    document.getElementById(
+      "matchResult"
+    );
+
+  const matchValue =
+    document.getElementById(
+      "matchValue"
+    );
+
+  const note =
+    document.getElementById(
+      "verifyNote"
+    );
+
+  const manualReview =
+    document.getElementById(
+      "manualReview"
+    );
+
+  const confVal =
+    document.getElementById(
+      "confVal"
+    );
+
+  const confFill =
+    document.getElementById(
+      "confFill"
+    );
+
+  const aiStatusText =
+    document.getElementById(
+      "aiStatusText"
+    );
+
+  const checkRows =
+    document.querySelectorAll(
+      ".check-row"
+    );
+
+
+  result.classList.remove(
+    "fail"
+  );
+
+
+  result.querySelector(
+    ".match-icon"
+  ).innerHTML = `
+    <svg
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+      <path d="M22 4L12 14.01l-3-3"/>
+    </svg>
+  `;
+
+
+  matchValue.innerHTML =
+    '<span class="m-score">Manually Verified</span> — Approved by admin';
+
+
+  note.textContent =
+    "Identity manually verified by the admin. Student moved to the verified queue for stage presentation.";
+
+
+  confVal.textContent =
+    "Manual";
+
+  confVal.style.color =
+    "var(--green)";
+
+
+  confFill.style.width =
+    "100%";
+
+  confFill.style.background =
+    "var(--green)";
+
+
+  checkRows.forEach(
+    function(row) {
+
+      row.classList.add(
+        "done"
+      );
+
+    }
+  );
+
+
+  aiStatusText.textContent =
+    "Manually verified by admin · Student routed to verified queue";
+
+
+  const buttons =
+    manualReview.querySelectorAll(
+      ".verify-btn"
+    );
+
+
+  buttons.forEach(
+    function(button) {
+
+      button.disabled = true;
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   MANUAL REJECT
+========================================================= */
+
+async function manualReject() {
+
+  if (!currentStudentId) {
+
+    alert(
+      "No current student is available."
+    );
+
+    return;
+
+  }
+
+
+  try {
+
+    const response =
+      await fetch(
+        `${API_BASE}/verification/manual`,
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body: JSON.stringify({
+
+            student_id:
+              currentStudentId,
+
+            action:
+              "reject"
+
+          })
+
+        }
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        data.message ||
+        "Manual rejection failed"
+      );
+
+    }
+
+
+    /*
+     * Update UI only after
+     * database update succeeds.
+     */
+
+    showManualRejected();
+
+
+    /*
+     * Refresh database data
+     */
+
+await loadCurrentSubject();
+await loadNextSubject();
+await loadVerificationHistory();
+
+
+  } catch (error) {
+
+    console.error(
+      "Manual reject error:",
+      error
+    );
+
+    alert(
+      "Failed to reject student."
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   MANUAL REJECT UI
+========================================================= */
+
+function showManualRejected() {
+
+  const result =
+    document.getElementById(
+      "matchResult"
+    );
+
+  const matchValue =
+    document.getElementById(
+      "matchValue"
+    );
+
+  const note =
+    document.getElementById(
+      "verifyNote"
+    );
+
+  const manualReview =
+    document.getElementById(
+      "manualReview"
+    );
+
+  const confVal =
+    document.getElementById(
+      "confVal"
+    );
+
+  const confFill =
+    document.getElementById(
+      "confFill"
+    );
+
+  const aiStatusText =
+    document.getElementById(
+      "aiStatusText"
+    );
+
+  const checkRows =
+    document.querySelectorAll(
+      ".check-row"
+    );
+
+
+  result.classList.add(
+    "fail"
+  );
+
+
+  result.querySelector(
+    ".match-icon"
+  ).innerHTML = `
+    <svg
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="M18 6L6 18M6 6l12 12"/>
+    </svg>
+  `;
+
+
+  matchValue.innerHTML =
+    '<span class="m-score">Rejected</span> — Escort to manual desk';
+
+
+  note.textContent =
+    "Identity rejected by the admin. Escort the student to the manual verification desk for further checks.";
+
+
+  confVal.textContent =
+    "Rejected";
+
+  confVal.style.color =
+    "var(--red)";
+
+
+  confFill.style.width =
+    "12%";
+
+  confFill.style.background =
+    "var(--red)";
+
+
+  checkRows.forEach(
+    function(row) {
+
+      row.classList.remove(
+        "done"
+      );
+
+    }
+  );
+
+
+  aiStatusText.textContent =
+    "Identity rejected by admin · Flagged for manual review";
+
+
+  const buttons =
+    manualReview.querySelectorAll(
+      ".verify-btn"
+    );
+
+
+  buttons.forEach(
+    function(button) {
+
+      button.disabled = true;
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   HTML ESCAPE
+========================================================= */
+
+function escapeHTML(value) {
+
+  return value
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+/* =========================================================
+   INITIAL LOAD
+========================================================= */
+
+resetCurrentSubject();
+loadNextSubject();
+loadVerificationHistory();
+
+
+/* =========================================================
+   AUTO REFRESH
+   Check database every 3 seconds
+========================================================= */
+
+setInterval(function() {
+
+  loadNextSubject();
+  loadVerificationHistory();
+
+}, 3000);
+
 </script>
 
 </body>

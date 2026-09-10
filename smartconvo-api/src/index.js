@@ -187,6 +187,45 @@ if (request.method === "GET" && url.pathname.startsWith("/api/face/samples/"))
 if (request.method === "POST" && url.pathname === "/api/face/verify")
   return handleFaceVerify(request, env);
 
+// ============================================================
+// ADMIN FACE VERIFICATION ROUTES
+// ============================================================
+
+if (
+  request.method === "GET" &&
+  url.pathname === "/api/admin/verification/current"
+) {
+  return handleAdminVerificationCurrent(request, env);
+}
+
+if (
+  request.method === "GET" &&
+  url.pathname === "/api/admin/verification/next"
+) {
+  return handleAdminVerificationNext(request, env);
+}
+
+if (
+  request.method === "GET" &&
+  url.pathname === "/api/admin/verification/history"
+) {
+  return handleAdminVerificationHistory(request, env);
+}
+
+if (
+  request.method === "POST" &&
+  url.pathname === "/api/admin/verification/manual"
+) {
+  return handleAdminVerificationManual(request, env);
+}
+
+if (
+  request.method === "GET" &&
+  url.pathname === "/api/admin/monitoring/current"
+) {
+  return handleAdminMonitoringCurrent(request, env);
+}
+
     return jsonResponse(
       {
         success: false,
@@ -2844,6 +2883,291 @@ async function handleFaceVerify(request, env) {
     return jsonResponse({
       success: false,
       message: error.message
+    }, 500);
+  }
+}
+
+
+// ============================================================
+// FRONT DISPLAY - CURRENT VERIFIED STUDENT
+// ============================================================
+
+async function handleAdminMonitoringCurrent(request, env) {
+  try {
+
+    const student = await env.DB
+      .prepare(`
+        SELECT
+          id,
+          student_id,
+          name,
+          course_code,
+          course_name,
+          faculty,
+          cgpa,
+          queue_number,
+          face_registration_status,
+          face_verification_status,
+          convocation_status,
+          created_at
+        FROM students
+        WHERE face_verification_status IN (
+          'verified',
+          'manual_verified'
+        )
+        ORDER BY id DESC
+        LIMIT 1
+      `)
+      .first();
+
+    if (!student) {
+      return jsonResponse({
+        success: true,
+        student: null
+      });
+    }
+
+    return jsonResponse({
+      success: true,
+      student: student
+    });
+
+  } catch (error) {
+
+    console.error(
+      "Front display current error:",
+      error
+    );
+
+    return jsonResponse({
+      success: false,
+      message: "Failed to load current verified student.",
+      student: null
+    }, 500);
+  }
+}
+
+// ============================================================
+// ADMIN VERIFICATION - CURRENT SUBJECT
+// Only return student AFTER successful verification
+// ============================================================
+
+
+async function handleAdminVerificationCurrent(request, env) {
+  return jsonResponse({
+    success: true,
+    student: null
+  });
+}
+
+// ============================================================
+// ADMIN VERIFICATION - NEXT SUBJECT
+// Get the next student based on queue number
+// ============================================================
+
+
+async function handleAdminVerificationNext(request, env) {
+  try {
+
+    const result = await env.DB
+      .prepare(`
+        SELECT
+          id,
+          student_id,
+          name,
+          course_code,
+          course_name,
+          faculty,
+          cgpa,
+          queue_number,
+          face_registration_status,
+          face_verification_status,
+          convocation_status,
+          created_at
+        FROM students
+        WHERE
+          queue_number IS NOT NULL
+          AND face_registration_status = 'registered'
+          AND (
+            face_verification_status IS NULL
+            OR face_verification_status NOT IN (
+              'verified',
+              'manual_verified'
+            )
+          )
+          AND (
+            convocation_status IS NULL
+            OR convocation_status != 'complete'
+          )
+        ORDER BY
+          queue_number ASC
+        LIMIT 1
+      `)
+      .first();
+
+    if (!result) {
+      return jsonResponse({
+        success: true,
+        student: null
+      });
+    }
+
+    return jsonResponse({
+      success: true,
+      student: result
+    });
+
+  } catch (error) {
+
+    console.error(
+      "Admin verification next error:",
+      error
+    );
+
+    return jsonResponse({
+      success: false,
+      message: "Failed to load next subject."
+    }, 500);
+  }
+}
+
+// ============================================================
+// ADMIN VERIFICATION - HISTORY
+// ============================================================
+
+async function handleAdminVerificationHistory(request, env) {
+  try {
+
+    const result = await env.DB
+      .prepare(`
+        SELECT
+          id,
+          student_id,
+          name,
+          course_code,
+          course_name,
+          queue_number,
+          face_verification_status,
+          convocation_status,
+          created_at
+        FROM students
+        WHERE face_verification_status IN (
+          'verified',
+          'manual_verified',
+          'rejected'
+        )
+        ORDER BY id DESC
+        LIMIT 100
+      `)
+      .all();
+
+    return jsonResponse({
+      success: true,
+      history: result.results || []
+    });
+
+  } catch (error) {
+
+    console.error(
+      "Admin verification history error:",
+      error
+    );
+
+    return jsonResponse({
+      success: false,
+      message: "Failed to load verification history.",
+      history: []
+    }, 500);
+  }
+}
+
+// ============================================================
+// ADMIN VERIFICATION - MANUAL APPROVE / REJECT
+// ============================================================
+
+async function handleAdminVerificationManual(request, env) {
+  try {
+
+    const body = await request.json();
+
+    const studentId = body.student_id;
+    const action = body.action;
+
+    if (!studentId) {
+      return jsonResponse({
+        success: false,
+        message: "Student ID is required."
+      }, 400);
+    }
+
+    if (!["approve", "reject"].includes(action)) {
+      return jsonResponse({
+        success: false,
+        message: "Invalid verification action."
+      }, 400);
+    }
+
+    const student = await env.DB
+      .prepare(`
+        SELECT
+          id,
+          student_id,
+          name,
+          face_verification_status
+        FROM students
+        WHERE student_id = ?
+        LIMIT 1
+      `)
+      .bind(studentId)
+      .first();
+
+    if (!student) {
+      return jsonResponse({
+        success: false,
+        message: "Student not found."
+      }, 404);
+    }
+
+    let newStatus;
+
+    if (action === "approve") {
+      newStatus = "manual_verified";
+    } else {
+      newStatus = "rejected";
+    }
+
+    await env.DB
+      .prepare(`
+        UPDATE students
+        SET face_verification_status = ?
+        WHERE student_id = ?
+      `)
+      .bind(newStatus, studentId)
+      .run();
+
+    return jsonResponse({
+      success: true,
+      message:
+        action === "approve"
+          ? "Student manually verified successfully."
+          : "Student verification rejected.",
+      student: {
+        student_id: student.student_id,
+        name: student.name,
+        face_verification_status: newStatus
+      }
+    });
+
+  } catch (error) {
+
+    console.error(
+      "Admin manual verification error:",
+      error
+    );
+
+    return jsonResponse({
+      success: false,
+      message: "Manual verification failed."
     }, 500);
   }
 }

@@ -1858,6 +1858,12 @@ function retakePhoto(){
   faceActions.style.display =
     'none';
 
+  uploadBtn.disabled =
+    false;
+
+  retakeBtn.disabled =
+    false;  
+
   facePlaceholder.style.display =
     'flex';
 
@@ -2394,7 +2400,7 @@ async function uploadPhoto(){
 
 
     uploadBtn.textContent =
-      `✓ Sample ${registeredTotal}/20`;
+      `✓ Sample ${registeredTotal + 1}/20`;
 
 
     captureHint.textContent =
@@ -2423,8 +2429,26 @@ async function uploadPhoto(){
      */
 
 
-    retakePhoto();
+        capturedBlob = null;
+    capturedDataUrl = null;
 
+    capturedPreview.src = '';
+    capturedPreview.style.display = 'none';
+
+    matchResult.style.display = 'none';
+
+    faceActions.style.display = 'none';
+
+    /* Re-enable buttons for the next sample */
+    uploadBtn.disabled = false;
+    retakeBtn.disabled = false;
+
+    facePlaceholder.style.display = 'flex';
+    scanLine.style.display = 'block';
+
+    captureBtn.style.display = 'inline-flex';
+    captureBtn.disabled = true;
+    captureBtn.textContent = 'Starting camera...';
 
     await startCamera();
 

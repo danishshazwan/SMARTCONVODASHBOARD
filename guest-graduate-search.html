@@ -383,100 +383,407 @@
 </div>
 
 <script>
-// Mock graduate database
-const graduates = {
-    '2402076': { name:'Danish Shazwan Bin Suwandi', faculty:'Information Technology & Engineering', programme:'Diploma in Computer Technology', queue:1, seat:'A01' },
-    '2402077': { name:'Iskandar Zulkarnain Bin Muhamad', faculty:'Information Technology & Engineering', programme:'Diploma in Computer Technology', queue:2, seat:'A02' },
-    '2402078': { name:'Mior Muhammad Ikmal Bin Mior Darul Ridzuan', faculty:'Information Technology & Engineering', programme:'Diploma in Computer Technology', queue:3, seat:'A03' },
-    '2402079': { name:'Mohammad Haziq Afiq Bin Yusli@Yazid', faculty:'Information Technology & Engineering', programme:'Diploma in Computer Technology', queue:4, seat:'A04' },
-    '2402080': { name:'Muhammad Ammar Bin Mahadir', faculty:'Information Technology & Engineering', programme:'Diploma in Computer Technology', queue:5, seat:'A05' },
-    '2402081': { name:'Muhammad Hafiz Bin Hassan', faculty:'Information Technology & Engineering', programme:'Diploma in Computer Technology', queue:6, seat:'A06' },
-    '2402082': { name:'Nor Adilah Binti Shamsuddin', faculty:'Information Technology & Engineering', programme:'Diploma in Computer Technology', queue:7, seat:'A07' },
-    '2402083': { name:'Nur Fadhilatul Akma Binti Roslan', faculty:'Information Technology & Engineering', programme:'Diploma in Computer Technology', queue:8, seat:'A08' },
-    '2402084': { name:'Nurfatin Nadiah Binti Mohd Khir', faculty:'Information Technology & Engineering', programme:'Diploma in Computer Technology', queue:9, seat:'A09' },
-    '2402085': { name:'Nursyazwanie Binti Jaimi', faculty:'Information Technology & Engineering', programme:'Diploma in Computer Technology', queue:10, seat:'A10' },
-    '2402086': { name:'Nur Ain Solehah Binti Muhamad Fauzi', faculty:'Information Technology & Engineering', programme:'Diploma in Computer Technology', queue:11, seat:'A11' },
-    '2402087': { name:'Lily Liyana Lorraine Binti Jale', faculty:'Information Technology & Engineering', programme:'Diploma in Computer Technology', queue:12, seat:'A12' },
-    '2402088': { name:'Muhammad Syamsul Nazir Bin Mohd Samsuri', faculty:'Information Technology & Engineering', programme:'Diploma in Computer Technology', queue:13, seat:'A13' },
-    '2402089': { name:'Najjwa Aqilla Binti Mohd Khairi', faculty:'Information Technology & Engineering', programme:'Diploma in Computer Technology', queue:14, seat:'A14' }
-  };
 
-  const statuses = [
-    { key:'waiting',    label:'Waiting',    cls:'waiting' },
-    { key:'verified',   label:'Verified',   cls:'verified' },
-    { key:'called',     label:'Called',     cls:'called' },
-    { key:'onstage',    label:'On Stage',   cls:'onstage' },
-    { key:'completed',  label:'Completed',  cls:'completed' }
-  ];
+const API_BASE_URL =
+  'https://smartconvo-api.danishshazwan85.workers.dev';
 
-  let currentStatusIndex = 0;
-  let currentStudentKey = null;
+let guestRefreshTimer = null;
+let currentStudentKey = null;
 
-  function searchGraduate(){
-    const id = document.getElementById('studentId').value.trim();
-    const empty = document.getElementById('emptyState');
-    const card = document.getElementById('statusCard');
 
-    if(!id){
-      alert('Please enter a Student ID.');
-      return;
-    }
+/* =========================================
+   SEARCH GRADUATE
+========================================= */
 
-    const student = graduates[id];
-    if(!student){
-      card.style.display = 'none';
+async function searchGraduate(){
+
+  const id =
+    document.getElementById('studentId')
+      .value
+      .trim();
+
+  const empty =
+    document.getElementById('emptyState');
+
+  const card =
+    document.getElementById('statusCard');
+
+
+  if(!id){
+
+    alert('Please enter a Student ID.');
+
+    return;
+
+  }
+
+
+  try {
+
+    card.style.display = 'none';
+    empty.style.display = 'none';
+
+
+    const response = await fetch(
+      `${API_BASE_URL}/api/guest/graduate-status?student_id=${encodeURIComponent(id)}`,
+      {
+        method: 'GET',
+
+        headers: {
+          'Content-Type': 'application/json'
+        },
+
+        mode: 'cors'
+      }
+    );
+
+
+    const result =
+      await response.json();
+
+
+    console.log(
+      'Guest Graduate Result:',
+      result
+    );
+
+
+    if(
+      !response.ok ||
+      !result.success
+    ){
+
       empty.style.display = 'block';
+
       currentStudentKey = null;
+
       return;
+
     }
+
+
+    const student =
+      result.student;
+
+
+    /* DISPLAY STUDENT INFORMATION */
 
     empty.style.display = 'none';
+
     card.style.display = 'grid';
-    currentStudentKey = id;
 
-    document.getElementById('scName').textContent = student.name;
-    document.getElementById('scId').textContent = id;
-    document.getElementById('scFaculty').textContent = student.faculty;
-    document.getElementById('scProgramme').textContent = student.programme;
-    document.getElementById('scQueue').textContent = '#' + String(student.queue).padStart(3,'0');
-    document.getElementById('scSeat').textContent = student.seat;
-    document.getElementById('avatar').textContent = student.name.charAt(0);
+    currentStudentKey =
+      student.student_id;
 
-    currentStatusIndex = 0;
-    renderStatus();
-    startStatusCycle();
+
+    document.getElementById(
+      'scName'
+    ).textContent =
+      student.name || '-';
+
+
+    document.getElementById(
+      'scId'
+    ).textContent =
+      student.student_id || '-';
+
+
+    document.getElementById(
+      'scFaculty'
+    ).textContent =
+      student.faculty || '-';
+
+
+    document.getElementById(
+      'scProgramme'
+    ).textContent =
+      student.programme ||
+      student.course_code ||
+      '-';
+
+
+    /* QUEUE NUMBER */
+
+    document.getElementById(
+      'scQueue'
+    ).textContent =
+      student.queue_number !== null &&
+      student.queue_number !== undefined
+        ? '#' +
+          String(
+            student.queue_number
+          ).padStart(3,'0')
+        : '-';
+
+
+    /* SEAT */
+
+    document.getElementById(
+      'scSeat'
+    ).textContent = '-';
+
+
+    /* AVATAR */
+
+    document.getElementById(
+      'avatar'
+    ).textContent =
+      (student.name || 'G')
+        .charAt(0)
+        .toUpperCase();
+
+
+    /* DATABASE STATUS */
+
+    renderDatabaseStatus(
+      student.convocation_status
+    );
+
+
     updateLastUpdated();
+
+
+    /* START AUTO REFRESH */
+
+    startGuestAutoRefresh();
+
+
+  } catch(error){
+
+    console.error(
+      'Guest search error:',
+      error
+    );
+
+
+    card.style.display = 'none';
+
+    empty.style.display = 'block';
+
+    currentStudentKey = null;
+
   }
 
-  function renderStatus(){
-    const s = statuses[currentStatusIndex];
-    const badge = document.getElementById('statusBadge');
-    badge.className = 'status-badge ' + s.cls;
-    badge.innerHTML = '<span class="sb-dot"></span>' + s.label;
-    document.getElementById('scStatusText').textContent = s.label;
+}
+
+
+/* =========================================
+   RENDER DATABASE STATUS
+========================================= */
+
+function renderDatabaseStatus(status){
+
+  const badge =
+    document.getElementById(
+      'statusBadge'
+    );
+
+
+  const statusText =
+    document.getElementById(
+      'scStatusText'
+    );
+
+
+  const normalized =
+    String(
+      status || 'registration'
+    ).toLowerCase();
+
+
+  let label = 'Waiting';
+
+  let cls = 'waiting';
+
+
+  switch(normalized){
+
+    case 'registration':
+
+      label = 'Waiting';
+
+      cls = 'waiting';
+
+      break;
+
+
+    case 'face_verification':
+
+      label = 'Verified';
+
+      cls = 'verified';
+
+      break;
+
+
+    case 'seat_queue':
+
+      label = 'Called';
+
+      cls = 'called';
+
+      break;
+
+
+    case 'queue':
+
+      label = 'Called';
+
+      cls = 'called';
+
+      break;
+
+
+    case 'on_stage':
+
+      label = 'On Stage';
+
+      cls = 'onstage';
+
+      break;
+
+
+    case 'complete':
+
+      label = 'Completed';
+
+      cls = 'completed';
+
+      break;
+
+
+    default:
+
+      label = 'Waiting';
+
+      cls = 'waiting';
+
   }
 
-  function updateLastUpdated(){
-    const now = new Date();
-    const hh = String(now.getHours()).padStart(2,'0');
-    const mm = String(now.getMinutes()).padStart(2,'0');
-    const ss = String(now.getSeconds()).padStart(2,'0');
-    document.getElementById('scUpdated').textContent = hh + ':' + mm + ':' + ss;
+
+  badge.className =
+    'status-badge ' + cls;
+
+
+  badge.innerHTML =
+    '<span class="sb-dot"></span>' +
+    label;
+
+
+  statusText.textContent =
+    label;
+
+}
+
+
+/* =========================================
+   START AUTO REFRESH
+========================================= */
+
+function startGuestAutoRefresh(){
+
+  if(guestRefreshTimer){
+
+    clearInterval(
+      guestRefreshTimer
+    );
+
   }
 
-  let cycleTimer = null;
-  function startStatusCycle(){
-    if(cycleTimer) clearInterval(cycleTimer);
-    cycleTimer = setInterval(function(){
-      if(!currentStudentKey) return;
-      if(currentStatusIndex < statuses.length - 1){
-        currentStatusIndex++;
-        renderStatus();
-      }
-      updateLastUpdated();
-    }, 4000);
+
+  guestRefreshTimer =
+    setInterval(
+      refreshGuestStatus,
+      5000
+    );
+
+}
+
+
+/* =========================================
+   REFRESH GUEST STATUS
+========================================= */
+
+async function refreshGuestStatus(){
+
+  if(!currentStudentKey){
+
+    return;
+
   }
+
+
+  try{
+
+    const response =
+      await fetch(
+        `${API_BASE_URL}/api/guest/graduate-status?student_id=${encodeURIComponent(currentStudentKey)}`,
+        {
+          method: 'GET',
+
+          headers: {
+            'Content-Type':
+              'application/json'
+          },
+
+          mode: 'cors'
+        }
+      );
+
+
+    const result =
+      await response.json();
+
+
+    if(
+      !response.ok ||
+      !result.success
+    ){
+
+      return;
+
+    }
+
+
+    const student =
+      result.student;
+
+
+    /* UPDATE STATUS */
+
+    renderDatabaseStatus(
+      student.convocation_status
+    );
+
+
+    /* UPDATE QUEUE */
+
+    document.getElementById(
+      'scQueue'
+    ).textContent =
+      student.queue_number !== null &&
+      student.queue_number !== undefined
+        ? '#' +
+          String(
+            student.queue_number
+          ).padStart(3,'0')
+        : '-';
+
+
+    updateLastUpdated();
+
+
+  } catch(error){
+
+    console.error(
+      'Guest auto refresh error:',
+      error
+    );
+
+  }
+
+}
+
 </script>
-
 </body>
 </html>

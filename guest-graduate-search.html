@@ -391,16 +391,42 @@ let guestRefreshTimer = null;
 let currentStudentKey = null;
 
 
-/* =========================================
+/* =========================================================
+   UPDATE LAST UPDATED
+========================================================= */
+
+function updateLastUpdated(){
+
+  const element =
+    document.getElementById('lastUpdated');
+
+  if(!element){
+    return;
+  }
+
+  const now = new Date();
+
+  const time =
+    now.toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    });
+
+  element.textContent =
+    `Last updated: ${time}`;
+
+}
+
+
+/* =========================================================
    SEARCH GRADUATE
-========================================= */
+========================================================= */
 
 async function searchGraduate(){
 
-  const id =
-    document.getElementById('studentId')
-      .value
-      .trim();
+  const input =
+    document.getElementById('studentId');
 
   const empty =
     document.getElementById('emptyState');
@@ -409,33 +435,59 @@ async function searchGraduate(){
     document.getElementById('statusCard');
 
 
-  if(!id){
-
-    alert('Please enter a Student ID.');
-
+  if(!input){
+    console.error(
+      'Student ID input not found.'
+    );
     return;
-
   }
 
 
-  try {
-
-    card.style.display = 'none';
-    empty.style.display = 'none';
+  const id =
+    input.value.trim();
 
 
-    const response = await fetch(
-      `${API_BASE_URL}/api/guest/graduate-status?student_id=${encodeURIComponent(id)}`,
-      {
-        method: 'GET',
+  if(!id){
 
-        headers: {
-          'Content-Type': 'application/json'
-        },
-
-        mode: 'cors'
-      }
+    alert(
+      'Please enter a Student ID.'
     );
+
+    return;
+  }
+
+
+  try{
+
+    /*
+      Hide previous results while searching
+    */
+
+    if(card){
+      card.style.display = 'none';
+    }
+
+    if(empty){
+      empty.style.display = 'none';
+    }
+
+
+    /*
+      Call Cloudflare API
+    */
+
+    const response =
+      await fetch(
+        `${API_BASE_URL}/api/guest/graduate-status?student_id=${encodeURIComponent(id)}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type':
+              'application/json'
+          },
+          mode: 'cors'
+        }
+      );
 
 
     const result =
@@ -448,107 +500,219 @@ async function searchGraduate(){
     );
 
 
+    /*
+      Graduate not found
+    */
+
     if(
       !response.ok ||
       !result.success
     ){
 
-      empty.style.display = 'block';
+      if(empty){
+        empty.style.display = 'block';
+      }
 
       currentStudentKey = null;
 
-      return;
+      if(guestRefreshTimer){
+        clearInterval(
+          guestRefreshTimer
+        );
 
+        guestRefreshTimer = null;
+      }
+
+      return;
     }
 
+
+    /*
+      Get student data
+    */
 
     const student =
       result.student;
 
 
-    /* DISPLAY STUDENT INFORMATION */
+    /*
+      Show result card
+    */
 
-    empty.style.display = 'none';
+    if(empty){
+      empty.style.display = 'none';
+    }
 
-    card.style.display = 'grid';
+    if(card){
+      card.style.display = 'grid';
+    }
+
 
     currentStudentKey =
       student.student_id;
 
 
-    document.getElementById(
-      'scName'
-    ).textContent =
-      student.name || '-';
+    /*
+      STUDENT NAME
+    */
+
+    const nameElement =
+      document.getElementById(
+        'scName'
+      );
+
+    if(nameElement){
+
+      nameElement.textContent =
+        student.name || '-';
+
+    }
 
 
-    document.getElementById(
-      'scId'
-    ).textContent =
-      student.student_id || '-';
+    /*
+      STUDENT ID
+    */
+
+    const idElement =
+      document.getElementById(
+        'scId'
+      );
+
+    if(idElement){
+
+      idElement.textContent =
+        student.student_id || '-';
+
+    }
 
 
-    document.getElementById(
-      'scFaculty'
-    ).textContent =
-      student.faculty || '-';
+    /*
+      FACULTY
+    */
+
+    const facultyElement =
+      document.getElementById(
+        'scFaculty'
+      );
+
+    if(facultyElement){
+
+      facultyElement.textContent =
+        student.faculty || '-';
+
+    }
 
 
-    document.getElementById(
-      'scProgramme'
-    ).textContent =
-      student.programme ||
-      student.course_code ||
-      '-';
+    /*
+      PROGRAMME
+    */
+
+    const programmeElement =
+      document.getElementById(
+        'scProgramme'
+      );
+
+    if(programmeElement){
+
+      programmeElement.textContent =
+        student.programme ||
+        student.course_name ||
+        student.course_code ||
+        '-';
+
+    }
 
 
-    /* QUEUE NUMBER */
+    /*
+      QUEUE NUMBER
+    */
 
-    document.getElementById(
-      'scQueue'
-    ).textContent =
-      student.queue_number !== null &&
-      student.queue_number !== undefined
-        ? '#' +
-          String(
-            student.queue_number
-          ).padStart(3,'0')
-        : '-';
+    const queueElement =
+      document.getElementById(
+        'scQueue'
+      );
+
+    if(queueElement){
+
+      queueElement.textContent =
+        student.queue_number !== null &&
+        student.queue_number !== undefined
+          ? '#' +
+            String(
+              student.queue_number
+            ).padStart(3, '0')
+          : '-';
+
+    }
 
 
-    /* SEAT */
+    /*
+      SEAT
 
-    document.getElementById(
-      'scSeat'
-    ).textContent = '-';
+      Current Guest API does not return
+      a seat field, so show "-"
+    */
+
+    const seatElement =
+      document.getElementById(
+        'scSeat'
+      );
+
+    if(seatElement){
+
+      seatElement.textContent =
+        '-';
+
+    }
 
 
-    /* AVATAR */
+    /*
+      AVATAR
+    */
 
-    document.getElementById(
-      'avatar'
-    ).textContent =
-      (student.name || 'G')
+    const avatarElement =
+      document.getElementById(
+        'avatar'
+      );
+
+    if(avatarElement){
+
+      avatarElement.textContent =
+        (
+          student.name || 'G'
+        )
         .charAt(0)
         .toUpperCase();
 
+    }
 
-    /* DATABASE STATUS */
+
+    /*
+      DATABASE STATUS
+    */
 
     renderDatabaseStatus(
       student.convocation_status
     );
 
 
+    /*
+      UPDATE TIME
+    */
+
     updateLastUpdated();
 
 
-    /* START AUTO REFRESH */
+    /*
+      START AUTO REFRESH
+
+      Refresh every 5 seconds
+    */
 
     startGuestAutoRefresh();
 
 
-  } catch(error){
+  }catch(error){
 
     console.error(
       'Guest search error:',
@@ -556,20 +720,37 @@ async function searchGraduate(){
     );
 
 
-    card.style.display = 'none';
+    if(card){
+      card.style.display = 'none';
+    }
 
-    empty.style.display = 'block';
+
+    if(empty){
+      empty.style.display = 'block';
+    }
+
 
     currentStudentKey = null;
+
+
+    if(guestRefreshTimer){
+
+      clearInterval(
+        guestRefreshTimer
+      );
+
+      guestRefreshTimer = null;
+
+    }
 
   }
 
 }
 
 
-/* =========================================
+/* =========================================================
    RENDER DATABASE STATUS
-========================================= */
+========================================================= */
 
 function renderDatabaseStatus(status){
 
@@ -577,7 +758,6 @@ function renderDatabaseStatus(status){
     document.getElementById(
       'statusBadge'
     );
-
 
   const statusText =
     document.getElementById(
@@ -591,96 +771,157 @@ function renderDatabaseStatus(status){
     ).toLowerCase();
 
 
-  let label = 'Waiting';
+  let label =
+    'Waiting';
 
-  let cls = 'waiting';
+  let cls =
+    'waiting';
 
 
   switch(normalized){
 
+    /*
+      Student registered
+    */
+
     case 'registration':
 
-      label = 'Waiting';
+      label =
+        'Waiting';
 
-      cls = 'waiting';
+      cls =
+        'waiting';
 
       break;
 
+
+    /*
+      Face verification stage
+    */
 
     case 'face_verification':
 
-      label = 'Verified';
+      label =
+        'Verified';
 
-      cls = 'verified';
+      cls =
+        'verified';
 
       break;
 
 
+    /*
+      Graduate called
+    */
+
     case 'seat_queue':
 
-      label = 'Called';
+      label =
+        'Called';
 
-      cls = 'called';
+      cls =
+        'called';
 
       break;
 
 
     case 'queue':
 
-      label = 'Called';
+      label =
+        'Called';
 
-      cls = 'called';
+      cls =
+        'called';
 
       break;
 
+
+    /*
+      Graduate on stage
+    */
 
     case 'on_stage':
 
-      label = 'On Stage';
+      label =
+        'On Stage';
 
-      cls = 'onstage';
+      cls =
+        'onstage';
 
       break;
 
+
+    /*
+      Graduate completed
+    */
 
     case 'complete':
 
-      label = 'Completed';
+      label =
+        'Completed';
 
-      cls = 'completed';
+      cls =
+        'completed';
 
       break;
 
 
+    /*
+      Unknown status
+    */
+
     default:
 
-      label = 'Waiting';
+      label =
+        'Waiting';
 
-      cls = 'waiting';
+      cls =
+        'waiting';
+
+      break;
 
   }
 
 
-  badge.className =
-    'status-badge ' + cls;
+  /*
+    Update badge
+  */
+
+  if(badge){
+
+    badge.className =
+      'status-badge ' + cls;
+
+    badge.innerHTML =
+      '<span class="sb-dot"></span>' +
+      label;
+
+  }
 
 
-  badge.innerHTML =
-    '<span class="sb-dot"></span>' +
-    label;
+  /*
+    Update status text
+  */
 
+  if(statusText){
 
-  statusText.textContent =
-    label;
+    statusText.textContent =
+      label;
+
+  }
 
 }
 
 
-/* =========================================
+/* =========================================================
    START AUTO REFRESH
-========================================= */
+========================================================= */
 
 function startGuestAutoRefresh(){
+
+  /*
+    Prevent multiple intervals
+  */
 
   if(guestRefreshTimer){
 
@@ -700,11 +941,15 @@ function startGuestAutoRefresh(){
 }
 
 
-/* =========================================
+/* =========================================================
    REFRESH GUEST STATUS
-========================================= */
+========================================================= */
 
 async function refreshGuestStatus(){
+
+  /*
+    No student selected
+  */
 
   if(!currentStudentKey){
 
@@ -720,12 +965,10 @@ async function refreshGuestStatus(){
         `${API_BASE_URL}/api/guest/graduate-status?student_id=${encodeURIComponent(currentStudentKey)}`,
         {
           method: 'GET',
-
           headers: {
             'Content-Type':
               'application/json'
           },
-
           mode: 'cors'
         }
       );
@@ -734,6 +977,16 @@ async function refreshGuestStatus(){
     const result =
       await response.json();
 
+
+    console.log(
+      'Guest Auto Refresh:',
+      result
+    );
+
+
+    /*
+      Stop if API returns an error
+    */
 
     if(
       !response.ok ||
@@ -749,31 +1002,47 @@ async function refreshGuestStatus(){
       result.student;
 
 
-    /* UPDATE STATUS */
+    /*
+      UPDATE STATUS
+    */
 
     renderDatabaseStatus(
       student.convocation_status
     );
 
 
-    /* UPDATE QUEUE */
+    /*
+      UPDATE QUEUE NUMBER
+    */
 
-    document.getElementById(
-      'scQueue'
-    ).textContent =
-      student.queue_number !== null &&
-      student.queue_number !== undefined
-        ? '#' +
-          String(
-            student.queue_number
-          ).padStart(3,'0')
-        : '-';
+    const queueElement =
+      document.getElementById(
+        'scQueue'
+      );
 
+
+    if(queueElement){
+
+      queueElement.textContent =
+        student.queue_number !== null &&
+        student.queue_number !== undefined
+          ? '#' +
+            String(
+              student.queue_number
+            ).padStart(3, '0')
+          : '-';
+
+    }
+
+
+    /*
+      UPDATE LAST UPDATED
+    */
 
     updateLastUpdated();
 
 
-  } catch(error){
+  }catch(error){
 
     console.error(
       'Guest auto refresh error:',
@@ -783,6 +1052,45 @@ async function refreshGuestStatus(){
   }
 
 }
+
+
+/* =========================================================
+   ENTER KEY SUPPORT
+========================================================= */
+
+document.addEventListener(
+  'DOMContentLoaded',
+  function(){
+
+    const input =
+      document.getElementById(
+        'studentId'
+      );
+
+
+    if(input){
+
+      input.addEventListener(
+        'keydown',
+        function(event){
+
+          if(
+            event.key === 'Enter'
+          ){
+
+            event.preventDefault();
+
+            searchGraduate();
+
+          }
+
+        }
+      );
+
+    }
+
+  }
+);
 
 </script>
 </body>

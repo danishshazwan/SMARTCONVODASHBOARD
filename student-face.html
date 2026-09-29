@@ -1275,9 +1275,28 @@ a{
 const API_BASE_URL =
   "https://smartconvo-api.danishshazwan85.workers.dev";
 
+
+// ============================================================
+// 3-PHOTO REGISTRATION
+// ============================================================
+
+const REQUIRED_SAMPLES = 3;
+
 let stream = null;
+
+// Temporary photos stored in browser.
+// NOTHING is uploaded to D1 until all 3 photos are captured.
+let capturedSamples = [];
+
 let capturedBlob = null;
 let capturedDataUrl = null;
+
+let processedFaceEncodings = [];
+
+
+// ============================================================
+// DOM ELEMENTS
+// ============================================================
 
 const video =
   document.getElementById('video');
@@ -1305,39 +1324,6 @@ const facePositionTitle =
 
 const facePositionInstruction =
   document.getElementById('facePositionInstruction');
-
-function updateFaceGuide(sample){
-
-  sampleProgress.textContent =
-    `Sample ${sample} / 20`;
-
-  if(sample <= 8){
-
-    facePositionTitle.textContent =
-      'FRONT VIEW';
-
-    facePositionInstruction.textContent =
-      'Face the camera directly.';
-
-  }else if(sample <= 14){
-
-    facePositionTitle.textContent =
-      'LEFT SIDE';
-
-    facePositionInstruction.textContent =
-      'Turn your face fully to the left.';
-
-  }else{
-
-    facePositionTitle.textContent =
-      'RIGHT SIDE';
-
-    facePositionInstruction.textContent =
-      'Turn your face fully to the right.';
-
-  }
-
-}
 
 const matchResult =
   document.getElementById('matchResult');
@@ -1370,9 +1356,47 @@ const historyBody =
   document.getElementById('historyBody');
 
 
-/* ============================================================
-   STUDENT PROFILE
-   ============================================================ */
+// ============================================================
+// FACE GUIDE
+// ============================================================
+
+function updateFaceGuide(sample){
+
+  sampleProgress.textContent =
+    `Photo ${sample} / ${REQUIRED_SAMPLES}`;
+
+  if(sample === 1){
+
+    facePositionTitle.textContent =
+      'FRONT VIEW';
+
+    facePositionInstruction.textContent =
+      'Face the camera directly.';
+
+  }else if(sample === 2){
+
+    facePositionTitle.textContent =
+      'SLIGHT LEFT';
+
+    facePositionInstruction.textContent =
+      'Turn your face slightly to the left.';
+
+  }else{
+
+    facePositionTitle.textContent =
+      'SLIGHT RIGHT';
+
+    facePositionInstruction.textContent =
+      'Turn your face slightly to the right.';
+
+  }
+
+}
+
+
+// ============================================================
+// STUDENT PROFILE
+// ============================================================
 
 async function loadStudentProfile(){
 
@@ -1394,17 +1418,33 @@ async function loadStudentProfile(){
         `${API_BASE_URL}/api/student/profile`,
         {
           method:'GET',
+
           headers:{
             'Authorization':
               `Bearer ${token}`,
+
             'Content-Type':
               'application/json'
           }
         }
       );
 
-    const data =
-      await response.json();
+
+    let data;
+
+    try{
+
+      data =
+        await response.json();
+
+    }catch(error){
+
+      throw new Error(
+        `Unable to read server response (HTTP ${response.status}).`
+      );
+
+    }
+
 
     if(!response.ok || !data.success){
 
@@ -1415,8 +1455,10 @@ async function loadStudentProfile(){
 
     }
 
+
     const student =
       data.student;
+
 
     if(userName){
 
@@ -1426,7 +1468,9 @@ async function loadStudentProfile(){
 
     }
 
+
     return student;
+
 
   }catch(error){
 
@@ -1435,12 +1479,14 @@ async function loadStudentProfile(){
       error
     );
 
+
     if(userName){
 
       userName.textContent =
         'Student';
 
     }
+
 
     return null;
 
@@ -1449,9 +1495,9 @@ async function loadStudentProfile(){
 }
 
 
-/* ============================================================
-   START CAMERA
-   ============================================================ */
+// ============================================================
+// START CAMERA
+// ============================================================
 
 async function startCamera(){
 
@@ -1468,54 +1514,79 @@ async function startCamera(){
 
   }
 
-  captureBtn.disabled = true;
+
+  captureBtn.disabled =
+    true;
+
   captureBtn.textContent =
     'Starting camera...';
+
 
   try{
 
     stream =
       await navigator.mediaDevices.getUserMedia({
+
         video:{
           facingMode:'user',
-          width:{ideal:1280},
-          height:{ideal:960}
+
+          width:{
+            ideal:1280
+          },
+
+          height:{
+            ideal:960
+          }
         },
+
         audio:false
+
       });
+
 
     video.srcObject =
       stream;
 
+
     video.style.display =
       'block';
+
 
     capturedPreview.style.display =
       'none';
 
+
     facePlaceholder.style.display =
       'none';
+
 
     scanLine.style.display =
       'block';
 
+
     matchResult.style.display =
       'none';
+
 
     faceActions.style.display =
       'none';
 
+
     captureHint.textContent =
       'Position your face within the frame following the guidelines, then click Capture Photo.';
+
 
     captureBtn.disabled =
       false;
 
+
     captureBtn.textContent =
       'Capture Photo';
 
+
     captureBtn.onclick =
       capturePhoto;
+
 
   }catch(error){
 
@@ -1524,16 +1595,20 @@ async function startCamera(){
       error
     );
 
+
     alert(
       'Unable to access camera: ' +
       error.message
     );
 
+
     captureBtn.disabled =
       false;
 
+
     captureBtn.textContent =
       'Start Camera';
+
 
     captureBtn.onclick =
       startCamera;
@@ -1543,9 +1618,9 @@ async function startCamera(){
 }
 
 
-/* ============================================================
-   CAPTURE PHOTO
-   ============================================================ */
+// ============================================================
+// CAPTURE PHOTO
+// ============================================================
 
 function capturePhoto(){
 
@@ -1562,17 +1637,40 @@ function capturePhoto(){
 
   }
 
+
+  const currentPhotoNumber =
+    capturedSamples.length + 1;
+
+
+  if(
+    currentPhotoNumber >
+    REQUIRED_SAMPLES
+  ){
+
+    alert(
+      'All 3 photos have already been captured.'
+    );
+
+    return;
+
+  }
+
+
   const canvas =
     document.createElement('canvas');
+
 
   canvas.width =
     video.videoWidth;
 
+
   canvas.height =
     video.videoHeight;
 
+
   const ctx =
     canvas.getContext('2d');
+
 
   ctx.drawImage(
     video,
@@ -1583,15 +1681,17 @@ function capturePhoto(){
   );
 
 
-  /* ==========================================================
-     SIMPLE LIGHTING CHECK
-     ========================================================== */
-
   captureBtn.disabled =
     true;
 
+
   captureBtn.textContent =
-    'Analysing with AI...';
+    'Checking photo...';
+
+
+  // ==========================================================
+  // LIGHTING CHECK
+  // ==========================================================
 
   const imageData =
     ctx.getImageData(
@@ -1601,11 +1701,14 @@ function capturePhoto(){
       canvas.height
     );
 
+
   const data =
     imageData.data;
 
+
   let sum = 0;
   let samples = 0;
+
 
   for(
     let i = 0;
@@ -1621,6 +1724,7 @@ function capturePhoto(){
     samples++;
 
   }
+
 
   const avgLuma =
     sum / samples;
@@ -1642,17 +1746,18 @@ function capturePhoto(){
     }
 
 
-    /* ========================================================
-       CREATE PREVIEW
-       ======================================================== */
+    // ========================================================
+    // CREATE IMAGE
+    // ========================================================
 
     canvas.toBlob(
+
       function(blob){
 
         if(!blob){
 
           alert(
-            'Unable to create image preview.'
+            'Unable to create image.'
           );
 
           resetCaptureButton();
@@ -1661,59 +1766,73 @@ function capturePhoto(){
 
         }
 
-        capturedBlob =
-          blob;
 
-        capturedDataUrl =
+        const dataUrl =
           canvas.toDataURL(
             'image/jpeg',
             0.92
           );
 
 
-        /* Preview */
+        // ====================================================
+        // STORE PHOTO LOCALLY
+        // ====================================================
+
+        capturedSamples.push({
+
+          blob:blob,
+
+          dataUrl:dataUrl,
+
+          luma:avgLuma
+
+        });
+
+
+        capturedBlob =
+          blob;
+
+
+        capturedDataUrl =
+          dataUrl;
+
+
+        // ====================================================
+        // SHOW PREVIEW
+        // ====================================================
 
         capturedPreview.src =
-          capturedDataUrl;
+          dataUrl;
+
 
         capturedPreview.style.display =
           'block';
 
 
-        /* Stop camera */
-
-        stopCamera();
-
-
-        /* Hide placeholder */
-
         facePlaceholder.style.display =
           'none';
+
 
         scanLine.style.display =
           'none';
 
 
-        /* Hide capture button */
-
         captureBtn.style.display =
           'none';
 
-
-        /* Show Retake + Upload */
 
         faceActions.style.display =
           'grid';
 
 
-        /* Show AI result */
-
         matchResult.style.display =
           'flex';
+
 
         matchResult.classList.remove(
           'fail'
         );
+
 
         matchIcon.innerHTML = `
           <svg
@@ -1731,54 +1850,121 @@ function capturePhoto(){
           </svg>
         `;
 
+
         confScore.textContent =
-          (
-            97 +
-            avgLuma / 100
-          ).toFixed(1) + '%';
+          `${capturedSamples.length}/${REQUIRED_SAMPLES}`;
+
 
         matchText.textContent =
-          '✓ Meets all requirements';
+          `✓ Photo ${capturedSamples.length} captured`;
 
-        captureHint.textContent =
-          'Photo captured successfully. Review the photo before uploading.';
 
-        captureBtn.disabled =
-          false;
+        faceStatus.classList.remove(
+          'verified'
+        );
+
+
+        faceStatus.classList.add(
+          'not-verified'
+        );
+
+
+        faceStatus.textContent =
+          `${capturedSamples.length}/${REQUIRED_SAMPLES} Captured`;
+
+
+        // ====================================================
+        // NOT YET 3 PHOTOS
+        // ====================================================
+
+        if(
+          capturedSamples.length <
+          REQUIRED_SAMPLES
+        ){
+
+          captureHint.textContent =
+            `Photo ${capturedSamples.length}/${REQUIRED_SAMPLES} captured. ` +
+            `Retake it if needed, then continue to the next photo.`;
+
+
+          retakeBtn.disabled =
+            false;
+
+
+          uploadBtn.disabled =
+            false;
+
+
+          uploadBtn.textContent =
+            `Continue ${capturedSamples.length}/${REQUIRED_SAMPLES}`;
+
+
+        }
+
+
+        // ====================================================
+        // ALL 3 PHOTOS READY
+        // ====================================================
+
+        else{
+
+          captureHint.textContent =
+            'All 3 photos captured. Click Upload 3 Photos to process and register them.';
+
+
+          uploadBtn.disabled =
+            false;
+
+
+          uploadBtn.textContent =
+            'Upload 3 Photos';
+
+
+          retakeBtn.disabled =
+            false;
+
+
+          faceStatus.textContent =
+            '3/3 Captured';
+
+        }
 
       },
+
       'image/jpeg',
+
       0.92
+
     );
 
-  },1000);
+  },300);
 
 }
 
 
-/* ============================================================
-   FAILED CAPTURE
-   ============================================================ */
+// ============================================================
+// FAILED CAPTURE
+// ============================================================
 
 function handleFailedCapture(){
 
-  const statusPill =
-    faceStatus;
-
-  statusPill.classList.remove(
+  faceStatus.classList.remove(
     'verified'
   );
 
-  statusPill.classList.add(
+
+  faceStatus.classList.add(
     'not-verified'
   );
 
-  statusPill.textContent =
+
+  faceStatus.textContent =
     'Retake';
 
 
   matchResult.style.display =
     'flex';
+
 
   matchResult.classList.add(
     'fail'
@@ -1804,10 +1990,11 @@ function handleFailedCapture(){
 
 
   confScore.textContent =
-    '✓ ';
+    '✕';
+
 
   matchText.textContent =
-    ' Lighting check failed';
+    'Lighting check failed';
 
 
   captureHint.textContent =
@@ -1822,11 +2009,14 @@ function handleFailedCapture(){
   captureBtn.disabled =
     false;
 
+
   captureBtn.style.display =
     'inline-flex';
 
+
   captureBtn.textContent =
     'Capture Photo';
+
 
   captureBtn.onclick =
     capturePhoto;
@@ -1834,63 +2024,173 @@ function handleFailedCapture(){
 }
 
 
-/* ============================================================
-   RETAKE
-   ============================================================ */
+// ============================================================
+// RETAKE CURRENT PHOTO
+// ============================================================
 
 function retakePhoto(){
+
+  // Remove the most recently captured photo.
+  if(
+    capturedSamples.length > 0
+  ){
+
+    capturedSamples.pop();
+
+  }
+
 
   capturedBlob =
     null;
 
+
   capturedDataUrl =
     null;
+
 
   capturedPreview.src =
     '';
 
+
   capturedPreview.style.display =
     'none';
+
 
   matchResult.style.display =
     'none';
 
+
   faceActions.style.display =
     'none';
+
 
   uploadBtn.disabled =
     false;
 
+
   retakeBtn.disabled =
-    false;  
+    false;
+
 
   facePlaceholder.style.display =
     'flex';
 
+
   scanLine.style.display =
     'block';
+
 
   captureBtn.style.display =
     'inline-flex';
 
+
   captureBtn.disabled =
     false;
+
 
   captureBtn.textContent =
     'Start Camera';
 
+
   captureBtn.onclick =
     startCamera;
 
+
+  const nextPhoto =
+    capturedSamples.length + 1;
+
+
+  updateFaceGuide(
+    Math.min(
+      nextPhoto,
+      REQUIRED_SAMPLES
+    )
+  );
+
+
+  faceStatus.textContent =
+    `${capturedSamples.length}/${REQUIRED_SAMPLES} Captured`;
+
+
   captureHint.textContent =
-    'Position your face within the frame following the guidelines, then click Start Camera.';
+    `Ready for Photo ${nextPhoto}/${REQUIRED_SAMPLES}.`;
 
 }
 
 
-/* ============================================================
-   STOP CAMERA
-   ============================================================ */
+// ============================================================
+// CONTINUE TO NEXT PHOTO
+// ============================================================
+
+function continueToNextPhoto(){
+
+  if(
+    capturedSamples.length >=
+    REQUIRED_SAMPLES
+  ){
+
+    return;
+
+  }
+
+
+  capturedPreview.src =
+    '';
+
+
+  capturedPreview.style.display =
+    'none';
+
+
+  matchResult.style.display =
+    'none';
+
+
+  faceActions.style.display =
+    'none';
+
+
+  captureBtn.style.display =
+    'inline-flex';
+
+
+  captureBtn.disabled =
+    true;
+
+
+  captureBtn.textContent =
+    'Starting camera...';
+
+
+  facePlaceholder.style.display =
+    'flex';
+
+
+  scanLine.style.display =
+    'block';
+
+
+  const nextPhoto =
+    capturedSamples.length + 1;
+
+
+  updateFaceGuide(
+    nextPhoto
+  );
+
+
+  captureHint.textContent =
+    `Prepare Photo ${nextPhoto}/${REQUIRED_SAMPLES}.`;
+
+
+  startCamera();
+
+}
+
+
+// ============================================================
+// STOP CAMERA
+// ============================================================
 
 function stopCamera(){
 
@@ -1904,10 +2204,12 @@ function stopCamera(){
 
       });
 
+
     stream =
       null;
 
   }
+
 
   video.srcObject =
     null;
@@ -1915,16 +2217,95 @@ function stopCamera(){
 }
 
 
-/* ============================================================
-   UPLOAD PHOTO
-   ============================================================ */
+// ============================================================
+// RESET EVERYTHING
+// ============================================================
+
+function resetAllSamples(){
+
+  capturedSamples = [];
+
+  processedFaceEncodings = [];
+
+  capturedBlob = null;
+
+  capturedDataUrl = null;
+
+
+  capturedPreview.src =
+    '';
+
+
+  capturedPreview.style.display =
+    'none';
+
+
+  matchResult.style.display =
+    'none';
+
+
+  faceActions.style.display =
+    'none';
+
+
+  faceStatus.classList.remove(
+    'verified'
+  );
+
+
+  faceStatus.classList.add(
+    'not-verified'
+  );
+
+
+  faceStatus.textContent =
+    'Not Registered';
+
+
+  updateFaceGuide(1);
+
+
+  captureHint.textContent =
+    'Start the camera to begin face registration.';
+
+
+  captureBtn.style.display =
+    'inline-flex';
+
+
+  captureBtn.disabled =
+    false;
+
+
+  captureBtn.textContent =
+    'Start Camera';
+
+
+  captureBtn.onclick =
+    startCamera;
+
+}
+
+
+// ============================================================
+// UPLOAD PHOTO
+// ============================================================
 
 async function uploadPhoto(){
 
-  if(!capturedBlob){
+  // ==========================================================
+  // IMPORTANT:
+  // MUST HAVE 3 PHOTOS
+  // ==========================================================
+
+  if(
+    capturedSamples.length !==
+    REQUIRED_SAMPLES
+  ){
 
     alert(
-      'Please capture a face photo first.'
+      `Please capture all ${REQUIRED_SAMPLES} photos first. ` +
+      `Currently captured: ${capturedSamples.length}/${REQUIRED_SAMPLES}.`
     );
 
     return;
@@ -1936,6 +2317,7 @@ async function uploadPhoto(){
     localStorage.getItem(
       'studentToken'
     );
+
 
   if(!token){
 
@@ -1966,6 +2348,7 @@ async function uploadPhoto(){
 
   let student;
 
+
   try{
 
     student =
@@ -1979,6 +2362,7 @@ async function uploadPhoto(){
       'Student data parse error:',
       error
     );
+
 
     alert(
       'Invalid student information. Please login again.'
@@ -2007,130 +2391,64 @@ async function uploadPhoto(){
   uploadBtn.disabled =
     true;
 
+
   retakeBtn.disabled =
     true;
 
-  uploadBtn.textContent =
-    'Processing Face...';
+
+  captureBtn.disabled =
+    true;
+
+
+  processedFaceEncodings = [];
 
 
   try{
 
-    /*
-     * ========================================================
-     * STEP 1
-     * Send captured image to Python Face API
-     *
-     * YuNet ? Face Detection
-     * SFace ? Alignment + Feature Extraction
-     *
-     * Expected result:
-     * 128-dimensional SFace feature
-     * ========================================================
-     */
-
-
-    const formData =
-      new FormData();
-
-
-    formData.append(
-      'image',
-      capturedBlob,
-      'face.jpg'
-    );
-
-
-    const processResponse =
-      await fetch(
-        'https://pakciksayur-laptop-iskandar.taild259e8.ts.net/api/face/process',
-        {
-          method: 'POST',
-          body: formData
-        }
-      );
-
-
-    const result =
-      await processResponse.json();
-
-
-    console.log(
-      'Face API result:',
-      result
-    );
-
-
-    if(
-      !processResponse.ok ||
-      !result.success
-    ){
-
-      throw new Error(
-        result.message ||
-        'Face processing failed.'
-      );
-
-    }
-
-
-    /*
-     * Make sure SFace returned
-     * exactly 128 values.
-     */
-
-
-    if(
-      !result.face_encoding ||
-      result.face_encoding.length !== 128
-    ){
-
-      throw new Error(
-        'Invalid face encoding received.'
-      );
-
-    }
-
-
-    console.log(
-      'SFace feature length:',
-      result.face_encoding.length
-    );
-
-
-    /*
-     * Temporarily store encoding.
-     */
-
-
-    window.processedFaceEncoding =
-      result.face_encoding;
-
-
-    /*
-     * ========================================================
-     * STEP 2
-     * Get existing registered samples
-     * from Cloudflare D1 through Worker
-     * ========================================================
-     */
-
+    // ========================================================
+    // STEP 1
+    // CHECK EXISTING DATABASE SAMPLES FIRST
+    // ========================================================
 
     uploadBtn.textContent =
-      'Checking Samples...';
+      'Checking registration...';
 
 
     const samplesResponse =
       await fetch(
         `${API_BASE_URL}/api/face/samples/${encodeURIComponent(studentId)}`,
         {
-          method: 'GET'
+          method:'GET',
+
+          headers:{
+            'Authorization':
+              `Bearer ${token}`,
+
+            'Content-Type':
+              'application/json'
+          },
+
+          mode:'cors'
         }
       );
 
 
-    const samplesResult =
-      await samplesResponse.json();
+    let samplesResult;
+
+
+    try{
+
+      samplesResult =
+        await samplesResponse.json();
+
+    }catch(error){
+
+      throw new Error(
+        `Unable to read face sample response ` +
+        `(HTTP ${samplesResponse.status}).`
+      );
+
+    }
 
 
     console.log(
@@ -2149,11 +2467,6 @@ async function uploadPhoto(){
     }
 
 
-    /*
-     * Worker should return total_samples.
-     */
-
-
     const totalSamples =
       Number(
         samplesResult.total_samples || 0
@@ -2166,168 +2479,24 @@ async function uploadPhoto(){
     );
 
 
-    /*
-     * Already completed.
-     */
+    // ========================================================
+    // ALREADY REGISTERED
+    // ========================================================
 
-
-    if(totalSamples >= 20){
+    if(
+      totalSamples >=
+      REQUIRED_SAMPLES
+    ){
 
       faceStatus.classList.remove(
         'not-verified'
       );
 
+
       faceStatus.classList.add(
         'verified'
       );
 
-      faceStatus.textContent =
-        '✓Registered';
-
-
-      uploadBtn.textContent =
-        '✓ Face Registration Complete';
-
-
-      captureHint.textContent =
-        'Your face registration is already complete.';
-
-
-      alert(
-        'Face registration is already complete (20/20 samples).'
-      );
-
-
-      return;
-
-    }
-
-
-    /*
-     * ========================================================
-     * STEP 3
-     * Determine next sample number
-     *
-     * Example:
-     * Existing = 1
-     * Next = 2
-     * ========================================================
-     */
-
-
-    const nextSampleNumber =
-      totalSamples + 1;
-
-    updateFaceGuide(nextSampleNumber);
-
-
-    console.log(
-      'Registering sample:',
-      nextSampleNumber
-    );
-
-
-    uploadBtn.textContent =
-      `Registering ${nextSampleNumber}/20...`;
-
-
-    /*
-     * ========================================================
-     * STEP 4
-     * Register SFace feature into Cloudflare D1
-     * ========================================================
-     */
-
-
-    const registerResponse =
-      await fetch(
-        `${API_BASE_URL}/api/face/register`,
-        {
-          method: 'POST',
-
-          headers: {
-            'Content-Type':
-              'application/json'
-          },
-
-          body: JSON.stringify({
-
-            student_id:
-              studentId,
-
-            sample_number:
-              nextSampleNumber,
-
-            face_encoding:
-              result.face_encoding
-
-          })
-
-        }
-      );
-
-
-    const registerResult =
-      await registerResponse.json();
-
-
-    console.log(
-      'FACE REGISTER RESULT:',
-      registerResult
-    );
-
-
-    if(
-      !registerResponse.ok ||
-      !registerResult.success
-    ){
-
-      throw new Error(
-        registerResult.message ||
-        'Face registration failed.'
-      );
-
-    }
-
-
-    /*
-     * Worker returns the updated
-     * total sample count.
-     */
-
-
-    const registeredTotal =
-      Number(
-        registerResult.total_samples ||
-        nextSampleNumber
-      );
-
-
-    console.log(
-      `Face sample registered: ${registeredTotal}/20`
-    );
-
-
-    /*
-     * ========================================================
-     * STEP 5
-     * Update UI
-     * ========================================================
-     */
-
-
-    faceStatus.classList.remove(
-      'not-verified'
-    );
-
-    faceStatus.classList.add(
-      'verified'
-    );
-
-
-    if(registeredTotal >= 20){
-
-      updateFaceGuide(20);
 
       faceStatus.textContent =
         '✓ Registered';
@@ -2338,7 +2507,7 @@ async function uploadPhoto(){
 
 
       captureHint.textContent =
-        'All 20 face samples have been registered successfully.';
+        'Your 3 face samples are already registered.';
 
 
       matchResult.style.display =
@@ -2350,33 +2519,16 @@ async function uploadPhoto(){
       );
 
 
-      matchIcon.innerHTML = `
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
-          <path d="M22 4L12 14.01l-3-3"/>
-        </svg>
-      `;
-
-
       confScore.textContent =
-        '—';
+        '3/3';
 
 
       matchText.textContent =
-        ' Face registration completed (20/20)';
+        'Face registration already completed (3/3).';
 
 
       alert(
-        'Face registration completed successfully! 20/20 samples registered.'
+        'Face registration is already complete (3/3 samples).'
       );
 
 
@@ -2385,26 +2537,320 @@ async function uploadPhoto(){
     }
 
 
-    /*
-     * ========================================================
-     * More samples are still required.
-     * Automatically prepare next capture.
-     * ========================================================
-     */
+    // ========================================================
+    // OLD PARTIAL DATA
+    // ========================================================
+
+    if(
+      totalSamples > 0
+    ){
+
+      throw new Error(
+        `This student already has ${totalSamples} registered ` +
+        `sample(s). Please clear the old face samples first ` +
+        `before using the new 3-photo registration.`
+      );
+
+    }
+
+
+    // ========================================================
+    // STEP 2
+    // PROCESS ALL 3 PHOTOS WITH PYTHON AI
+    //
+    // IMPORTANT:
+    // NOTHING IS SENT TO D1 YET.
+    // ========================================================
+
+    for(
+      let i = 0;
+      i < capturedSamples.length;
+      i++
+    ){
+
+      const photoNumber =
+        i + 1;
+
+
+      uploadBtn.textContent =
+        `Processing ${photoNumber}/${REQUIRED_SAMPLES}...`;
+
+
+      captureHint.textContent =
+        `AI is processing photo ${photoNumber}/${REQUIRED_SAMPLES}...`;
+
+
+      const formData =
+        new FormData();
+
+
+      formData.append(
+        'image',
+        capturedSamples[i].blob,
+        `face_${photoNumber}.jpg`
+      );
+
+
+      let processResponse;
+
+
+      try{
+
+        processResponse =
+          await fetch(
+            'https://pakciksayur-laptop-iskandar.taild259e8.ts.net/api/face/process',
+            {
+              method:'POST',
+
+              body:formData,
+
+              mode:'cors'
+            }
+          );
+
+      }catch(networkError){
+
+        console.error(
+          'Face AI network error:',
+          networkError
+        );
+
+
+        throw new Error(
+          'Failed to fetch AI face server. ' +
+          'Make sure the Python face server is running, ' +
+          'the Tailscale URL is reachable from this browser, ' +
+          'and CORS is enabled on the Python server.'
+        );
+
+      }
+
+
+      let result;
+
+
+      try{
+
+        result =
+          await processResponse.json();
+
+      }catch(jsonError){
+
+        throw new Error(
+          `AI face server returned an invalid response ` +
+          `(HTTP ${processResponse.status}) ` +
+          `for photo ${photoNumber}.`
+        );
+
+      }
+
+
+      console.log(
+        `Face API result ${photoNumber}:`,
+        result
+      );
+
+
+      if(
+        !processResponse.ok ||
+        !result.success
+      ){
+
+        throw new Error(
+          result.message ||
+          `Face processing failed for photo ${photoNumber}.`
+        );
+
+      }
+
+
+      // ======================================================
+      // CHECK SFACE 128D
+      // ======================================================
+
+      if(
+        !result.face_encoding ||
+        !Array.isArray(
+          result.face_encoding
+        ) ||
+        result.face_encoding.length !== 128
+      ){
+
+        throw new Error(
+          `Invalid face encoding received for photo ${photoNumber}.`
+        );
+
+      }
+
+
+      // Store locally.
+      // Still NOT uploaded to D1.
+      processedFaceEncodings.push(
+        result.face_encoding
+      );
+
+    }
+
+
+    // ========================================================
+    // IMPORTANT:
+    // ALL 3 AI PROCESSING MUST SUCCEED
+    // BEFORE DATABASE REGISTRATION STARTS.
+    // ========================================================
+
+    if(
+      processedFaceEncodings.length !==
+      REQUIRED_SAMPLES
+    ){
+
+      throw new Error(
+        'Not all 3 face photos were successfully processed.'
+      );
+
+    }
+
+
+    // ========================================================
+    // STEP 3
+    // REGISTER 3 FACE ENCODINGS INTO D1
+    // ========================================================
+
+    for(
+      let i = 0;
+      i < processedFaceEncodings.length;
+      i++
+    ){
+
+      const sampleNumber =
+        i + 1;
+
+
+      uploadBtn.textContent =
+        `Registering ${sampleNumber}/${REQUIRED_SAMPLES}...`;
+
+
+      captureHint.textContent =
+        `Saving face sample ${sampleNumber}/${REQUIRED_SAMPLES} to database...`;
+
+
+      let registerResponse;
+
+
+      try{
+
+        registerResponse =
+          await fetch(
+            `${API_BASE_URL}/api/face/register`,
+            {
+              method:'POST',
+
+              headers:{
+                'Content-Type':
+                  'application/json',
+
+                'Authorization':
+                  `Bearer ${token}`
+              },
+
+              body:JSON.stringify({
+
+                student_id:
+                  studentId,
+
+                sample_number:
+                  sampleNumber,
+
+                face_encoding:
+                  processedFaceEncodings[i]
+
+              }),
+
+              mode:'cors'
+            }
+          );
+
+      }catch(networkError){
+
+        console.error(
+          'Database network error:',
+          networkError
+        );
+
+
+        throw new Error(
+          'Failed to fetch Cloudflare database API. ' +
+          'Please check your internet connection, ' +
+          'Cloudflare Worker URL, and CORS configuration.'
+        );
+
+      }
+
+
+      let registerResult;
+
+
+      try{
+
+        registerResult =
+          await registerResponse.json();
+
+      }catch(error){
+
+        throw new Error(
+          `Database returned an invalid response ` +
+          `(HTTP ${registerResponse.status}) ` +
+          `for sample ${sampleNumber}.`
+        );
+
+      }
+
+
+      console.log(
+        `FACE REGISTER RESULT ${sampleNumber}:`,
+        registerResult
+      );
+
+
+      if(
+        !registerResponse.ok ||
+        !registerResult.success
+      ){
+
+        throw new Error(
+          registerResult.message ||
+          `Face registration failed for sample ${sampleNumber}.`
+        );
+
+      }
+
+    }
+
+
+    // ========================================================
+    // STEP 4
+    // SUCCESS
+    // ========================================================
+
+    faceStatus.classList.remove(
+      'not-verified'
+    );
+
+
+    faceStatus.classList.add(
+      'verified'
+    );
 
 
     faceStatus.textContent =
-      `✓ Registered ${registeredTotal}/20`;
-
-    updateFaceGuide(registeredTotal + 1);
+      '✓ Registered';
 
 
     uploadBtn.textContent =
-      `✓ Sample ${registeredTotal + 1}/20`;
+      '✓ Registration Complete';
 
 
     captureHint.textContent =
-      `Sample ${registeredTotal}/20 registered. Please capture the next face sample.`;
+      'All 3 face samples have been registered successfully.';
 
 
     matchResult.style.display =
@@ -2416,41 +2862,49 @@ async function uploadPhoto(){
     );
 
 
+    matchIcon.innerHTML = `
+      <svg
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+        <path d="M22 4L12 14.01l-3-3"/>
+      </svg>
+    `;
+
+
     confScore.textContent =
-      '—';
+      '3/3';
 
 
     matchText.textContent =
-      ` Sample ${registeredTotal}/20 registered`;
+      '✓ Face registration completed (3/3)';
 
 
-    /*
-     * Prepare camera for next sample.
-     */
+    alert(
+      'Face registration completed successfully! 3/3 samples registered.'
+    );
 
 
-        capturedBlob = null;
-    capturedDataUrl = null;
+    uploadBtn.disabled =
+      true;
 
-    capturedPreview.src = '';
-    capturedPreview.style.display = 'none';
 
-    matchResult.style.display = 'none';
+    retakeBtn.disabled =
+      true;
 
-    faceActions.style.display = 'none';
 
-    /* Re-enable buttons for the next sample */
-    uploadBtn.disabled = false;
-    retakeBtn.disabled = false;
+    captureBtn.disabled =
+      true;
 
-    facePlaceholder.style.display = 'flex';
-    scanLine.style.display = 'block';
 
-    captureBtn.style.display = 'inline-flex';
-    captureBtn.disabled = true;
-    captureBtn.textContent = 'Starting camera...';
-
-    await startCamera();
+    stopCamera();
 
 
   }catch(error){
@@ -2463,36 +2917,51 @@ async function uploadPhoto(){
 
     alert(
       error.message ||
-      'Unable to register face sample. Please try again.'
+      'Unable to register face samples. Please try again.'
     );
 
 
     uploadBtn.disabled =
       false;
 
+
     retakeBtn.disabled =
       false;
 
+
+    captureBtn.disabled =
+      false;
+
+
     uploadBtn.textContent =
-      'Upload Photo';
+      'Upload 3 Photos';
+
+
+    captureHint.textContent =
+      'Registration failed. Check the AI server connection and try again.';
 
   }
 
 }
-/* ============================================================
-   RESET CAPTURE BUTTON
-   ============================================================ */
+
+
+// ============================================================
+// RESET CAPTURE BUTTON
+// ============================================================
 
 function resetCaptureButton(){
 
   captureBtn.disabled =
     false;
 
+
   captureBtn.style.display =
     'inline-flex';
 
+
   captureBtn.textContent =
     'Start Camera';
+
 
   captureBtn.onclick =
     startCamera;
@@ -2500,9 +2969,9 @@ function resetCaptureButton(){
 }
 
 
-/* ============================================================
-   LOGOUT
-   ============================================================ */
+// ============================================================
+// LOGOUT
+// ============================================================
 
 function setupLogout(){
 
@@ -2511,11 +2980,13 @@ function setupLogout(){
       'logoutLink'
     );
 
+
   if(!logoutLink){
 
     return;
 
   }
+
 
   logoutLink.addEventListener(
     'click',
@@ -2525,9 +2996,11 @@ function setupLogout(){
         'studentToken'
       );
 
+
       localStorage.removeItem(
         'studentData'
       );
+
 
       sessionStorage.removeItem(
         'smartconvo_student_name'
@@ -2539,31 +3012,52 @@ function setupLogout(){
 }
 
 
-/* ============================================================
-   BUTTON EVENTS
-   ============================================================ */
+// ============================================================
+// BUTTON EVENTS
+// ============================================================
 
 retakeBtn.addEventListener(
   'click',
   retakePhoto
 );
 
+
 uploadBtn.addEventListener(
   'click',
-  uploadPhoto
+  function(){
+
+    // If less than 3 photos, this button means Continue.
+    if(
+      capturedSamples.length <
+      REQUIRED_SAMPLES
+    ){
+
+      continueToNextPhoto();
+
+      return;
+
+    }
+
+
+    // Exactly 3 photos -> upload/process.
+    uploadPhoto();
+
+  }
 );
 
 
-/* ============================================================
-   PAGE INITIALIZATION
-   ============================================================ */
+// ============================================================
+// PAGE INITIALIZATION
+// ============================================================
 
 async function initializeFacePage(){
 
   updateFaceGuide(1);
 
+
   const student =
     await loadStudentProfile();
+
 
   if(!student){
 
@@ -2571,23 +3065,16 @@ async function initializeFacePage(){
 
   }
 
-  /*
-   * Untuk sementara status default ialah
-   * Not Registered kerana database face
-   * belum disediakan.
-   *
-   * Nanti status ini akan diambil daripada:
-   *
-   * GET /api/student/face
-   */
 
   faceStatus.classList.remove(
     'verified'
   );
 
+
   faceStatus.classList.add(
     'not-verified'
   );
+
 
   faceStatus.textContent =
     'Not Registered';
@@ -2595,12 +3082,18 @@ async function initializeFacePage(){
 
   historyBody.innerHTML = `
     <tr>
-      <td colspan="3"
-          style="text-align:center;color:var(--ink-soft);">
+      <td
+        colspan="3"
+        style="text-align:center;color:var(--ink-soft);"
+      >
         No verification history yet.
       </td>
     </tr>
   `;
+
+
+  captureHint.textContent =
+    'Start the camera to begin face registration.';
 
 }
 
@@ -2608,9 +3101,9 @@ async function initializeFacePage(){
 initializeFacePage();
 
 
-/* ============================================================
-   CLEANUP CAMERA
-   ============================================================ */
+// ============================================================
+// CLEANUP CAMERA
+// ============================================================
 
 window.addEventListener(
   'beforeunload',

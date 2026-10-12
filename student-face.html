@@ -1,11 +1,11 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>SmartConvo — Face Recognition</title>
+<title>SmartConvo � Face Recognition</title>
 
 <link rel="icon" type="image/svg+xml" href="smc-icon.svg?v=3">
 <link rel="apple-touch-icon" href="smc-icon.svg?v=3">
@@ -1077,8 +1077,8 @@ a{
                 </div>
 
                 <div class="m-value">
-                  <span class="m-score" id="confScore">✓ </span>
-                  <span id="matchText">✓ </span>
+                  <span class="m-score" id="confScore">? </span>
+                  <span id="matchText">? </span>
                 </div>
 
               </div>
@@ -1258,7 +1258,7 @@ a{
 
     <footer class="main-footer">
 
-      <span>© 2026 SmartConvo</span>
+      <span>� 2026 SmartConvo</span>
 
       <span>
         AI-Assisted Convocation Queue &amp; Identity Verification System
@@ -1856,7 +1856,7 @@ function capturePhoto(){
 
 
         matchText.textContent =
-          `✓ Photo ${capturedSamples.length} captured`;
+          `? Photo ${capturedSamples.length} captured`;
 
 
         faceStatus.classList.remove(
@@ -1990,7 +1990,7 @@ function handleFailedCapture(){
 
 
   confScore.textContent =
-    '✕';
+    '?';
 
 
   matchText.textContent =
@@ -2499,11 +2499,11 @@ async function uploadPhoto(){
 
 
       faceStatus.textContent =
-        '✓ Registered';
+        '? Registered';
 
 
       uploadBtn.textContent =
-        '✓ Registration Complete';
+        '? Registration Complete';
 
 
       captureHint.textContent =
@@ -2598,7 +2598,7 @@ async function uploadPhoto(){
 
         processResponse =
           await fetch(
-            'https://pakciksayur.taildeeab3.ts.net/api/face/process',
+            'https://pakciksayur-laptop-iskandar.taild259e8.ts.net/api/face/process',
             {
               method:'POST',
 
@@ -2842,11 +2842,11 @@ async function uploadPhoto(){
 
 
     faceStatus.textContent =
-      '✓ Registered';
+      '? Registered';
 
 
     uploadBtn.textContent =
-      '✓ Registration Complete';
+      '? Registration Complete';
 
 
     captureHint.textContent =
@@ -2884,7 +2884,7 @@ async function uploadPhoto(){
 
 
     matchText.textContent =
-      '✓ Face registration completed (3/3)';
+      '? Face registration completed (3/3)';
 
 
     alert(
